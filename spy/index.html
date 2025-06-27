@@ -1,177 +1,396 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Игра Шпион</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center px-4">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Игра Шпион</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center px-4">
+        <!-- Главный экран -->
+        <div id="main" class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg">
+            <h1 class="text-2xl font-bold text-center mb-4">Игра «Шпион»</h1>
 
-  <!-- Главный экран -->
-  <div id="main" class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg">
-    <h1 class="text-2xl font-bold text-center mb-6">Игра «Шпион»</h1>
-    
-    <form id="gameForm" class="space-y-4" novalidate>
-      <div>
-        <label for="players" class="block mb-1">Количество игроков:</label>
-        <input type="number" id="players" name="players" min="1"
-               class="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        <p id="playersError" class="text-red-500 text-sm mt-1 hidden"></p>
-      </div>
+            <!-- Подсказка -->
+            <div class="text-sm text-gray-400 text-center mb-4">
+                Каждый игрок по очереди узнаёт свою роль. Шпион не знает место, остальные знают. <br />
+                Игроки задают вопросы по кругу, отвечая только «да» или «нет». <br />
+                Ваша цель — вычислить шпиона или угадать место.
+            </div>
 
-      <div>
-        <label for="spies" class="block mb-1">Количество шпионов:</label>
-        <input type="number" id="spies" name="spies" min="1"
-               class="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-500" required>
-        <p id="spiesError" class="text-red-500 text-sm mt-1 hidden"></p>
-      </div>
+            <form id="gameForm" class="space-y-4" novalidate>
+                <div>
+                    <label for="players" class="block mb-1">Количество игроков:</label>
+                    <input type="number" id="players" name="players" min="1" class="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                    <p id="playersError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
 
-      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold transition">Начать игру</button>
-    </form>
-  </div>
+                <div>
+                    <label for="spies" class="block mb-1">Количество шпионов:</label>
+                    <input type="number" id="spies" name="spies" min="1" class="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+                    <p id="spiesError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
 
-  <!-- Экран игры -->
-  <div id="gameScreen" class="hidden w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg text-center space-y-6">
-    <h2 class="text-xl font-semibold" id="playerCounter">Игрок 1</h2>
-    <div id="card" class="bg-gray-700 rounded-xl p-8 text-xl font-bold text-center">
-      <span id="cardText">Нажмите "Показать", чтобы узнать роль</span>
-    </div>
-    <button id="showButton" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">Показать</button>
-    <button id="nextButton" class="hidden w-full bg-green-600 hover:bg-green-700 py-2 rounded font-semibold">Следующий игрок</button>
-    <button id="homeButton" class="hidden w-full bg-red-600 hover:bg-red-700 py-2 rounded font-semibold">Домой</button>
-  </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold transition">Начать игру</button>
+            </form>
+        </div>
 
-  <script>
-    const form = document.getElementById('gameForm');
-    const playersInput = document.getElementById('players');
-    const spiesInput = document.getElementById('spies');
-    const playersError = document.getElementById('playersError');
-    const spiesError = document.getElementById('spiesError');
+        <!-- Экран игры -->
+        <div id="gameScreen" class="hidden w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg text-center space-y-6">
+            <h2 class="text-xl font-semibold" id="playerCounter">Игрок 1</h2>
+            <div id="card" class="bg-gray-700 rounded-xl p-8 text-xl font-bold text-center">
+                <span id="cardText">Нажмите "Показать", чтобы узнать роль</span>
+            </div>
+            <button id="showButton" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">Показать</button>
+            <button id="nextButton" class="hidden w-full bg-green-600 hover:bg-green-700 py-2 rounded font-semibold">Следующий игрок</button>
+            <button id="homeButton" class="hidden w-full bg-red-600 hover:bg-red-700 py-2 rounded font-semibold">Домой</button>
+        </div>
 
-    const mainScreen = document.getElementById('main');
-    const gameScreen = document.getElementById('gameScreen');
-    const showButton = document.getElementById('showButton');
-    const nextButton = document.getElementById('nextButton');
-    const homeButton = document.getElementById('homeButton');
-    const cardText = document.getElementById('cardText');
-    const playerCounter = document.getElementById('playerCounter');
+        <script>
+            const form = document.getElementById("gameForm");
+            const playersInput = document.getElementById("players");
+            const spiesInput = document.getElementById("spies");
+            const playersError = document.getElementById("playersError");
+            const spiesError = document.getElementById("spiesError");
 
-    let roles = [];
-    let currentPlayer = 0;
-    let secretWord = '';
+            const mainScreen = document.getElementById("main");
+            const gameScreen = document.getElementById("gameScreen");
+            const showButton = document.getElementById("showButton");
+            const nextButton = document.getElementById("nextButton");
+            const homeButton = document.getElementById("homeButton");
+            const cardText = document.getElementById("cardText");
+            const playerCounter = document.getElementById("playerCounter");
 
-    const wordList = [
-      'Аэропорт', 'Аптека', 'Арена', 'Ателье', 'Аудитория', 'Балет', 'Балкон', 'Баня', 'Банк', 'Бар',
-      'Библиотека', 'Больница', 'Бункер', 'Бургерная', 'Вагон', 'Ванная', 'Вокзал', 'Военкомат', 'Вулкан', 'Галерея',
-      'Гараж', 'Гастроном', 'Гимназия', 'Гимнастика', 'Гипермаркет', 'Гольф', 'Гостиная', 'Гостиница', 'Грот', 'Дача',
-      'Дворец', 'Деканат', 'Детдом', 'Детсад', 'Дирекция', 'Дом', 'Дорога', 'Дуэль', 'Елка', 'Железка',
-      'Жерло', 'Жерло', 'Журавль', 'Забегаловка', 'Завод', 'Загон', 'Зал', 'Замок', 'Заправка', 'Застава',
-      'Звезда', 'Зоопарк', 'Игротека', 'Институт', 'Интернат', 'Кабак', 'Кабина', 'Казино', 'Казарма', 'Камера',
-      'Кафе', 'Кемпинг', 'Кинотеатр', 'Кирпич', 'Клад', 'Кладбище', 'Клуб', 'Ковчег', 'Колледж', 'Комната',
-      'Комплекс', 'Концерт', 'Коридор', 'Корпус', 'Космодром', 'Кофейня', 'Крепость', 'Кубрик', 'Кухня', 'Лабиринт',
-      'Лаборатория', 'Лагерь', 'Лампа', 'Ларек', 'Ледник', 'Лес', 'Лестница', 'Лифт', 'Литейка', 'Лобби',
-      'Лоджия', 'Лодка', 'Лужайка', 'Магазин', 'Магистрат', 'Майдан', 'Манеж', 'Мансарда', 'Мастерская', 'Маяк',
-      'Мельница', 'Метро', 'Мечеть', 'Микрорайон', 'Минимаркет', 'Морг', 'Мост', 'Музей', 'Мыловарня', 'Навес',
-      'Навигация', 'Наркошка', 'Настил', 'Небоскреб', 'Номер', 'Обсерватория', 'Общежитие', 'Опера', 'Оптика', 'Оранжерея',
-      'Организация', 'Остановка', 'Отдел', 'Отель', 'Офис', 'Палата', 'Палуба', 'Пансион', 'Парк', 'Парусник',
-      'Парфюмерия', 'Пекарня', 'Перекресток', 'Переулок', 'Пещера', 'Пивоварня', 'Пивная', 'Площадь', 'Пляж', 'Подвал',
-      'Погреб', 'Пожарка', 'Поле', 'Поликлиника', 'Полустанок', 'Почта', 'Прачечная', 'Пристань', 'Приют', 'Продукт',
-      'Пруд', 'Пункт', 'Пустыня', 'Пыльник', 'Работка', 'Развал', 'Ракета', 'Ресторан', 'Ринг', 'Ров',
-      'Рубеж', 'Рынок', 'Сарай', 'Свалка', 'Святилище', 'Секретариат', 'Село', 'Сеновал', 'Склад', 'Смотровая',
-      'Снегопад', 'Собор', 'Солярий', 'Станция', 'Столовка', 'Столовая', 'Стойка', 'Стройка', 'Студия', 'Суд',
-      'Судно', 'Суши', 'Сцена', 'Таверна', 'Тайга', 'Таможня', 'Танкодром', 'Театр', 'Телестудия', 'Терминал',
-      'Тир', 'Трактир', 'Трамвай', 'Трансформатор', 'Трасса', 'Тренажер', 'Туалет', 'Турбаза', 'Убежище', 'Угол',
-      'Улица', 'Универмаг', 'Университет', 'Усадьба', 'Участок', 'Ушко', 'Фабрика', 'Фазанарий', 'Филармония', 'Флигель',
-      'Флот', 'Форт', 'Фрегат', 'Фреска', 'Футбол', 'Халабуда', 'Хижина', 'Химчистка', 'Хирургия', 'Храм',
-      'Цех', 'Цирк', 'Цитадель', 'Чайхана', 'Часовня', 'Чулан', 'Шахта', 'Школа', 'Штаб', 'Штольня',
-      'Экспозиция', 'Экспресс', 'Экстрим', 'Электричка', 'Этаж', 'Эстакада', 'Ювелир', 'Юрта', 'Якорь', 'Яма'
-    ];
+            let roles = [];
+            let currentPlayer = 0;
+            let secretWord = "";
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      let isValid = true;
+            const wordList = [
+                "Аэропорт",
+                "Аптека",
+                "Арена",
+                "Ателье",
+                "Аудитория",
+                "Балет",
+                "Балкон",
+                "Баня",
+                "Банк",
+                "Бар",
+                "Библиотека",
+                "Больница",
+                "Бункер",
+                "Бургерная",
+                "Вагон",
+                "Ванная",
+                "Вокзал",
+                "Военкомат",
+                "Вулкан",
+                "Галерея",
+                "Гараж",
+                "Гастроном",
+                "Гимназия",
+                "Гимнастика",
+                "Гипермаркет",
+                "Гольф",
+                "Гостиная",
+                "Гостиница",
+                "Грот",
+                "Дача",
+                "Дворец",
+                "Деканат",
+                "Детдом",
+                "Детсад",
+                "Дирекция",
+                "Дом",
+                "Дорога",
+                "Дуэль",
+                "Елка",
+                "Железка",
+                "Жерло",
+                "Жерло",
+                "Журавль",
+                "Забегаловка",
+                "Завод",
+                "Загон",
+                "Зал",
+                "Замок",
+                "Заправка",
+                "Застава",
+                "Звезда",
+                "Зоопарк",
+                "Игротека",
+                "Институт",
+                "Интернат",
+                "Кабак",
+                "Кабина",
+                "Казино",
+                "Казарма",
+                "Камера",
+                "Кафе",
+                "Кемпинг",
+                "Кинотеатр",
+                "Кирпич",
+                "Клад",
+                "Кладбище",
+                "Клуб",
+                "Ковчег",
+                "Колледж",
+                "Комната",
+                "Комплекс",
+                "Концерт",
+                "Коридор",
+                "Корпус",
+                "Космодром",
+                "Кофейня",
+                "Крепость",
+                "Кубрик",
+                "Кухня",
+                "Лабиринт",
+                "Лаборатория",
+                "Лагерь",
+                "Лампа",
+                "Ларек",
+                "Ледник",
+                "Лес",
+                "Лестница",
+                "Лифт",
+                "Литейка",
+                "Лобби",
+                "Лоджия",
+                "Лодка",
+                "Лужайка",
+                "Магазин",
+                "Магистрат",
+                "Майдан",
+                "Манеж",
+                "Мансарда",
+                "Мастерская",
+                "Маяк",
+                "Мельница",
+                "Метро",
+                "Мечеть",
+                "Микрорайон",
+                "Минимаркет",
+                "Морг",
+                "Мост",
+                "Музей",
+                "Мыловарня",
+                "Навес",
+                "Навигация",
+                "Наркошка",
+                "Настил",
+                "Небоскреб",
+                "Номер",
+                "Обсерватория",
+                "Общежитие",
+                "Опера",
+                "Оптика",
+                "Оранжерея",
+                "Организация",
+                "Остановка",
+                "Отдел",
+                "Отель",
+                "Офис",
+                "Палата",
+                "Палуба",
+                "Пансион",
+                "Парк",
+                "Парусник",
+                "Парфюмерия",
+                "Пекарня",
+                "Перекресток",
+                "Переулок",
+                "Пещера",
+                "Пивоварня",
+                "Пивная",
+                "Площадь",
+                "Пляж",
+                "Подвал",
+                "Погреб",
+                "Пожарка",
+                "Поле",
+                "Поликлиника",
+                "Полустанок",
+                "Почта",
+                "Прачечная",
+                "Пристань",
+                "Приют",
+                "Продукт",
+                "Пруд",
+                "Пункт",
+                "Пустыня",
+                "Пыльник",
+                "Работка",
+                "Развал",
+                "Ракета",
+                "Ресторан",
+                "Ринг",
+                "Ров",
+                "Рубеж",
+                "Рынок",
+                "Сарай",
+                "Свалка",
+                "Святилище",
+                "Секретариат",
+                "Село",
+                "Сеновал",
+                "Склад",
+                "Смотровая",
+                "Снегопад",
+                "Собор",
+                "Солярий",
+                "Станция",
+                "Столовка",
+                "Столовая",
+                "Стойка",
+                "Стройка",
+                "Студия",
+                "Суд",
+                "Судно",
+                "Суши",
+                "Сцена",
+                "Таверна",
+                "Тайга",
+                "Таможня",
+                "Танкодром",
+                "Театр",
+                "Телестудия",
+                "Терминал",
+                "Тир",
+                "Трактир",
+                "Трамвай",
+                "Трансформатор",
+                "Трасса",
+                "Тренажер",
+                "Туалет",
+                "Турбаза",
+                "Убежище",
+                "Угол",
+                "Улица",
+                "Универмаг",
+                "Университет",
+                "Усадьба",
+                "Участок",
+                "Ушко",
+                "Фабрика",
+                "Фазанарий",
+                "Филармония",
+                "Флигель",
+                "Флот",
+                "Форт",
+                "Фрегат",
+                "Фреска",
+                "Футбол",
+                "Халабуда",
+                "Хижина",
+                "Химчистка",
+                "Хирургия",
+                "Храм",
+                "Цех",
+                "Цирк",
+                "Цитадель",
+                "Чайхана",
+                "Часовня",
+                "Чулан",
+                "Шахта",
+                "Школа",
+                "Штаб",
+                "Штольня",
+                "Экспозиция",
+                "Экспресс",
+                "Экстрим",
+                "Электричка",
+                "Этаж",
+                "Эстакада",
+                "Ювелир",
+                "Юрта",
+                "Якорь",
+                "Яма",
+            ];
 
-      const players = parseInt(playersInput.value, 10);
-      const spies = parseInt(spiesInput.value, 10);
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                let isValid = true;
 
-      playersError.textContent = '';
-      playersError.classList.add('hidden');
-      spiesError.textContent = '';
-      spiesError.classList.add('hidden');
+                const players = parseInt(playersInput.value, 10);
+                const spies = parseInt(spiesInput.value, 10);
 
-      if (isNaN(players) || players <= 0) {
-        playersError.textContent = 'Введите число больше нуля.';
-        playersError.classList.remove('hidden');
-        isValid = false;
-      }
+                playersError.textContent = "";
+                playersError.classList.add("hidden");
+                spiesError.textContent = "";
+                spiesError.classList.add("hidden");
 
-      if (isNaN(spies) || spies <= 0) {
-        spiesError.textContent = 'Введите число больше нуля.';
-        spiesError.classList.remove('hidden');
-        isValid = false;
-      } else if (spies >= players) {
-        spiesError.textContent = 'Шпионов должно быть меньше, чем игроков.';
-        spiesError.classList.remove('hidden');
-        isValid = false;
-      }
+                if (isNaN(players) || players <= 0) {
+                    playersError.textContent = "Введите число больше нуля.";
+                    playersError.classList.remove("hidden");
+                    isValid = false;
+                }
 
-      if (!isValid) return;
+                if (isNaN(spies) || spies <= 0) {
+                    spiesError.textContent = "Введите число больше нуля.";
+                    spiesError.classList.remove("hidden");
+                    isValid = false;
+                } else if (spies >= players) {
+                    spiesError.textContent = "Шпионов должно быть меньше, чем игроков.";
+                    spiesError.classList.remove("hidden");
+                    isValid = false;
+                }
 
-      // Подготовка ролей
-      roles = Array(players).fill('Мирный');
-      for (let i = 0; i < spies; i++) {
-        roles[i] = 'Шпион';
-      }
-      roles.sort(() => Math.random() - 0.5);
+                if (!isValid) return;
 
-      // Выбор секретного слова
-      secretWord = wordList[Math.floor(Math.random() * wordList.length)];
-      currentPlayer = 0;
+                // Подготовка ролей
+                roles = Array(players).fill("Мирный");
+                for (let i = 0; i < spies; i++) {
+                    roles[i] = "Шпион";
+                }
+                roles.sort(() => Math.random() - 0.5);
 
-      // Переключение экранов
-      mainScreen.classList.add('hidden');
-      gameScreen.classList.remove('hidden');
-      updateCardView();
-    });
+                // Выбор секретного слова
+                secretWord = wordList[Math.floor(Math.random() * wordList.length)];
+                currentPlayer = 0;
 
-    function updateCardView() {
-      playerCounter.textContent = `Игрок ${currentPlayer + 1}`;
-      cardText.textContent = 'Нажмите "Показать", чтобы узнать роль';
-      showButton.classList.remove('hidden');
-      nextButton.classList.add('hidden');
-      homeButton.classList.add('hidden');
-    }
+                // Переключение экранов
+                mainScreen.classList.add("hidden");
+                gameScreen.classList.remove("hidden");
+                updateCardView();
+            });
 
-    showButton.addEventListener('click', () => {
-      const role = roles[currentPlayer];
-      if (role === 'Шпион') {
-        cardText.innerHTML = `<div class="text-red-400 text-2xl font-bold mb-2">Вы — Шпион</div>
+            function updateCardView() {
+                playerCounter.textContent = `Игрок ${currentPlayer + 1}`;
+                cardText.textContent = 'Нажмите "Показать", чтобы узнать роль';
+                showButton.classList.remove("hidden");
+                nextButton.classList.add("hidden");
+                homeButton.classList.add("hidden");
+            }
+
+            showButton.addEventListener("click", () => {
+                const role = roles[currentPlayer];
+                if (role === "Шпион") {
+                    cardText.innerHTML = `<div class="text-red-400 text-2xl font-bold mb-2">Вы — Шпион</div>
                               <div class="text-sm text-gray-300">Попробуйте понять, где вы.</div>`;
-      } else {
-        cardText.innerHTML = `<div class="text-green-400 text-2xl font-bold mb-2">Место: ${secretWord}</div>
+                } else {
+                    cardText.innerHTML = `<div class="text-green-400 text-2xl font-bold mb-2">Место: ${secretWord}</div>
                               <div class="text-sm text-gray-300">Не показывайте слово другим игрокам.</div>`;
-      }
+                }
 
-      showButton.classList.add('hidden');
-      if (currentPlayer < roles.length - 1) {
-        nextButton.classList.remove('hidden');
-      } else {
-        homeButton.classList.remove('hidden');
-      }
-    });
+                showButton.classList.add("hidden");
+                if (currentPlayer < roles.length - 1) {
+                    nextButton.classList.remove("hidden");
+                } else {
+                    homeButton.classList.remove("hidden");
+                }
+            });
 
-    nextButton.addEventListener('click', () => {
-      currentPlayer++;
-      updateCardView();
-    });
+            nextButton.addEventListener("click", () => {
+                currentPlayer++;
+                updateCardView();
+            });
 
-    homeButton.addEventListener('click', () => {
-      gameScreen.classList.add('hidden');
-      mainScreen.classList.remove('hidden');
-      form.reset();
-    });
-  </script>
-
-</body>
+            homeButton.addEventListener("click", () => {
+                gameScreen.classList.add("hidden");
+                mainScreen.classList.remove("hidden");
+                form.reset();
+            });
+        </script>
+    </body>
 </html>

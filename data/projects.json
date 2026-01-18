@@ -32,5 +32,43 @@
     "github": "https://github.com/kalpak44/bunker-party",
     "url": "https://bunker.pavel-usanli.online/",
     "link": "#"
+  },
+  {
+    "id": "homelab-k8s",
+    "title": "Homelab Kubernetes with FluxCD (MicroK8s GitOps)",
+    "summary": "A private homelab Kubernetes platform running on MicroK8s and managed via FluxCD GitOps, with Traefik ingress, Cloudflare-managed TLS, NFS-backed persistent volumes, and built-in monitoring + security scanning.",
+    "description": "This project is a GitOps-managed homelab Kubernetes cluster running inside a private network behind a home router. The cluster is built on MicroK8s and fully deployed through FluxCD, where Git acts as the single source of truth for infrastructure and services. Traffic routing is handled by Traefik with two entrypoints: websecure (public HTTPS with automatic TLS certificates via Cloudflare + ACME) and internal (LAN/VPN-only access for private services). Persistent data is stored on an external NFS server and claimed in the cluster through Kubernetes volumes. The cluster includes Trivy Operator for security checks and Grafana dashboards for hardware metrics and vulnerability reports. Internal-only services include a custom NGINX landing page, router configuration proxies, AdGuard DNS, pgAdmin, and additional utilities. The homelab also includes separate private servers providing PostgreSQL, private DNS records, VPN access, and NFS storage. Future improvements include SSO and RAID-backed storage.",
+    "details": [
+      "Platform: **MicroK8s** Kubernetes cluster inside a private LAN",
+      "GitOps: **FluxCD** syncing cluster state from GitHub",
+      "Ingress: **Traefik** with `websecure` + `internal` entrypoints",
+      "TLS Automation: **Cloudflare DNS + ACME (Let's Encrypt)** for cert renewal",
+      "Storage: **NFS server** used as persistent volumes (PVCs)",
+      "Security: **Trivy Operator** for vulnerability & configuration scanning",
+      "Monitoring: **Grafana** dashboards for node/hardware metrics + Trivy reports",
+      "Internal services: **NGINX landing page**, **AdGuard DNS**, **pgAdmin**, router proxies, and more",
+      "External private servers: **PostgreSQL**, private DNS records, **VPN server**, **NFS storage**",
+      "Roadmap: **SSO**, **RAID**, cluster hardening"
+    ],
+    "details_md": "* **Platform**: **MicroK8s** Kubernetes cluster inside a private LAN\n* **GitOps**: **FluxCD** syncing cluster state from GitHub\n* **Ingress**: **Traefik** with `websecure` + `internal` entrypoints\n* **TLS Automation**: **Cloudflare DNS + ACME (Let's Encrypt)** for cert renewal\n* **Storage**: **NFS server** used as persistent volumes (PVCs)\n* **Security**: **Trivy Operator** for vulnerability & configuration scanning\n* **Monitoring**: **Grafana** dashboards for node/hardware metrics + Trivy reports\n* **Internal services**: **NGINX landing page**, **AdGuard DNS**, **pgAdmin**, router proxies, and more\n* **External private servers**: **PostgreSQL**, private DNS records, **VPN server**, **NFS storage**\n* **Roadmap**: **SSO**, **RAID**, cluster hardening\n\n```mermaid\ngraph TD\n  Internet((Internet)) --> Cloudflare[Cloudflare DNS]\n  Cloudflare --> Router[Home Router / Firewall]\n\n  Router -->|LAN| Cluster[MicroK8s Cluster]\n  Router -->|Remote Access| VPN[VPN Server]\n  VPN -->|Private Access| Cluster\n\n  Cluster --> Traefik[Traefik Ingress]\n  Traefik -->|websecure| WebSecure[Public HTTPS Entry]\n  Traefik -->|internal| Internal[Private LAN/VPN Entry]\n\n  Cluster --> Flux[FluxCD GitOps]\n  GitHub[GitHub Repo] --> Flux\n\n  Cluster --> Trivy[Trivy Operator]\n  Cluster --> Grafana[Grafana Dashboards]\n\n  NFS[NFS Server] -->|PV/PVC| Cluster\n  Postgres[(PostgreSQL Server)] --> Cluster\n  DNS[AdGuard DNS / Private Records] --> Cluster\n```\n\n> **Note:** Most internal services are accessible only via the `internal` entrypoint (LAN/VPN), while `websecure` is used for HTTPS endpoints with Cloudflare-managed certificates.",
+    "technologies": [
+      "Kubernetes",
+      "MicroK8s",
+      "FluxCD",
+      "GitOps",
+      "Traefik",
+      "Cloudflare",
+      "ACME / Let's Encrypt",
+      "NFS",
+      "Persistent Volumes",
+      "Trivy Operator",
+      "Grafana",
+      "VPN",
+      "PostgreSQL",
+      "NGINX"
+    ],
+    "github": "https://github.com/kalpak44/homelab-k8s",
+    "url": "",
+    "link": "#"
   }
 ]

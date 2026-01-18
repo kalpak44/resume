@@ -3,13 +3,15 @@ import { Markdown } from '../components/Markdown'
 
 export function ProjectDetails({ projects }) {
   const { id } = useParams()
-  const project = projects.find(p => p.id === id)
+  const project = projects.find((p) => p.id === id)
 
   if (!project) {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl font-bold mb-4">Project not found</h2>
-        <Link to="/" className="text-primary hover:underline">Back to resume</Link>
+        <Link to="/" className="text-primary hover:underline">
+          Back to resume
+        </Link>
       </div>
     )
   }
@@ -19,15 +21,15 @@ export function ProjectDetails({ projects }) {
 ${project.description}
 
 ### Key Features & Details
-${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
+${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
   `.trim()
 
   return (
     <div className="space-y-8">
       {/* Navigation */}
       <div className="flex justify-center">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
         >
           <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
@@ -42,12 +44,22 @@ ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
           </div>
           <div className="flex gap-2">
             {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" className="pill pill-primary hover:bg-primary hover:text-white transition-colors">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+              >
                 <i className="fa-brands fa-github mr-2"></i>GitHub
               </a>
             )}
             {project.url && (
-              <a href={project.url} target="_blank" rel="noopener noreferrer" className="pill pill-primary hover:bg-primary hover:text-white transition-colors">
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+              >
                 <i className="fa-solid fa-external-link mr-2"></i>Live Demo
               </a>
             )}
@@ -56,11 +68,13 @@ ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
 
         <div>
           <Markdown content={markdownContent} />
-          
+
           <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
           <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
             {project.technologies.map((tech, idx) => (
-              <span key={idx} className="pill pill-primary">{tech}</span>
+              <span key={idx} className="pill pill-primary">
+                {tech}
+              </span>
             ))}
           </div>
         </div>
@@ -68,8 +82,8 @@ ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
 
       {/* Bottom Navigation */}
       <div className="flex justify-center pt-4 pb-8">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
         >
           <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>

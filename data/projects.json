@@ -1,21 +1,34 @@
 [
   {
+    "id": "bunker",
     "title": "Bunker: Browser-based Party Game",
-    "summary": "A light, fast browser-based party game where each player gets a survival character with hidden attributes (profession, health, age, etc.). Every round introduces a bunker event, and players must reveal cards and argue why they deserve a place in the bunker to survive.",
+    "summary": "A fast, browser-based real-time party game inspired by the popular “Bunker” format. Players receive survival characters with hidden attributes and must convince others why they deserve a spot in the bunker during escalating disaster rounds.",
+    "description": "This project is a web adaptation of the “Bunker” party game that I personally enjoy. I built it as a lightweight, real-time multiplayer experience playable directly in the browser. The main goal was to reproduce the original game mechanics online while exploring micro-backend development in Java for the first time using Spark. I also focused heavily on engineering practices by integrating SonarCloud for automated code quality analysis, adding JaCoCo for test coverage reporting, and using Jib for streamlined Docker image builds. Additional tooling such as the Spotify formatting/check plugin helped enforce consistent code style. Real-time gameplay is powered by WebSockets to keep all players synchronized with minimal latency, without requiring authentication or a persistent database.",
     "details": [
-      "Backend: Spark Java + WebSockets",
+      "Backend: Spark Java micro-backend + WebSockets (first experience)",
       "Frontend: Vanilla JS + Tailwind CSS",
-      "Real-time: WebSocket game state sync",
-      "No database: All rooms live in memory",
-      "Zero auth: Just enter a name and play"
+      "Real-time: WebSocket-based state synchronization for multiplayer sessions",
+      "Code quality: SonarCloud integration for static analysis and quality gates",
+      "Test coverage: JaCoCo reports published into SonarCloud",
+      "Containerization: Docker image builds using Jib (no Dockerfile needed)",
+      "Code style: Spotify fmt/check plugin for consistent formatting and validation",
+      "No database: Rooms and game sessions stored in memory",
+      "Zero auth: Players join instantly by entering a name"
     ],
-    "technologies": ["Java", "Spark", "WebSockets", "JavaScript", "Tailwind CSS"],
+    "technologies": [
+      "Java",
+      "Spark Java",
+      "WebSockets",
+      "JavaScript",
+      "Tailwind CSS",
+      "SonarCloud",
+      "JaCoCo",
+      "Jib",
+      "Docker",
+      "Maven"
+    ],
+    "github": "https://github.com/kalpak44/bunker-party",
+    "url": "https://bunker.pavel-usanli.online/",
     "link": "#"
-  },
-  {
-    "title": "Resume Website",
-    "summary": "A consistently styled, responsive personal resume website built with HTML, CSS (Bootstrap), and JavaScript. It uses a JSON-driven approach for easy content management.",
-    "technologies": ["HTML", "CSS", "Bootstrap", "JavaScript", "Docker"],
-    "link": "https://github.com/pusanli/resume"
   }
 ]

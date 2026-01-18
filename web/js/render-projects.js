@@ -22,14 +22,23 @@ function renderProjects(projects = []) {
         const title = el("div", "section-title mb-0", project.title || "Untitled Project");
         titleLine.appendChild(title);
 
+        const actionsWrap = el("div", "d-flex gap-2");
+
+        if (project.id) {
+            const detailsLink = el("a", "btn btn-sm btn-outline-secondary", "Details");
+            detailsLink.href = `project-details.html?id=${project.id}`;
+            actionsWrap.appendChild(detailsLink);
+        }
+
         if (project.link && project.link !== "#") {
             const link = el("a", "btn btn-sm btn-outline-primary", "View Project");
             link.href = project.link;
             link.target = "_blank";
             link.rel = "noopener";
-            titleLine.appendChild(link);
+            actionsWrap.appendChild(link);
         }
         
+        titleLine.appendChild(actionsWrap);
         card.appendChild(titleLine);
 
         if (project.summary) {

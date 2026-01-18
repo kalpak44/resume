@@ -26,7 +26,7 @@
       "href": "https://www.linkedin.com/in/pavel-usanli-721946102"
     },
     {
-      "text": "Download Resume",
+      "text": "Resume",
       "icon": "fa-solid fa-download",
       "class": "btn btn-outline-secondary",
       "href": "./assets/resume.pdf"

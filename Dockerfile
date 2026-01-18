@@ -1,4 +1,4 @@
-# Stage 1: Build PDF
+# Stage 1: Build PDF and Web Apps
 FROM node:18-slim AS builder
 
 # Install puppeteer dependencies
@@ -52,18 +52,23 @@ COPY . .
 # Run the PDF builder
 WORKDIR /app/pdf
 RUN npm install && npm run build
+
+# Build the React app
+WORKDIR /app/web-page
+RUN npm install && npm run build
 WORKDIR /app
 
 # Stage 2: Nginx
 FROM nginx:latest
 
-# Copy the static site content
+# Copy the static site content (old simple web)
 COPY --from=builder /app/web /usr/share/nginx/html
 
-# Copy the shared data to the web folder (so it can be served)
-COPY --from=builder /app/data/profile.json /usr/share/nginx/html/data/profile.json
-COPY --from=builder /app/data/projects.json /usr/share/nginx/html/data/projects.json
-COPY --from=builder /app/data/profile.jpg /usr/share/nginx/html/data/profile.jpg
+# Copy the React app build results
+COPY --from=builder /app/web-page/dist /usr/share/nginx/html/web-page
+
+# Copy the shared data to the root so both can access it at /data/
+COPY --from=builder /app/data /usr/share/nginx/html/data
 
 # Copy the generated PDF to the assets folder
 COPY --from=builder /app/pdf/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf

@@ -15,17 +15,17 @@ function App() {
   })
 
   useEffect(() => {
-    fetch('/data/profile.json')
+    fetch(`${import.meta.env.BASE_URL}data/profile.json`)
       .then(res => res.json())
       .then(data => {
         if (data.avatar && data.avatar.startsWith('./data/')) {
-            data.avatar = data.avatar.replace('./data/', '/data/');
+          data.avatar = `${import.meta.env.BASE_URL}${data.avatar.substring(2)}`;
         }
         setProfile(data)
       })
       .catch(err => console.error('Error loading profile:', err))
 
-    fetch('/data/projects.json')
+    fetch(`${import.meta.env.BASE_URL}data/projects.json`)
       .then(res => res.json())
       .then(data => setProjects(data))
       .catch(err => console.error('Error loading projects:', err))

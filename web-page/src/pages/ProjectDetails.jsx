@@ -16,7 +16,6 @@ export function ProjectDetails({ projects }) {
     )
   }
 
-  // Combine description and details into a single markdown content
   const markdownContent = `
 ${project.description}
 
@@ -26,17 +25,6 @@ ${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
 
   return (
     <div className="space-y-8">
-      {/* Navigation */}
-      <div className="flex justify-center">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
-        >
-          <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
-          Back to Resume
-        </Link>
-      </div>
-
       <div className="card-flat">
         <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
           <div>
@@ -80,7 +68,6 @@ ${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
         </div>
       </div>
 
-      {/* Bottom Navigation */}
       <div className="flex justify-center pt-4 pb-8">
         <Link
           to="/"

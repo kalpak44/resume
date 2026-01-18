@@ -5,7 +5,6 @@ export function Resume({ profile, projects }) {
 
   return (
     <>
-      {/* Summary Section */}
       <div className="card-flat">
         <h2 className="section-title">
           <i className="fa-solid fa-user text-primary/80 text-[1.1rem]"></i>
@@ -14,7 +13,6 @@ export function Resume({ profile, projects }) {
         <p className="text-foreground leading-[1.7] text-[1.05rem]">{profile.summary}</p>
       </div>
 
-      {/* Experience Section */}
       <div className="card-flat mt-8">
         <h2 className="section-title">
           <i className="fa-solid fa-briefcase text-primary/80 text-[1.1rem]"></i>
@@ -75,7 +73,6 @@ export function Resume({ profile, projects }) {
         </div>
       </div>
 
-      {/* Hobby Projects Section */}
       {projects && projects.length > 0 && (
         <div className="card-flat mt-8">
           <h2 className="section-title">
@@ -96,8 +93,7 @@ export function Resume({ profile, projects }) {
                 >
                   <div className="relative">
                     <div
-                      className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 transition-opacity
-                                 group-hover:opacity-100 group-active:bg-primary/10 pointer-events-none"
+                      className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100 group-active:bg-primary/10 pointer-events-none"
                       aria-hidden="true"
                     />
 
@@ -146,7 +142,6 @@ export function Resume({ profile, projects }) {
         </div>
       )}
 
-      {/* Education Section */}
       <div className="card-flat mt-8">
         <h2 className="section-title">
           <i className="fa-solid fa-graduation-cap text-primary/80 text-[1.1rem]"></i>

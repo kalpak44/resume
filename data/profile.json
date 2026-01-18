@@ -32,7 +32,7 @@
       "href": "/assets/resume.pdf"
     }
   ],
-  "summary": "I’m an experienced software engineer with a strong focus on Java, passionate about automation and building complete, reliable systems. I enjoy developing and maintaining end-to-end solutions - from backend services and APIs to frontend features, infrastructure, and CI/CD. While Java is my main language, I also love working with JavaScript and Python, and I’m always experimenting with new tools and approaches to deliver practical business value.",
+  "summary": "I’m a software engineer with a strong focus on Java, passionate about automation and building complete, reliable systems. I enjoy developing and maintaining end-to-end solutions—from backend services and APIs to frontend features, infrastructure, and CI/CD. While Java is my main language, I also love working with JavaScript and Python, and I’m always experimenting with new tools and approaches to deliver practical business value.",
   "experience": [
     {
       "title": "Software Engineer",
@@ -45,9 +45,9 @@
       ],
       "technologies": [
         "Azure DevOps",
-        "Java 11-17",
         "Kubernetes",
         "MongoDB",
+        "Jenkins",
         "Azure Key Vaults"
       ],
       "skills": [

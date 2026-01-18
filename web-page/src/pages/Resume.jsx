@@ -2,13 +2,6 @@ import { Link } from 'react-router-dom'
 
 export function Resume({ profile, projects }) {
   if (!profile) return null;
-
-  // Aggregate all skills from all jobs
-  const allSkills = [...new Set(profile.experience.flatMap(job => [
-    ...(job.tags || []),
-    ...(job.technologies || []),
-    ...(job.skills || [])
-  ]))].sort();
   
   return (
     <>
@@ -21,21 +14,6 @@ export function Resume({ profile, projects }) {
         <p className="text-foreground leading-[1.7] text-[1.05rem]">
           {profile.summary}
         </p>
-      </div>
-
-      {/* Skills Section */}
-      <div className="card-flat mt-8">
-        <h2 className="section-title">
-          <i className="fa-solid fa-gears text-primary/80 text-[1.1rem]"></i>
-          Skills & Technologies
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {allSkills.map((skill, idx) => (
-            <span key={idx} className="pill pill-primary font-medium">
-              {skill}
-            </span>
-          ))}
-        </div>
       </div>
 
       {/* Experience Section */}

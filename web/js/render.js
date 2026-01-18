@@ -147,6 +147,21 @@ async function initRender() {
         }
 
         renderButtons(data.buttons);
+
+        // Add Projects link to buttons if it doesn't exist (assuming we want it there)
+        const projectsBtn = data.buttons && data.buttons.find(b => b.text === "Hobby Projects");
+        if (!projectsBtn) {
+            const container = document.getElementById("headerButtons");
+            const a = document.createElement("a");
+            a.href = "projects.html";
+            a.className = "btn btn-outline-primary";
+            const i = document.createElement("i");
+            i.className = `fa-solid fa-code me-2`;
+            a.appendChild(i);
+            a.appendChild(document.createTextNode("Hobby Projects"));
+            container.appendChild(a);
+        }
+
         renderMeta(data.meta);
         document.getElementById("summary").textContent = data.summary || "";
 

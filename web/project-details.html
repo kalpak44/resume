@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Projects — Pavel Usanli</title>
+    <title>Project Details — Pavel Usanli</title>
 
     <!-- Vendor CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -31,11 +31,15 @@
                 <div class="header-main">
                     <div class="header-info">
                         <h1 id="name" class="name"></h1>
-                        <p id="role" class="role">Hobby Projects</p>
+                        <p id="project-title-header" class="role">Project Details</p>
                     </div>
 
                     <!-- Meta -->
                     <div id="meta" class="meta mt-3">
+                        <div class="mb-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <a href="projects.html" class="clean-link">Back to Projects</a>
+                        </div>
                         <div class="mb-2">
                             <i class="fa-solid fa-house"></i>
                             <a href="index.html" class="clean-link">Home</a>
@@ -57,9 +61,14 @@
         </div>
     </div>
 
-    <!-- Projects -->
-    <div id="projects-container">
-        <!-- Projects will be rendered here -->
+    <!-- Project Details -->
+    <div id="project-details-container">
+        <!-- Project details will be rendered here -->
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <div class="text-center text-muted mt-4 footer-note">
@@ -69,6 +78,6 @@
 
 <!-- Scripts -->
 <script src="./js/main.js" defer></script>
-<script src="./js/render-projects.js" defer></script>
+<script src="./js/render-project-details.js" defer></script>
 </body>
 </html>

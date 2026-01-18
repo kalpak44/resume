@@ -29,7 +29,7 @@
       "text": "Download Resume",
       "icon": "fa-solid fa-download",
       "class": "btn btn-outline-secondary",
-      "href": "https://drive.google.com/file/d/1si8Es8G7akhEgEIwWVGZ5e2Zz5BF4bYD/view"
+      "href": "./assets/resume.pdf"
     }
   ],
   "summary": "I am an experienced software engineer with a strong focus on Java development. I have worked on building and maintaining cloud systems, microservices, and data processes for various industries. Skilled in modern tools like AWS, Kubernetes, and CI/CD pipelines, I create reliable and efficient solutions. My work combines technical expertise with a practical approach to deliver high-quality results.",

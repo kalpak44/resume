@@ -4,11 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm run sync-data && vite",
-    "build": "npm run sync-data && vite build",
+    "dev": "vite",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "sync-data": "mkdir -p public/data && cp ../data/* public/data/"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",

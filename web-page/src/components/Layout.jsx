@@ -80,13 +80,6 @@ export function Layout({ children, theme, toggleTheme, profile }) {
                   {btn.text}
                 </a>
               ))}
-              <Link
-                to={isHome ? "/projects" : "/"}
-                className={`h-11 inline-flex items-center px-4 rounded-xl font-medium border border-primary text-primary hover:bg-primary/5 transition-all transform hover:-translate-y-px active:translate-y-0 ${!isHome ? 'bg-primary/5' : ''}`}
-              >
-                <i className={`fa-solid ${isHome ? 'fa-code' : 'fa-file-lines'} mr-[10px]`}></i>
-                {isHome ? 'Hobby Projects' : 'Resume'}
-              </Link>
             </div>
           </div>
         </div>

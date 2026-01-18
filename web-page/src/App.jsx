@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ScrollToTop } from './components/ScrollToTop'
 import { Resume } from './pages/Resume'
-import { Projects } from './pages/Projects'
 import { ProjectDetails } from './pages/ProjectDetails'
 
 function App() {
@@ -46,8 +45,7 @@ function App() {
       <ScrollToTop />
       <Layout theme={theme} toggleTheme={toggleTheme} profile={profile}>
         <Routes>
-          <Route path="/" element={<Resume profile={profile} />} />
-          <Route path="/projects" element={<Projects projects={projects} />} />
+          <Route path="/" element={<Resume profile={profile} projects={projects} />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
         </Routes>
       </Layout>

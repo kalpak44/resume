@@ -77,7 +77,7 @@ ${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
       <div className="flex justify-center pt-4 pb-8">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
+          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group cursor-pointer"
         >
           <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
           Back to Resume

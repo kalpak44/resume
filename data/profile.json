@@ -60,7 +60,8 @@
         "ETL",
         "Containers",
         "CI/CD",
-        "Jenkins"
+        "Jenkins",
+        "React"
       ]
     },
     {
@@ -90,7 +91,8 @@
         "Jenkins",
         "Smart Contracts",
         "Solidity",
-        "Terraform"
+        "Terraform",
+        "React"
       ]
     },
     {

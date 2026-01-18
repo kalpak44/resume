@@ -4,18 +4,16 @@
 @theme {
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
-  --color-bg-light: #f6f7f9;
+  --color-bg-light: #f0f2f5;
   --color-card-light: #ffffff;
   --color-text-light: #111827;
-  --color-muted-light: #6b7280;
-  --color-line-light: #e5e7eb;
-  --color-pill-bg-light: #f9fafb;
-  --color-pill-text-light: #374151;
+  --color-line-light: #d1d5db;
+  --color-pill-bg-light: #e5e7eb;
+  --color-pill-text-light: #1f2937;
 
   --color-bg-dark: #0b1220;
   --color-card-dark: #0f172a;
   --color-text-dark: #e5e7eb;
-  --color-muted-dark: #9ca3af;
   --color-line-dark: #1f2937;
   --color-pill-bg-dark: #0b1220;
   --color-pill-text-dark: #e5e7eb;
@@ -48,7 +46,7 @@ body {
   border: 1px solid color-mix(in srgb, var(--color-line-light) 85%, transparent);
   border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
   transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -104,7 +102,7 @@ body {
   border: 1px solid color-mix(in srgb, var(--color-line-light) 85%, transparent);
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }

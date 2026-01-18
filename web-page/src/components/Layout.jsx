@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export function Layout({ children, theme, toggleTheme, profile }) {
+  const location = useLocation()
   if (!profile) return <div className="flex items-center justify-center min-h-screen font-poppins">Loading...</div>
+
+  const isHome = location.pathname === '/'
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-[980px]">
       {/* Topbar / Header */}
       <div className="topbar">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+        <div className={`flex flex-col md:flex-row items-center md:items-start gap-8 ${!isHome ? 'mt-8 md:mt-4' : ''}`}>
           {/* Avatar */}
           <div className="flex-shrink-0">
             <Link to="/">
@@ -33,7 +36,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
                 </p>
 
                 {/* Meta Info */}
-                <div className="mt-[10px] flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-[10px] text-[0.95rem] text-muted-light dark:text-muted-dark">
+                <div className="mt-[10px] flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-[10px] text-[0.95rem] text-foreground/70 dark:text-foreground/60">
                   {profile.meta.map((item, idx) => (
                     <div key={idx} className="flex items-center gap-[10px]">
                       <i className={`${item.icon} text-primary w-[18px] text-center opacity-80 text-base`}></i>
@@ -78,11 +81,11 @@ export function Layout({ children, theme, toggleTheme, profile }) {
                 </a>
               ))}
               <Link
-                to="/projects"
-                className="h-11 inline-flex items-center px-4 rounded-xl font-medium border border-primary text-primary hover:bg-primary/5 transition-all transform hover:-translate-y-px active:translate-y-0"
+                to={isHome ? "/projects" : "/"}
+                className={`h-11 inline-flex items-center px-4 rounded-xl font-medium border border-primary text-primary hover:bg-primary/5 transition-all transform hover:-translate-y-px active:translate-y-0 ${!isHome ? 'bg-primary/5' : ''}`}
               >
-                <i className="fa-solid fa-code mr-[10px]"></i>
-                Hobby Projects
+                <i className={`fa-solid ${isHome ? 'fa-code' : 'fa-file-lines'} mr-[10px]`}></i>
+                {isHome ? 'Hobby Projects' : 'Resume'}
               </Link>
             </div>
           </div>
@@ -94,7 +97,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
       </main>
 
       {/* Footer */}
-      <footer className="text-center text-muted-light dark:text-muted-dark mt-12 mb-8 text-[0.9rem]">
+      <footer className="text-center text-foreground/70 dark:text-foreground/60 mt-12 mb-8 text-[0.9rem]">
         © {new Date().getFullYear()} {profile.name}
       </footer>
     </div>

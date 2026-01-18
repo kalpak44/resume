@@ -17,7 +17,11 @@ function renderButtons(buttons = []) {
 
     for (const b of buttons) {
         const a = document.createElement("a");
-        a.href = b.href || "#";
+        if (b.text === "Download Resume") {
+            a.href = "./assets/resume.pdf";
+        } else {
+            a.href = b.href || "#";
+        }
         a.className = b.class || "btn btn-primary";
         a.target = "_blank";
         a.rel = "noopener";

@@ -50,3 +50,10 @@ hs_err_pid*
 /arge-dqr/
 /logs/
 .dccache
+
+# Resume Builder
+resume-builder/node_modules/
+resume-builder/package-lock.json
+resume-builder/temp.html
+resume-builder/dist/
+site/assets/resume.pdf

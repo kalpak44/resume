@@ -9,7 +9,7 @@ export function ProjectDetails({ projects }) {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl font-bold mb-4">Project not found</h2>
-        <Link to="/projects" className="text-primary hover:underline">Back to projects</Link>
+        <Link to="/" className="text-primary hover:underline">Back to resume</Link>
       </div>
     )
   }
@@ -20,12 +20,21 @@ ${project.description}
 
 ### Key Features & Details
 ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
-
-### Technologies Used
   `.trim()
 
   return (
     <div className="space-y-8">
+      {/* Navigation */}
+      <div className="flex justify-center">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
+        >
+          <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+          Back to Resume
+        </Link>
+      </div>
+
       <div className="card-flat">
         <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
           <div>
@@ -33,12 +42,12 @@ ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
           </div>
           <div className="flex gap-2">
             {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" className="pill hover:bg-primary hover:text-white transition-colors">
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="pill pill-primary hover:bg-primary hover:text-white transition-colors">
                 <i className="fa-brands fa-github mr-2"></i>GitHub
               </a>
             )}
             {project.url && (
-              <a href={project.url} target="_blank" rel="noopener noreferrer" className="pill hover:bg-primary hover:text-white transition-colors">
+              <a href={project.url} target="_blank" rel="noopener noreferrer" className="pill pill-primary hover:bg-primary hover:text-white transition-colors">
                 <i className="fa-solid fa-external-link mr-2"></i>Live Demo
               </a>
             )}
@@ -48,12 +57,24 @@ ${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
         <div>
           <Markdown content={markdownContent} />
           
+          <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
           <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
             {project.technologies.map((tech, idx) => (
-              <span key={idx} className="pill">{tech}</span>
+              <span key={idx} className="pill pill-primary">{tech}</span>
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="flex justify-center pt-4 pb-8">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
+        >
+          <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+          Back to Resume
+        </Link>
       </div>
     </div>
   )

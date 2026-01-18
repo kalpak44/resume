@@ -69,6 +69,12 @@ body {
   white-space: nowrap;
 }
 
+.pill-primary {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  color: var(--color-primary);
+  border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
 :root[data-theme='dark'] .pill {
   background-color: var(--color-pill-bg-dark);
   color: var(--color-pill-text-dark);

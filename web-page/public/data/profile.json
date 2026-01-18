@@ -24,12 +24,6 @@
       "icon": "fab fa-linkedin",
       "class": "btn btn-primary",
       "href": "https://www.linkedin.com/in/pavel-usanli-721946102"
-    },
-    {
-      "text": "Download Resume",
-      "icon": "fa-solid fa-download",
-      "class": "btn btn-outline-secondary",
-      "href": "./assets/resume.pdf"
     }
   ],
   "summary": "I am an experienced software engineer with a strong focus on Java development. I have worked on building and maintaining cloud systems, microservices, and data processes for various industries. Skilled in modern tools like AWS, Kubernetes, and CI/CD pipelines, I create reliable and efficient solutions. My work combines technical expertise with a practical approach to deliver high-quality results.",

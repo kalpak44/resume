@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - {{name}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --text: #111827;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --pill-bg: #f3f4f6;
+        }
+        body {
+            font-family: "Poppins", sans-serif;
+            color: var(--text);
+            line-height: 1.5;
+            padding: 0;
+            margin: 0;
+            background: white;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm 20mm 10mm 20mm;
+            margin: auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-right: 25px;
+            border: 2px solid var(--line);
+        }
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .role {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            margin: 5px 0 10px 0;
+        }
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .summary-content {
+            margin-bottom: 2px;
+        }
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+        .job {
+            margin-bottom: 37px;
+        }
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .job-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .job-company {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .job-meta {
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .job-desc {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .bullets {
+            font-size: 14px;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        .pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .pill {
+            background: var(--pill-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .edu-item {
+            margin-bottom: 15px;
+        }
+        .edu-school {
+            font-weight: 600;
+        }
+        .edu-degree {
+            color: var(--primary);
+            font-size: 14px;
+        }
+        @media print {
+            .page {
+                margin: 0;
+                border: none;
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <img src="{{avatar_base64}}" class="avatar" alt="Profile">
+            <div>
+                <h1 class="name">{{name}}</h1>
+                <p class="role">{{role}}</p>
+                <div class="contact-info">
+                    {{#meta}}
+                    <div class="contact-item">
+                        <i class="{{icon}}"></i>
+                        <span>{{text}}</span>
+                    </div>
+                    {{/meta}}
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">Summary</div>
+        <div class="job-desc summary-content">{{summary}}</div>
+
+        <div class="section-title">Experience</div>
+        {{#experience}}
+        <div class="job">
+            <div class="job-header">
+                <span class="job-title">{{title}}</span>
+                <span class="job-company">{{company}}</span>
+            </div>
+            <div class="job-meta">{{location_date}}</div>
+            <div class="job-desc">{{description}}</div>
+            <ul class="bullets">
+                {{#bullets}}
+                <li>{{.}}</li>
+                {{/bullets}}
+            </ul>
+            <div class="pills">
+                {{#all_skills}}
+                <span class="pill">{{.}}</span>
+                {{/all_skills}}
+            </div>
+        </div>
+        {{/experience}}
+
+        <div class="section-title">Education</div>
+        {{#education}}
+        <div class="edu-item">
+            <div class="edu-school">{{school}}</div>
+            <div class="edu-degree">{{degree}}</div>
+            {{#faculty}}<div class="small text-muted">{{faculty}}</div>{{/faculty}}
+        </div>
+        {{/education}}
+    </div>
+</body>
+</html>

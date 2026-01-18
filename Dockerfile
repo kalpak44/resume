@@ -64,8 +64,7 @@ FROM nginx:latest
 # Copy the React app build results to the root
 COPY --from=builder /app/web-page/dist /usr/share/nginx/html
 
-# Copy the generated PDF from the builder stage
-COPY --from=builder /app/pdf/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf
+COPY pdf/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf
 
 # Add Nginx configuration to support SPA routing
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf

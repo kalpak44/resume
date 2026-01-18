@@ -1,0 +1,12 @@
+{
+  "name": "resume-pdf-builder",
+  "version": "1.0.0",
+  "description": "Generates PDF resume from template and data",
+  "main": "builder.js",
+  "scripts": {
+    "build": "node builder.js"
+  },
+  "dependencies": {
+    "puppeteer": "^24.35.0"
+  }
+}

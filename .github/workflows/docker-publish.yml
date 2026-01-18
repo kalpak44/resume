@@ -25,7 +25,7 @@ jobs:
           images: kalpak44/resume
           tags: |
             type=raw,value=latest
-            type=sha,format=long
+            type=sha,format=short
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

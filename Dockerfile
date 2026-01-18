@@ -62,6 +62,7 @@ COPY --from=builder /app/web /usr/share/nginx/html
 
 # Copy the shared data to the web folder (so it can be served)
 COPY --from=builder /app/data/profile.json /usr/share/nginx/html/data/profile.json
+COPY --from=builder /app/data/projects.json /usr/share/nginx/html/data/projects.json
 COPY --from=builder /app/data/profile.jpg /usr/share/nginx/html/data/profile.jpg
 
 # Copy the generated PDF to the assets folder

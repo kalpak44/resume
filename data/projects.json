@@ -1,0 +1,21 @@
+[
+  {
+    "title": "Bunker: Browser-based Party Game",
+    "summary": "A light, fast browser-based party game where each player gets a survival character with hidden attributes (profession, health, age, etc.). Every round introduces a bunker event, and players must reveal cards and argue why they deserve a place in the bunker to survive.",
+    "details": [
+      "Backend: Spark Java + WebSockets",
+      "Frontend: Vanilla JS + Tailwind CSS",
+      "Real-time: WebSocket game state sync",
+      "No database: All rooms live in memory",
+      "Zero auth: Just enter a name and play"
+    ],
+    "technologies": ["Java", "Spark", "WebSockets", "JavaScript", "Tailwind CSS"],
+    "link": "#"
+  },
+  {
+    "title": "Resume Website",
+    "summary": "A consistently styled, responsive personal resume website built with HTML, CSS (Bootstrap), and JavaScript. It uses a JSON-driven approach for easy content management.",
+    "technologies": ["HTML", "CSS", "Bootstrap", "JavaScript", "Docker"],
+    "link": "https://github.com/pusanli/resume"
+  }
+]

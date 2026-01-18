@@ -26,6 +26,12 @@
       "href": "https://www.linkedin.com/in/pavel-usanli-721946102"
     },
     {
+      "text": "GitHub",
+      "icon": "fa-brands fa-github",
+      "class": "btn btn-outline-secondary",
+      "href": "https://github.com/kalpak44"
+    },
+    {
       "text": "Resume",
       "icon": "fa-solid fa-download",
       "class": "btn btn-outline-secondary",

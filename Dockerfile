@@ -1,5 +1,5 @@
 # Stage 1: Build PDF and Web Apps
-FROM node:18-slim AS builder
+FROM node:22-slim AS builder
 
 # Install puppeteer dependencies
 RUN apt-get update && apt-get install -y \

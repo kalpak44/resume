@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Markdown } from '../components/Markdown'
 
 export function ProjectDetails({ projects }) {
   const { id } = useParams()
@@ -13,15 +14,18 @@ export function ProjectDetails({ projects }) {
     )
   }
 
+  // Combine description and details into a single markdown content
+  const markdownContent = `
+${project.description}
+
+### Key Features & Details
+${project.details_md || project.details.map(d => `* ${d}`).join('\n')}
+
+### Technologies Used
+  `.trim()
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Link to="/projects" className="text-primary hover:underline flex items-center gap-2">
-          <i className="fa-solid fa-arrow-left"></i>
-          Back to Projects
-        </Link>
-      </div>
-      
       <div className="card-flat">
         <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
           <div>
@@ -41,20 +45,10 @@ export function ProjectDetails({ projects }) {
           </div>
         </div>
 
-        <div className="prose dark:prose-invert max-w-none">
-          <p className="text-lg leading-relaxed text-foreground/90">
-            {project.description}
-          </p>
-
-          <h3 className="text-xl font-bold mt-8 mb-4">Key Features & Details</h3>
-          <ul className="list-disc list-outside ml-6 space-y-2 text-foreground/85">
-            {project.details.map((detail, idx) => (
-              <li key={idx}>{detail}</li>
-            ))}
-          </ul>
-
-          <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
-          <div className="flex flex-wrap gap-2">
+        <div>
+          <Markdown content={markdownContent} />
+          
+          <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
             {project.technologies.map((tech, idx) => (
               <span key={idx} className="pill">{tech}</span>
             ))}

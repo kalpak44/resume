@@ -6,7 +6,7 @@ export function Resume({ profile }) {
       {/* Summary Section */}
       <div className="card-flat">
         <h2 className="section-title">Summary</h2>
-        <p className="text-foreground/90 leading-[1.7] text-[1.05rem]">
+        <p className="text-foreground leading-[1.7] text-[1.05rem]">
           {profile.summary}
         </p>
       </div>
@@ -25,16 +25,16 @@ export function Resume({ profile }) {
                   {job.meta.split(',')[0]}
                 </span>
               </div>
-              <div className="text-muted-light dark:text-muted-dark text-[0.9rem] mt-[2px]">
+              <div className="text-foreground/70 dark:text-foreground/60 text-[0.9rem] mt-[2px]">
                 {job.meta.split(',').slice(1).join(',').trim()}
               </div>
               {job.description && (
-                <p className="mt-3 text-foreground/90 leading-[1.6]">
+                <p className="mt-3 text-foreground leading-[1.6]">
                   {job.description}
                 </p>
               )}
               {job.bullets && (
-                <ul className="list-disc list-outside ml-[1.2rem] mt-[10px] space-y-1.5 text-foreground/85">
+                <ul className="list-disc list-outside ml-[1.2rem] mt-[10px] space-y-1.5 text-foreground">
                   {job.bullets.map((bullet, bIdx) => (
                     <li key={bIdx} className="mb-[6px]">
                       {bullet}
@@ -66,7 +66,7 @@ export function Resume({ profile }) {
             <div key={idx} className={`flex flex-col gap-1 ${idx > 0 ? 'mt-[25px] pt-[25px] border-t border-dashed border-line-light dark:border-line-dark' : ''}`}>
               <div className="font-bold text-lg">{edu.school}</div>
               <div className="text-primary font-medium">{edu.degree}</div>
-              {edu.faculty && <div className="text-muted-light dark:text-muted-dark text-sm">{edu.faculty}</div>}
+              {edu.faculty && <div className="text-foreground/70 dark:text-foreground/60 text-sm">{edu.faculty}</div>}
             </div>
           ))}
         </div>

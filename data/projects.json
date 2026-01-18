@@ -1,7 +1,7 @@
 [
   {
     "id": "bunker",
-    "title": "Bunker: Browser-based Party Game",
+    "title": "Bunker: Browser-based Party Game (Spark Java, Vanila JS)",
     "summary": "A fast, browser-based real-time party game inspired by the popular “Bunker” format. Players receive survival characters with hidden attributes and must convince others why they deserve a spot in the bunker during escalating disaster rounds.",
     "description": "This project is a web adaptation of the “Bunker” party game that I personally enjoy. I built it as a lightweight, real-time multiplayer experience playable directly in the browser. The main goal was to reproduce the original game mechanics online while exploring micro-backend development in Java for the first time using Spark. I also focused heavily on engineering practices by integrating SonarCloud for automated code quality analysis, adding JaCoCo for test coverage reporting, and using Jib for streamlined Docker image builds. Additional tooling such as the Spotify formatting/check plugin helped enforce consistent code style. Real-time gameplay is powered by WebSockets to keep all players synchronized with minimal latency, without requiring authentication or a persistent database.",
     "details": [
@@ -72,6 +72,86 @@
       "NGINX"
     ],
     "github": "https://github.com/kalpak44/homelab-k8s",
+    "url": "",
+    "link": "#"
+  },
+  {
+    "id": "telegram-stripe-bot",
+    "title": "Telegram Stripe Payment Bot (Java, Docker, ARM32)",
+    "summary": "A lightweight Telegram bot that generates Stripe Checkout payment links from chat input, built in raw Java and deployed via Docker on Raspberry Pi (ARM32).",
+    "description": "A minimal Telegram bot designed to streamline payment collection for small sellers. The bot collects product details directly in chat (name, quantity, price, currency) and generates a Stripe Checkout session link for one-time payments. Built as a framework-free Java application focused on simplicity, low resource usage, and portable deployment, including ARM32 Docker builds for Raspberry Pi hosting.",
+    "details": [
+      "Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links",
+      "Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely",
+      "Built framework-free Java service with minimal dependencies for fast startup and low memory usage",
+      "Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments",
+      "Configured runtime via environment variables with optional properties-based fallback for flexible deployments",
+      "Added structured logging using SLF4J + Logback for easier troubleshooting and observability"
+    ],
+    "details_md": "* Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links\n* Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely\n* Built framework-free Java service with minimal dependencies for fast startup and low memory usage\n* Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments\n* Configured runtime via environment variables with optional properties-based fallback for flexible deployments\n* Added structured logging using SLF4J + Logback for easier troubleshooting and observability\n\n```mermaid\ngraph TD\n  Seller[Seller in Telegram] --> Bot[Java Telegram Bot]\n  Bot --> Stripe[Stripe Checkout Session]\n  Stripe --> Link[Payment Link]\n  Bot --> Seller\n```\n\n**Purpose:** Enable quick payment link creation directly from Telegram without building a full storefront UI.\n\n**Bonus:** Used this project to experiment with multi-architecture Docker image builds (ARM32 for Raspberry Pi) and validate how far a small, framework-free Java service can go in terms of memory efficiency and operational simplicity.",
+    "technologies": [
+      "Java",
+      "Java 17",
+      "TelegramBots API",
+      "Stripe Java SDK",
+      "Docker",
+      "ARM32",
+      "Maven",
+      "SLF4J",
+      "Logback"
+    ],
+    "github": "https://github.com/kalpak44/telegram-bot",
+    "url": "",
+    "link": "#"
+  },
+  {
+    "id": "code-viewer-bot",
+    "title": "Code Viewer Bot (VS Code Extension + Multi-Platform CI Releases)",
+    "summary": "A tiny VS Code extension that randomly opens files and wiggles the cursor — because apparently being \"active\" is a KPI now 😄",
+    "description": "A fun experimental Visual Studio Code extension built after hearing stories about how some workplaces obsess over “activity status” in chat apps. This extension randomly opens files from the current project and performs simple cursor movements — like a tiny developer hamster running in a wheel.\n\nTechnically, the real goal was to experiment with VS Code extension APIs in plain JavaScript and set up a CI pipeline that produces downloadable builds for multiple platforms (Windows/macOS) via GitHub Releases.",
+    "details": [
+      "Built a VS Code extension in JavaScript that randomly opens workspace files and moves the cursor around like it’s \"busy\"",
+      "Implemented workspace file discovery + random rotation logic across the project directory",
+      "Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API",
+      "Set up GitHub Actions to build and package the extension into `.vsix` artifacts",
+      "Automated GitHub Releases with multi-platform builds (Windows/macOS) so the extension can be downloaded directly from CI"
+    ],
+    "details_md": "* Built a VS Code extension in **JavaScript** that randomly opens workspace files and moves the cursor around like it’s \"busy\"\n* Implemented workspace file discovery + random rotation logic across the project directory\n* Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API\n* Set up GitHub Actions to build and package the extension into `.vsix` artifacts\n* Automated GitHub Releases with **multi-platform builds (Windows/macOS)** so the extension can be downloaded directly from CI\n\n```mermaid\ngraph TD\n  A[Run Extension] --> B[Scan Workspace Files]\n  B --> C[Pick Random File]\n  C --> D[Open in Editor]\n  D --> E[Move Cursor a Bit]\n  E --> C\n```\n\n**Purpose:** A small “because I can” project — play with VS Code extension APIs and automate code browsing.\n\n**Bonus:** Practiced CI/CD + release automation by generating ready-to-install `.vsix` builds for Windows/macOS via GitHub Actions and publishing them through GitHub Releases.\n\n> **Disclaimer:** This bot moves the cursor. It does not fix bugs, write features, or survive standups on your behalf 😄",
+    "technologies": [
+      "JavaScript",
+      "Node.js",
+      "VS Code Extension API",
+      "GitHub Actions",
+      "CI/CD",
+      "GitHub Releases"
+    ],
+    "github": "https://github.com/kalpak44/code-viewer-bot",
+    "url": "",
+    "link": "#"
+  },
+  {
+    "id": "simple-k8s-operator",
+    "title": "Simple Kubernetes Operator (Go, CRDs, Controller Runtime)",
+    "summary": "A sandbox Kubernetes operator written in Go to explore CRDs, reconciliation loops, and the end-to-end operator development workflow.",
+    "description": "A small experimental Kubernetes Operator built to understand how operators work internally and how custom controllers extend Kubernetes. The project includes a basic Custom Resource Definition (CRD) and a controller that reconciles resource state inside a cluster. While intentionally lightweight and used mainly for learning, it provided hands-on experience with operator scaffolding, manifests, and the full build → deploy → apply cycle on a real Kubernetes environment.",
+    "details": [
+      "Built a Hello World Kubernetes Operator in Go with a minimal reconciliation loop",
+      "Created and applied custom CRDs and controller manifests to a Kubernetes cluster",
+      "Practiced the Kubernetes operator development workflow: scaffold → build → deploy → reconcile",
+      "Learned core Go syntax and patterns commonly used in controller-style codebases",
+      "Deepened Kubernetes understanding around controllers, desired state, and cluster extensibility"
+    ],
+    "details_md": "* Built a Hello World Kubernetes Operator in **Go** with a minimal reconciliation loop\n* Created and applied custom **CRDs** and controller manifests to a Kubernetes cluster\n* Practiced the full operator workflow: **scaffold → build → deploy → apply manifests → reconcile**\n* Learned practical Go fundamentals relevant to Kubernetes tooling and controllers\n* Improved understanding of Kubernetes internals: controllers, desired state, and reconciliation patterns\n\n**Purpose:** Learn operator fundamentals and Kubernetes extensibility by building a real controller + CRD.\n\n**Bonus:** Solidified the operator mental model and built confidence to implement more advanced operators with stronger Go skills when needed.",
+    "technologies": [
+      "Go",
+      "Kubernetes",
+      "Operators",
+      "CRDs",
+      "Controller Runtime",
+      "kubectl",
+      "YAML Manifests"
+    ],
+    "github": "https://github.com/kalpak44/simple-k8s-operator",
     "url": "",
     "link": "#"
   }

@@ -16,19 +16,19 @@ function App() {
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/profile.json`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.avatar && data.avatar.startsWith('./data/')) {
-          data.avatar = `${import.meta.env.BASE_URL}${data.avatar.substring(2)}`;
+          data.avatar = `${import.meta.env.BASE_URL}${data.avatar.substring(2)}`
         }
         setProfile(data)
       })
-      .catch(err => console.error('Error loading profile:', err))
+      .catch((err) => console.error('Error loading profile:', err))
 
     fetch(`${import.meta.env.BASE_URL}data/projects.json`)
-      .then(res => res.json())
-      .then(data => setProjects(data))
-      .catch(err => console.error('Error loading projects:', err))
+      .then((res) => res.json())
+      .then((data) => setProjects(data))
+      .catch((err) => console.error('Error loading projects:', err))
   }, [])
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function App() {
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark')
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
   }
 
   return (

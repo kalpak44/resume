@@ -27,30 +27,30 @@ const dataPlugin = () => ({
       if (!fs.existsSync(destDir)) {
         fs.mkdirSync(destDir, { recursive: true })
       }
-      fs.readdirSync(srcDir).forEach(file => {
+      fs.readdirSync(srcDir).forEach((file) => {
         fs.copyFileSync(path.join(srcDir, file), path.join(destDir, file))
       })
     }
-  }
+  },
 })
 
 function getContentType(filePath) {
   const ext = path.extname(filePath).toLowerCase()
   switch (ext) {
-    case '.json': return 'application/json'
+    case '.json':
+      return 'application/json'
     case '.jpg':
-    case '.jpeg': return 'image/jpeg'
-    case '.png': return 'image/png'
-    default: return 'application/octet-stream'
+    case '.jpeg':
+      return 'image/jpeg'
+    case '.png':
+      return 'image/png'
+    default:
+      return 'application/octet-stream'
   }
 }
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
-  plugins: [
-    react(),
-    tailwindcss(),
-    dataPlugin(),
-  ],
+  plugins: [react(), tailwindcss(), dataPlugin()],
 })

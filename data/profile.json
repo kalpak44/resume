@@ -1,7 +1,7 @@
 {
   "name": "Pavel Usanli",
   "role": "Software Engineer Specializing in Java",
-  "avatar": "./assets/profile.jpg",
+  "avatar": "./data/profile.jpg",
   "meta": [
     {
       "icon": "fa-solid fa-location-dot",

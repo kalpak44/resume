@@ -1,7 +1,14 @@
 async function loadProfile() {
     const res = await fetch("./data/profile.json", {cache: "no-store"});
     if (!res.ok) throw new Error("Failed to load ./data/profile.json");
-    return res.json();
+    const data = await res.json();
+    
+    // Fix avatar path if it was relative to old site structure
+    if (data.avatar && data.avatar.includes('assets/')) {
+        data.avatar = data.avatar.replace('assets/', 'data/');
+    }
+    
+    return data;
 }
 
 function el(tag, className, text) {

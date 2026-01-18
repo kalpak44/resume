@@ -50,16 +50,22 @@ WORKDIR /app
 COPY . .
 
 # Run the PDF builder
-RUN chmod +x resume-builder/build-pdf.sh && ./resume-builder/build-pdf.sh
+WORKDIR /app/pdf
+RUN npm install && npm run build
+WORKDIR /app
 
 # Stage 2: Nginx
 FROM nginx:latest
 
 # Copy the static site content
-COPY --from=builder /app/site /usr/share/nginx/html
+COPY --from=builder /app/web /usr/share/nginx/html
+
+# Copy the shared data to the web folder (so it can be served)
+COPY --from=builder /app/data/profile.json /usr/share/nginx/html/data/profile.json
+COPY --from=builder /app/data/profile.jpg /usr/share/nginx/html/data/profile.jpg
 
 # Copy the generated PDF to the assets folder
-COPY --from=builder /app/resume-builder/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf
+COPY --from=builder /app/pdf/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf
 
 # Expose port 80
 EXPOSE 80

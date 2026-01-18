@@ -27,13 +27,13 @@ function renderTemplate(template, data) {
 
 async function build() {
     const rootDir = path.join(__dirname, '..');
-    const profilePath = path.join(rootDir, 'site/data/profile.json');
+    const profilePath = path.join(rootDir, 'data/profile.json');
     const templatePath = path.join(__dirname, 'template.html');
     const distDir = path.join(__dirname, 'dist');
     const outputPath = path.join(distDir, 'resume.pdf');
 
     if (!fs.existsSync(distDir)) {
-        fs.mkdirSync(distDir, { recursive: true });
+        fs.mkdirSync(distDir, {recursive: true});
     }
 
 
@@ -60,7 +60,7 @@ async function build() {
 
     // Convert avatar to base64
     if (profileData.avatar) {
-        const avatarPath = path.join(rootDir, 'site', profileData.avatar);
+        const avatarPath = path.join(rootDir, 'data', path.basename(profileData.avatar));
         if (fs.existsSync(avatarPath)) {
             const avatarBase64 = fs.readFileSync(avatarPath).toString('base64');
             const ext = path.extname(avatarPath).replace('.', '');
@@ -76,7 +76,7 @@ async function build() {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' });
+    await page.goto(`file://${tempHtmlPath}`, {waitUntil: 'networkidle0'});
     await page.pdf({
         path: outputPath,
         format: 'A4',

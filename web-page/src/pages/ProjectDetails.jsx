@@ -1,9 +1,15 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Markdown } from '../components/Markdown'
 
 export function ProjectDetails({ projects }) {
   const { id } = useParams()
+  const navigate = useNavigate()
   const project = projects.find((p) => p.id === id)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [id])
 
   if (!project) {
     return (
@@ -69,13 +75,13 @@ ${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
       </div>
 
       <div className="flex justify-center pt-4 pb-8">
-        <Link
-          to="/"
+        <button
+          onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group"
         >
           <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
           Back to Resume
-        </Link>
+        </button>
       </div>
     </div>
   )

@@ -25,31 +25,30 @@ export function Resume({ profile, projects }) {
           {profile.experience.map((job, idx) => (
             <div
               key={idx}
-              className={`${
-                idx > 0
-                  ? 'mt-[47px] pt-[47px] border-t border-line-light dark:border-line-dark'
-                  : ''
-              }`}
+              className={`${idx > 0 ? 'border-t border-line-light/60 -mt-px pt-4 mt-4' : ''}`}
             >
               <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-2">
-                <h3 className="text-[1.25rem] font-semibold text-foreground">
+                <h3 className="text-[1.25rem] font-semibold text-foreground tracking-tight">
                   {job.title}
                 </h3>
-                <span className="text-primary font-medium text-[1.05rem]">
+
+                <span className="text-[0.75rem] font-medium text-primary uppercase tracking-wider opacity-85">
                   {job.meta.split(',')[0]}
                 </span>
               </div>
 
-              <div className="text-foreground/70 dark:text-foreground/60 text-[0.9rem] mt-[2px]">
+              <div className="text-foreground/70 dark:text-foreground/60 text-[0.95rem] mt-1">
                 {job.meta.split(',').slice(1).join(',').trim()}
               </div>
 
               {job.description && (
-                <p className="mt-3 text-foreground leading-[1.6]">{job.description}</p>
+                <p className="mt-3 text-foreground leading-[1.65] text-[0.98rem]">
+                  {job.description}
+                </p>
               )}
 
               {job.bullets && (
-                <ul className="list-disc list-outside ml-[1.2rem] mt-[10px] space-y-1.5 text-foreground">
+                <ul className="list-disc list-outside ml-[1.2rem] mt-[10px] space-y-1.5 text-foreground text-[0.98rem] leading-[1.65]">
                   {job.bullets.map((bullet, bIdx) => (
                     <li key={bIdx} className="mb-[6px]">
                       {bullet}
@@ -66,7 +65,7 @@ export function Resume({ profile, projects }) {
                     ...(job.skills || []),
                   ]),
                 ].map((pill, pIdx) => (
-                  <span key={pIdx} className="pill text-[0.75rem] opacity-80">
+                  <span key={pIdx} className="pill text-[0.75rem] opacity-85">
                     {pill}
                   </span>
                 ))}
@@ -84,63 +83,64 @@ export function Resume({ profile, projects }) {
             Hobby Projects
           </h2>
 
-          <div className="grid gap-6">
-            {projects.map((project) => (
-              <Link
+          <div className="flex flex-col">
+            {projects.map((project, idx) => (
+              <div
                 key={project.id}
-                to={`/projects/${project.id}`}
-                aria-label={`Open project details for ${project.title}`}
-                className="group block p-4 -m-4 rounded-xl transition-all
-                           hover:bg-primary/5 active:bg-primary/10
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                className={`${idx > 0 ? 'border-t border-line-light/60 -mt-px pt-4 mt-4' : ''}`}
               >
-                {/* Title + Action */}
-                <div className="flex justify-between items-start gap-4">
-                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-
-                  {/* Always visible on ALL screens (mobile + tablets + desktop) */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span
-                      className="text-xs font-medium text-primary uppercase tracking-wider
-                                 opacity-90 group-hover:opacity-100 transition-opacity"
-                    >
-                      Tap for details
-                    </span>
-
-                    <i
-                      className="fa-solid fa-arrow-right text-primary
-                                 opacity-90 group-hover:opacity-100
-                                 transition-all transform group-hover:translate-x-1"
+                <Link
+                  to={`/projects/${project.id}`}
+                  aria-label={`Open project details for ${project.title}`}
+                  className="group block -mx-2 px-2 py-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                >
+                  <div className="relative">
+                    <div
+                      className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 transition-opacity
+                                 group-hover:opacity-100 group-active:bg-primary/10 pointer-events-none"
                       aria-hidden="true"
                     />
+
+                    <div className="relative rounded-2xl px-4 py-4">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-[1.15rem] font-semibold text-foreground tracking-tight group-hover:text-primary transition-colors">
+                            {project.title}
+                          </h3>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[0.75rem] font-medium text-primary uppercase tracking-wider opacity-80 group-hover:opacity-100 transition-opacity">
+                              View details
+                            </span>
+                            <i
+                              className="fa-solid fa-arrow-right text-primary opacity-80 group-hover:opacity-100 transition-all transform group-hover:translate-x-1"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        </div>
+
+                        <p className="text-foreground/75 text-[0.95rem] leading-[1.65] mt-1">
+                          {project.summary}
+                        </p>
+
+                        <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
+                          {(project.technologies || []).slice(0, 6).map((tech, tIdx) => (
+                            <span key={tIdx} className="pill text-[0.75rem] opacity-85">
+                              {tech}
+                            </span>
+                          ))}
+
+                          {(project.technologies || []).length > 6 && (
+                            <span className="text-foreground/55 text-[0.75rem] self-center">
+                              +{project.technologies.length - 6} more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                {/* Summary */}
-                <p className="text-foreground/80 mt-2 text-[0.95rem]">
-                  {project.summary}
-                </p>
-
-                {/* Tech pills */}
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {(project.technologies || []).slice(0, 6).map((tech, idx) => (
-                    <span key={idx} className="pill text-[0.7rem]">
-                      {tech}
-                    </span>
-                  ))}
-
-                  {(project.technologies || []).length > 6 && (
-                    <span className="text-foreground/50 text-[0.7rem] self-center">
-                      +{project.technologies.length - 6} more
-                    </span>
-                  )}
-                </div>
-
-                {/* Optional subtle divider cue on mobile */}
-                <div className="mt-3 h-px bg-line-light/70 dark:bg-line-dark/70 md:hidden" />
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
@@ -159,14 +159,16 @@ export function Resume({ profile, projects }) {
               key={idx}
               className={`flex flex-col gap-1 ${
                 idx > 0
-                  ? 'mt-[25px] pt-[25px] border-t border-dashed border-line-light dark:border-line-dark'
+                  ? 'mt-[25px] pt-[25px] border-t border-dashed border-line-light/60 '
                   : ''
               }`}
             >
-              <div className="font-bold text-lg">{edu.school}</div>
-              <div className="text-primary font-medium">{edu.degree}</div>
+              <div className="text-[1.15rem] font-semibold text-foreground tracking-tight">
+                {edu.school}
+              </div>
+              <div className="text-primary font-medium text-[1.05rem]">{edu.degree}</div>
               {edu.faculty && (
-                <div className="text-foreground/70 dark:text-foreground/60 text-sm">
+                <div className="text-foreground/70 dark:text-foreground/60 text-[0.95rem] mt-1">
                   {edu.faculty}
                 </div>
               )}

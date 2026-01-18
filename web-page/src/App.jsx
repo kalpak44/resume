@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
-import { ScrollToTop } from './components/ScrollToTop'
 import { Resume } from './pages/Resume'
 import { ProjectDetails } from './pages/ProjectDetails'
 
@@ -42,7 +41,6 @@ function App() {
 
   return (
     <Router>
-      <ScrollToTop />
       <Layout theme={theme} toggleTheme={toggleTheme} profile={profile}>
         <Routes>
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />

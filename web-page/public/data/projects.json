@@ -13,9 +13,10 @@
       "Containerization: Docker image builds using Jib (no Dockerfile needed)",
       "Code style: Spotify fmt/check plugin for consistent formatting and validation",
       "No database: Rooms and game sessions stored in memory",
-      "Zero auth: Players join instantly by entering a name"
+      "Zero auth: Players join instantly by entering a name",
+      "Bonus: During coding I learned that it's a great game to play with friends, and we still do it from time to time"
     ],
-    "details_md": "* **Backend**: Spark Java micro-backend + WebSockets (first experience)\n* **Frontend**: Vanilla JS + Tailwind CSS\n* **Real-time**: WebSocket-based state synchronization for multiplayer sessions\n* **Code quality**: SonarCloud integration for static analysis and quality gates\n* **Test coverage**: JaCoCo reports published into SonarCloud\n* **Containerization**: Docker image builds using Jib (no Dockerfile needed)\n* **Code style**: Spotify fmt/check plugin for consistent formatting and validation\n* **No database**: Rooms and game sessions stored in memory\n* **Zero auth**: Players join instantly by entering a name\n\n```mermaid\ngraph TD\n    A[Player 1] <-->|WebSocket| B(Spark Java Backend)\n    C[Player 2] <-->|WebSocket| B\n    B -->|Game State| D{In-Memory Storage}\n```",
+    "details_md": "* **Backend**: Spark Java micro-backend + WebSockets (first experience)\n* **Frontend**: Vanilla JS + Tailwind CSS\n* **Real-time**: WebSocket-based state synchronization for multiplayer sessions\n* **Code quality**: SonarCloud integration for static analysis and quality gates\n* **Test coverage**: JaCoCo reports published into SonarCloud\n* **Containerization**: Docker image builds using Jib (no Dockerfile needed)\n* **Code style**: Spotify fmt/check plugin for consistent formatting and validation\n* **No database**: Rooms and game sessions stored in memory\n* **Zero auth**: Players join instantly by entering a name\n\n```mermaid\ngraph TD\n    A[Player 1] <-->|WebSocket| B(Spark Java Backend)\n    C[Player 2] <-->|WebSocket| B\n    B -->|Game State| D{In-Memory Storage}\n```\n\n> **Bonus:** Beyond the technical challenge, I discovered that this is a great game to play with friends! We still enjoy playing it together from time to time.",
     "technologies": [
       "Java",
       "Spark Java",

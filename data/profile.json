@@ -43,11 +43,13 @@
     {
       "title": "Software Engineer",
       "meta": "foryouandyourcustomers, Sofia (Full-time, June 2020 - Present)",
-      "description": "As a Software Engineer with experience in Kubernetes, Java, and Data Transformation, I am responsible for the design and development of scalable and reliable microservices and data transformation applications. My primary duties include:",
+      "description": "As a Software Engineer, I develop microservices in Java and Kubernetes, ensuring clean, secure, and maintainable solutions.",
       "bullets": [
-        "Developed and deployed microservices and data transformation applications using Java and Kubernetes.",
-        "Implemented data transformation processes to convert large volumes of data into structured format.",
-        "Participated in code and design reviews."
+        "Designed, developed, and deployed microservices and data transformation applications using Java and Kubernetes.",
+        "Collaborated with Product Owners to refine PBIs, clarify scope, and ensure readiness and alignment with product goals.",
+        "Reviewed code and approved Pull Requests, ensuring code quality, security, and adherence to engineering standards.",
+        "Implemented unit tests and test cases, supporting reliable releases and stable production systems.",
+        "Proposed and documented architectural improvements and best practices to maintain a clean and scalable codebase."
       ],
       "technologies": [
         "Azure DevOps",

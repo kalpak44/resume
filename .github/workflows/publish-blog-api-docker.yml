@@ -34,7 +34,7 @@ jobs:
       - name: Build image (Spring Boot)
         working-directory: blog-api
         run: |
-          ./mvn -DskipTests spring-boot:build-image \
+          mvn -DskipTests spring-boot:build-image \
             -Dspring-boot.build-image.imageName=kalpak44/blog_api:latest
 
       - name: Tag image with short sha

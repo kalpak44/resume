@@ -3,10 +3,16 @@ name: Build and Publish Docker Image
 on:
   push:
     branches: [ "main", "master" ]
+  paths:
+    - "web-page/**"
+    - "pdf/**"
+    - "ngnix/**"
+    - "data/**"
+    - ".github/workflows/publish-frontend.yml"
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  publish-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

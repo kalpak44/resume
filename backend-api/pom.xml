@@ -11,10 +11,10 @@
 	</parent>
 
 	<groupId>com.home</groupId>
-	<artifactId>backend</artifactId>
+	<artifactId>webpage</artifactId>
 	<version>0.0.1</version>
 
-	<name>web-page-api</name>
+	<name>personal-web-page-api</name>
 	<description>Simple web page backend</description>
 	<url/>
 	<licenses>

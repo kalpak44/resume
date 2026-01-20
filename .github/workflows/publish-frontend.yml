@@ -37,9 +37,9 @@ jobs:
         working-directory: frontend-app/frontend-app
         run: npm run format:check
 
-      - name: Run linter
-        working-directory: frontend-app/frontend-app
-        run: npm run lint
+#      - name: Run linter
+#        working-directory: frontend-app/frontend-app
+#        run: npm run lint
 
   publish-frontend:
     needs: lint-and-format

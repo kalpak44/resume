@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>4.0.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
+		<!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>com.home</groupId>
 	<artifactId>blog</artifactId>
 	<version>0.0.1</version>
+
 	<name>blog</name>
 	<description>Simple blog</description>
 	<url/>
 	<licenses>
 		<license/>
 	</licenses>
+
 	<developers>
 		<developer/>
 	</developers>
+
 	<scm>
 		<connection/>
 		<developerConnection/>
@@ -31,24 +34,19 @@
 
 	<properties>
 		<java.version>25</java.version>
-		<maven.compiler.release>${java.version}</maven.compiler.release>
+
+		<!-- Settings: maven-build -->
+		<maven.build.timestamp.format>yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;</maven.build.timestamp.format>
+
+		<!-- Encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<springdoc-openapi.version>3.0.1</springdoc-openapi.version>
-
-		<spring-boot-maven-plugin.version>4.0.1</spring-boot-maven-plugin.version>
-		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
-		<tidy-maven-plugin.version>1.4.0</tidy-maven-plugin.version>
-		<fmt-maven-plugin.version>2.29</fmt-maven-plugin.version>
-		<maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
 		<!-- Settings: Sonar Cloud -->
 		<sonar.language>java</sonar.language>
 		<sonar.organization>kalpak44</sonar.organization>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		<sonar.java.source>${java.version}</sonar.java.source>
+		<sonar.java.source>25</sonar.java.source>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.jacoco.reportsPaths>${project.build.directory}/jacoco-ut.exec</sonar.jacoco.reportsPaths>
@@ -56,6 +54,16 @@
 		<sonar.coverage.exclusions>**/com/home/blog/BlogApplication.java</sonar.coverage.exclusions>
 		<sonar.tests>src/test/java</sonar.tests>
 		<sonar.projectKey>personal-web-page</sonar.projectKey>
+
+		<!-- Plugin versions -->
+		<fmt-maven-plugin.version>2.29</fmt-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+		<tidy-maven-plugin.version>1.4.0</tidy-maven-plugin.version>
+		<maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+
+		<!-- Dependency versions -->
+		<springdoc-openapi.version>3.0.1</springdoc-openapi.version>
 	</properties>
 
 	<dependencies>
@@ -107,20 +115,41 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>resolve-mockito-agent</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<!--suppress UnresolvedMavenProperty -->
+					<argLine>@{argLine} -Dfile.encoding=${project.build.sourceEncoding} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+					<includes>
+						<include>**/*Test*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring-boot-maven-plugin.version}</version>
 			</plugin>
 
 			<plugin>
@@ -193,20 +222,6 @@
 				<artifactId>fmt-maven-plugin</artifactId>
 				<version>${fmt-maven-plugin.version}</version>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
-				<configuration>
-					<!--suppress UnresolvedMavenProperty -->
-					<argLine>@{argLine} -Dfile.encoding=${project.build.sourceEncoding} -javaagent:${org.mockito:mockito-core:jar}</argLine>
-					<includes>
-						<include>**/*Test*.java</include>
-					</includes>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>

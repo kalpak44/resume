@@ -12,18 +12,19 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class BlogService {
 
-    private final BlogRepository blogRepository;
+  private final BlogRepository blogRepository;
 
-    public BlogService(BlogRepository blogRepository) {
-        this.blogRepository = blogRepository;
-    }
+  public BlogService(BlogRepository blogRepository) {
+    this.blogRepository = blogRepository;
+  }
 
-    public Page<BlogSummary> list(Pageable pageable) {
-        return blogRepository.findSummaries(pageable);
-    }
+  public Page<BlogSummary> list(Pageable pageable) {
+    return blogRepository.findSummaries(pageable);
+  }
 
-    public BlogDetails details(Long id) {
-        return blogRepository.findDetailsById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
+  public BlogDetails details(Long id) {
+    return blogRepository
+        .findDetailsById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+  }
 }

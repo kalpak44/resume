@@ -18,28 +18,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blogs")
 public class BlogController {
 
-    private final BlogService blogService;
+  private final BlogService blogService;
 
-    public BlogController(BlogService blogService) {
-        this.blogService = blogService;
-    }
+  public BlogController(BlogService blogService) {
+    this.blogService = blogService;
+  }
 
-    @Operation(summary = "List blogs (paginated)", description = "Returns blog summaries ordered by creation date (newest first).")
-    @GetMapping
-    public Page<BlogSummary> list(
-            @ParameterObject
-            @Parameter(description = "Pagination parameters: page, size, sort")
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
-        return blogService.list(pageable);
-    }
+  @Operation(
+      summary = "List blogs (paginated)",
+      description = "Returns blog summaries ordered by creation date (newest first).")
+  @GetMapping
+  public Page<BlogSummary> list(
+      @ParameterObject
+          @Parameter(description = "Pagination parameters: page, size, sort")
+          @PageableDefault(size = 20)
+          Pageable pageable) {
+    return blogService.list(pageable);
+  }
 
-    @Operation(summary = "Get blog details", description = "Returns a single blog by id.")
-    @GetMapping("/{id}")
-    public BlogDetails details(
-            @Parameter(description = "Blog id", required = true)
-            @PathVariable Long id
-    ) {
-        return blogService.details(id);
-    }
+  @Operation(summary = "Get blog details", description = "Returns a single blog by id.")
+  @GetMapping("/{id}")
+  public BlogDetails details(
+      @Parameter(description = "Blog id", required = true) @PathVariable Long id) {
+    return blogService.details(id);
+  }
 }

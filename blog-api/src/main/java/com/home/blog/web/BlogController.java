@@ -1,4 +1,3 @@
-// src/main/java/com/home/blog/web/blog/BlogController.java
 package com.home.blog.web;
 
 import com.home.blog.domain.BlogDetails;

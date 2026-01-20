@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Layout } from './components/Layout'
-import { Resume } from './pages/Resume'
-import { ProjectDetails } from './pages/ProjectDetails'
+import { Layout } from './components/Layout.jsx'
+import { Resume } from './pages/Resume.jsx'
+import { ProjectDetails } from './pages/ProjectDetails.jsx'
 
 function App() {
   const [profile, setProfile] = useState(null)

@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image
+name: Build and Publish Front End Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
       - master
     paths-ignore:
-      - "blog-api/**"
+      - "backend-api/**"
   workflow_dispatch:
 
 jobs:

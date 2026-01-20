@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useEffect } from 'react'
-import { Markdown } from '../components/Markdown'
+import { Markdown } from '../components/Markdown.jsx'
 
 export function ProjectDetails({ projects }) {
   const { id } = useParams()

@@ -1,10 +1,12 @@
-name: Publish Blog API Docker
+name: Build and Publish Back End Docker Image
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches:
+      - main
+      - master
     paths:
-      - "blog-api/**"
+      - "backend-api/**"
   workflow_dispatch:
 
 jobs:

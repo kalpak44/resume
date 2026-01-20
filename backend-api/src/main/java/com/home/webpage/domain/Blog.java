@@ -1,6 +1,11 @@
 package com.home.webpage.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.Instant;
 
 @Entity
@@ -11,7 +16,7 @@ public class Blog {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String title;
 
   @Column(name = "short_description", nullable = false, length = 500)
@@ -23,7 +28,9 @@ public class Blog {
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
 
-  public Blog() {}
+  public Blog() {
+    // Empty constructor
+  }
 
   public Long getId() {
     return id;

@@ -54,15 +54,15 @@ jobs:
         working-directory: backend-api
         run: |
           mvn -B -DskipTests spring-boot:build-image \
-            -Dspring-boot.build-image.imageName=kalpak44/blog_api:latest
+            -Dspring-boot.build-image.imageName=kalpak44/personal-web-page-api:latest
 
       - name: Tag image with short sha
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
-          docker tag kalpak44/blog_api:latest kalpak44/blog_api:${SHORT_SHA}
+          docker tag kalpak44/personal-web-page-api:latest kalpak44/personal-web-page-api:${SHORT_SHA}
 
       - name: Push images
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
-          docker push kalpak44/blog_api:latest
-          docker push kalpak44/blog_api:${SHORT_SHA}
+          docker push kalpak44/personal-web-page-api:latest
+          docker push kalpak44/personal-web-page-api:${SHORT_SHA}

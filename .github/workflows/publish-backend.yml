@@ -27,19 +27,19 @@ jobs:
           cache: maven
 
       - name: Maven tidy check
-        working-directory: blog-api
+        working-directory: backend-api
         run: mvn -B tidy:pom
 
       - name: Maven format check
-        working-directory: blog-api
+        working-directory: backend-api
         run: mvn -B fmt:check
 
       - name: Maven test with coverage (JaCoCo)
-        working-directory: blog-api
+        working-directory: backend-api
         run: mvn -B test jacoco:report
 
       - name: Maven SonarQube report
-        working-directory: blog-api
+        working-directory: backend-api
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B sonar:sonar
@@ -51,7 +51,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image (Spring Boot)
-        working-directory: blog-api
+        working-directory: backend-api
         run: |
           mvn -B -DskipTests spring-boot:build-image \
             -Dspring-boot.build-image.imageName=kalpak44/blog_api:latest

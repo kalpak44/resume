@@ -1,75 +1,50 @@
-# Stage 1: Build PDF and Web Apps
+# Stage 1: Build PDF and Frontend
 FROM node:22-slim AS builder
 
-# Install puppeteer dependencies
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    ca-certificates \
-    procps \
-    libxss1 \
-    libasound2 \
-    libatk1.0-0 \
-    libc6 \
-    libcairo2 \
-    libcups2 \
-    libdbus-1-3 \
-    libexpat1 \
-    libfontconfig1 \
-    libgbm1 \
-    libgcc1 \
-    libgconf-2-4 \
-    libgdk-pixbuf2.0-0 \
-    libglib2.0-0 \
-    libgtk-3-0 \
-    libnspr4 \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libstdc++6 \
-    libx11-6 \
-    libx11-xcb1 \
-    libxcb1 \
-    libxcomposite1 \
-    libxcursor1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxi6 \
-    libxrandr2 \
-    libxrender1 \
-    libxtst6 \
-    fonts-liberation \
-    libappindicator1 \
-    libnss3 \
-    lsb-release \
-    xdg-utils \
-    --no-install-recommends \
+# Tell Puppeteer not to download its own Chromium
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Install Chromium + needed deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    ca-certificates fonts-liberation \
+    libnss3 libatk-bridge2.0-0 libgtk-3-0 libasound2 \
+    libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 \
+    libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libcups2 \
+    libxss1 libxtst6 xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY .. .
 
-# Build the PDF
-WORKDIR /app/pdf
-RUN npm install && npm run build
+COPY cv-pdf-generator/package*.json ./cv-pdf-generator/
+COPY frontend-app/package*.json ./frontend-app/
 
-# Build the React app
-WORKDIR /app/web-page
-RUN npm install && npm run build
+WORKDIR /app/cv-pdf-generator
+RUN npm ci
+
+WORKDIR /app/frontend-app
+RUN npm ci
+
 WORKDIR /app
+COPY common-data ./common-data
+COPY cv-pdf-generator ./cv-pdf-generator
+COPY frontend-app ./frontend-app
+
+RUN ln -s /app/common-data /app/data
+
+WORKDIR /app/cv-pdf-generator
+RUN npm run build
+
+WORKDIR /app/frontend-app
+RUN npm run build
+
+RUN mkdir -p /app/frontend-app/dist/assets && \
+    cp /app/cv-pdf-generator/dist/resume.pdf /app/frontend-app/dist/assets/resume.pdf
+
 
 # Stage 2: Nginx
 FROM nginx:latest
-
-# Copy the React app build results to the root
-COPY --from=builder /app/web-page/dist /usr/share/nginx/html
-
-COPY --from=builder /app/pdf/dist/resume.pdf /usr/share/nginx/html/assets/resume.pdf
-
-# Add Nginx configuration to support SPA routing
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
+COPY --from=builder /app/frontend-app/dist /usr/share/nginx/html
+COPY nginx-config/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-
-# Nginx starts automatically by default

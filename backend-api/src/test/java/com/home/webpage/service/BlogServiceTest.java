@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import com.home.webpage.domain.BlogDetails;
 import com.home.webpage.domain.BlogRepository;
 import com.home.webpage.domain.BlogSummary;
+import com.home.webpage.exception.ResourceNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class BlogServiceTest {
@@ -74,9 +73,8 @@ class BlogServiceTest {
     var service = new BlogService(blogRepository);
 
     assertThatThrownBy(() -> service.details(id))
-        .isInstanceOf(ResponseStatusException.class)
-        .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
-        .isEqualTo(HttpStatus.NOT_FOUND);
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessage("Blog not found with id: " + id);
 
     verify(blogRepository).findDetailsById(id);
   }

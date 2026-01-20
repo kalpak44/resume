@@ -67,3 +67,12 @@ app:
       - "*"
     allow-credentials: false
     max-age: 3600
+  openapi:
+    title: Personal Page API
+    description: Simple API for my personal page
+    version: 0.0.1
+    contact:
+      name: Pavel Usanli
+      url: https://pavel-usanli.online/
+    servers:
+      - url: https://api.pavel-usanli.online/personal-page/v1/

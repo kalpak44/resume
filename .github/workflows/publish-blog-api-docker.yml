@@ -25,6 +25,24 @@ jobs:
           java-version: "25"
           cache: maven
 
+      - name: Maven tidy check
+        working-directory: blog-api
+        run: mvn -B tidy:pom
+
+      - name: Maven format check
+        working-directory: blog-api
+        run: mvn -B fmt:check
+
+      - name: Maven test with coverage (JaCoCo)
+        working-directory: blog-api
+        run: mvn -B test jacoco:report
+
+      - name: Maven SonarQube report
+        working-directory: blog-api
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B sonar:sonar
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -34,7 +52,7 @@ jobs:
       - name: Build image (Spring Boot)
         working-directory: blog-api
         run: |
-          mvn -DskipTests spring-boot:build-image \
+          mvn -B -DskipTests spring-boot:build-image \
             -Dspring-boot.build-image.imageName=kalpak44/blog_api:latest
 
       - name: Tag image with short sha

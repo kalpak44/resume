@@ -2,11 +2,11 @@ name: Build and Publish Docker Image
 
 on:
   push:
-    branches: [ "main", "master" ]
-  paths:
-    - ".github/workflows/publish-frontend.yml"
-  paths-ignore:
-    - "blog-api/**"
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - "blog-api/**"
   workflow_dispatch:
 
 jobs:

@@ -46,5 +46,5 @@ RUN mkdir -p /app/frontend-app/dist/assets && \
 # Stage 2: Nginx
 FROM nginx:latest
 COPY --from=builder /app/frontend-app/dist /usr/share/nginx/html
-COPY frontend-app/nginx-config/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx-config/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

@@ -7,13 +7,13 @@ on:
       - master
     paths:
       - "frontend-app/**"
+      - ".github/workflows/publish-frontend.yml"
   pull_request:
     branches:
       - main
       - master
     paths:
       - "frontend-app/**"
-      - ".github/workflows/publish-frontend.yml"
   workflow_dispatch:
 
 jobs:

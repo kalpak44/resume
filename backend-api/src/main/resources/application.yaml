@@ -3,9 +3,9 @@ spring:
     name: home-webpage
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/home_webpage
-    username: postgres
-    password: postgres
+    url: ${DB_CONNECTION_STRING:"jdbc:postgresql://localhost:5432/home_webpage"}
+    username: ${DB_USERNAME:"postgres"}
+    password: ${DB_PASSWORD:"postgres"}
     driver-class-name: org.postgresql.Driver
 
   jpa:

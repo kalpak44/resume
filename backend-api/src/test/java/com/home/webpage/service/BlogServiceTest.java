@@ -48,11 +48,7 @@ class BlogServiceTest {
     var id = 42L;
     var details =
         new BlogDetails(
-            id,
-            "Some title",
-            "Short description",
-            "# Long description",
-            Instant.parse("2026-01-20T10:15:30Z"));
+            id, "Some title", "# Long description", Instant.parse("2026-01-20T10:15:30Z"));
 
     when(blogRepository.findDetailsById(id)).thenReturn(Optional.of(details));
 

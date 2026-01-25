@@ -18,7 +18,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
   @Query(
       """
-        select new com.home.webpage.domain.BlogDetails(b.id, b.title, b.shortDescription, b.longDescriptionMd, b.createdAt)
+        select new com.home.webpage.domain.BlogDetails(b.id, b.title, b.longDescriptionMd, b.createdAt)
         from Blog b
         where b.id = :id
     """)

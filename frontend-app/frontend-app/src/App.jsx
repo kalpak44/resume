@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout.jsx'
 import { Resume } from './pages/Resume.jsx'
 import { ProjectDetails } from './pages/ProjectDetails.jsx'
+import { Blogs } from './pages/Blogs.jsx'
 
 function App() {
   const [profile, setProfile] = useState(null)
@@ -44,6 +45,7 @@ function App() {
       <Layout theme={theme} toggleTheme={toggleTheme} profile={profile}>
         <Routes>
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />
+          <Route path="/blogs" element={<Blogs />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
         </Routes>
       </Layout>

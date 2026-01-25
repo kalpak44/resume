@@ -1,9 +1,7 @@
--- src/main/resources/db/migration/V2__seed_first_blog.sql
 INSERT INTO blog (title, short_description, long_description_md, created_at)
-VALUES (
-           'Hello, world',
-           'First post on my personal blog.',
-           '# Hello, world
+VALUES ('Hello, world',
+        'First post on my personal blog.',
+        '# Hello, world
 
 This is the first post in **Markdown**.
 
@@ -13,5 +11,4 @@ This is the first post in **Markdown**.
 
 Enjoy!
 ',
-           NOW()
-       );
+        NOW());

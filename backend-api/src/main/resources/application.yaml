@@ -56,6 +56,7 @@ app:
       - https://pavel-usanli.online/
       - https://www.pavel-usanli.online/
       - https://blog.pavel-usanli.online/
+      - http://localhost:5173/
     allowed-methods:
       - GET
       - POST
@@ -75,4 +76,4 @@ app:
       name: Pavel Usanli
       url: https://pavel-usanli.online/
     servers:
-      - url: https://api.pavel-usanli.online/personal-page/v1/
+      - url: https://api.pavel-usanli.online/personal-page-api/v1/

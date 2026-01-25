@@ -26,7 +26,7 @@ function renderTemplate(template, data) {
 }
 
 async function build() {
-    const rootDir = path.join(__dirname, '..');
+    const rootDir = path.join(__dirname, '.');
     const profilePath = path.join(rootDir, 'data/profile.json');
     const templatePath = path.join(__dirname, 'template.html');
     const distDir = path.join(__dirname, 'dist');

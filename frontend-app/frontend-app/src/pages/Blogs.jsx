@@ -70,7 +70,10 @@ export function Blogs() {
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-2">
-                    <Link to={`/blogs/${blog.id}`} className="hover:text-primary transition-colors">
+                    <Link
+                      to={`/blogs/${blog.id}`}
+                      className="hover:text-primary transition-colors"
+                    >
                       <h3 className="text-[1.25rem] font-semibold text-foreground tracking-tight">
                         {blog.title}
                       </h3>

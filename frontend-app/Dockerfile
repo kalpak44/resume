@@ -32,6 +32,7 @@ COPY cv-pdf-generator ./cv-pdf-generator
 COPY frontend-app ./frontend-app
 
 RUN ln -s /app/common-data /app/data
+RUN rm -rf /app/data
 
 WORKDIR /app/cv-pdf-generator
 RUN npm run build

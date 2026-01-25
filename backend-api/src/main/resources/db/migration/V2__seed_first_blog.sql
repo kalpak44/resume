@@ -5,12 +5,13 @@ VALUES (
            'First post on my personal blog.',
            '# Hello, world
 
-         This is the first post in **Markdown**.
+This is the first post in **Markdown**.
 
-         - Built with Spring Boot + PostgreSQL
-         - Managed with Flyway
-         - Served via REST API
+- Built with Spring Boot + PostgreSQL
+- Managed with Flyway
+- Served via REST API
 
-         Enjoy!',
+Enjoy!
+',
            NOW()
        );

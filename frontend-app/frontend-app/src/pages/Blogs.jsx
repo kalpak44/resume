@@ -70,9 +70,11 @@ export function Blogs() {
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-2">
-                    <h3 className="text-[1.25rem] font-semibold text-foreground tracking-tight">
-                      {blog.title}
-                    </h3>
+                    <Link to={`/blogs/${blog.id}`} className="hover:text-primary transition-colors">
+                      <h3 className="text-[1.25rem] font-semibold text-foreground tracking-tight">
+                        {blog.title}
+                      </h3>
+                    </Link>
                     <span className="text-[0.8rem] font-medium text-foreground/50 uppercase tracking-wider">
                       {new Date(blog.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -87,10 +89,13 @@ export function Blogs() {
                   </p>
 
                   <div className="mt-4">
-                    <span className="text-primary font-medium text-[0.95rem] hover:underline cursor-pointer">
+                    <Link
+                      to={`/blogs/${blog.id}`}
+                      className="text-primary font-medium text-[0.95rem] hover:underline"
+                    >
                       Read more{' '}
                       <i className="fa-solid fa-arrow-right ml-1 text-[0.8rem]"></i>
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </div>

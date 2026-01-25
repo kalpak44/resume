@@ -12,6 +12,8 @@ mermaid.initialize({
 export function Markdown({ content }) {
   const containerRef = useRef(null)
 
+  if (!content) return null
+
   useEffect(() => {
     let cancelled = false
 

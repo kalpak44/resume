@@ -11,7 +11,7 @@ export function BlogDetails() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    
+
     setLoading(true)
     fetch(`https://api.pavel-usanli.online/personal-page-api/v1/blogs/${id}`)
       .then((res) => {

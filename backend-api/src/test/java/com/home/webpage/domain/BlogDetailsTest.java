@@ -11,19 +11,14 @@ class BlogDetailsTest {
   void shouldHoldAllValues() {
     var id = 1L;
     var title = "Some title";
-    var shortDescription = "Short description";
     var longDescriptionMd = "# Long description";
     var createdAt = Instant.parse("2026-01-20T10:15:30Z");
 
-    var details = new BlogDetails(id, title, shortDescription, longDescriptionMd, createdAt);
+    var details = new BlogDetails(id, title, longDescriptionMd, createdAt);
 
     assertThat(details)
         .extracting(
-            BlogDetails::id,
-            BlogDetails::title,
-            BlogDetails::shortDescription,
-            BlogDetails::longDescriptionMd,
-            BlogDetails::createdAt)
-        .containsExactly(id, title, shortDescription, longDescriptionMd, createdAt);
+            BlogDetails::id, BlogDetails::title, BlogDetails::description, BlogDetails::createdAt)
+        .containsExactly(id, title, longDescriptionMd, createdAt);
   }
 }

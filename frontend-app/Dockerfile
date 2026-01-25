@@ -19,7 +19,6 @@ WORKDIR /app
 
 COPY cv-pdf-generator/package*.json ./cv-pdf-generator/
 COPY frontend-app/package*.json ./frontend-app/
-RUN rm -rf /frontend-app/data
 
 WORKDIR /app/cv-pdf-generator
 RUN npm ci
@@ -30,8 +29,9 @@ RUN npm ci
 WORKDIR /app
 COPY common-data ./cv-pdf-generator/data
 COPY cv-pdf-generator ./cv-pdf-generator
-COPY common-data ./frontend-app/public/data
 COPY frontend-app ./frontend-app
+RUN rm -rf ./frontend-app/public/data
+COPY common-data ./frontend-app/public/data
 
 WORKDIR /app/cv-pdf-generator
 RUN npm run build

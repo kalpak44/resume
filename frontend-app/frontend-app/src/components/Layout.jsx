@@ -10,6 +10,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
     )
 
   const isProject = location.pathname.startsWith('/projects/')
+  const isBlog = location.pathname.startsWith('/blog')
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-[980px]">
@@ -21,7 +22,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
         <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`}></i>
       </button>
 
-      {!isProject && (
+      {!isProject && !isBlog && (
         <div className="topbar">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <div className="flex-shrink-0">
@@ -94,9 +95,9 @@ export function Layout({ children, theme, toggleTheme, profile }) {
         </div>
       )}
 
-      <main className={isProject ? '' : 'mt-8'}>{children}</main>
+      <main className={isProject || isBlog ? '' : 'mt-8'}>{children}</main>
 
-      {!isProject && (
+      {!isProject && !isBlog && (
         <footer className="text-center text-foreground/70 dark:text-foreground/60 mt-12 mb-8 text-[0.9rem]">
           © {new Date().getFullYear()} {profile.name}
         </footer>

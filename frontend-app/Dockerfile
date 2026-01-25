@@ -30,7 +30,7 @@ RUN npm ci
 WORKDIR /app
 COPY common-data ./cv-pdf-generator/data
 COPY cv-pdf-generator ./cv-pdf-generator
-COPY common-data ./frontend-app/data
+COPY common-data ./frontend-app/public/data
 COPY frontend-app ./frontend-app
 
 WORKDIR /app/cv-pdf-generator

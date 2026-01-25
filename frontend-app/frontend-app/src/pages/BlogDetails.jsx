@@ -67,7 +67,7 @@ export function BlogDetails() {
         </div>
 
         <div>
-          <Markdown content={blog.longDescriptionMd} />
+          <Markdown content={blog.description} />
         </div>
       </div>
 

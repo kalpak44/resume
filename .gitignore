@@ -11,10 +11,9 @@ yarn-error.log*
 .eslintcache
 
 # Project specific
-pdf/dist/
-pdf/node_modules/
-web/data/
-web/assets/resume.pdf
+frontend-app/cv-pdf-generator/dist/
+frontend-app/cv-pdf-generator/node_modules/
+frontend-app/frontend-app/node_modules
 
 # IDEs
 .idea/

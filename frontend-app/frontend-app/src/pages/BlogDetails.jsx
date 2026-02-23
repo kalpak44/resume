@@ -6,13 +6,18 @@ export function BlogDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [blog, setBlog] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(() => true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
 
-    setLoading(true)
+    let isCancelled = false
+    // Defer state update to avoid synchronous setState inside effect
+    setTimeout(() => {
+      if (!isCancelled) setLoading(true)
+    }, 0)
+
     fetch(`https://api.pavel-usanli.online/personal-page-api/v1/blogs/${id}`)
       .then((res) => {
         if (!res.ok) {
@@ -21,14 +26,22 @@ export function BlogDetails() {
         return res.json()
       })
       .then((data) => {
-        setBlog(data)
-        setLoading(false)
+        if (!isCancelled) {
+          setBlog(data)
+          setLoading(false)
+        }
       })
       .catch((err) => {
-        console.error('Error loading blog details:', err)
-        setError(err.message)
-        setLoading(false)
+        if (!isCancelled) {
+          console.error('Error loading blog details:', err)
+          setError(err.message)
+          setLoading(false)
+        }
       })
+
+    return () => {
+      isCancelled = true
+    }
   }, [id])
 
   if (loading) {

@@ -31,14 +31,15 @@ export function NotFound() {
             <i className="fa-solid fa-ghost text-5xl text-primary animate-bounce"></i>
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-foreground">Page Not Found</h2>
           <p className="text-foreground/60 leading-relaxed">
             Oops! The page you're looking for doesn't exist or has been moved.
           </p>
           <p className="text-foreground/40 text-sm mt-4">
-            Redirecting to home in <span className="text-primary font-semibold">{countdown}</span> seconds...
+            Redirecting to home in{' '}
+            <span className="text-primary font-semibold">{countdown}</span> seconds...
           </p>
         </div>
 

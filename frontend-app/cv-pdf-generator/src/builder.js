@@ -25,23 +25,10 @@ function renderTemplate(template, data) {
     });
 }
 
-async function build() {
-    const rootDir = path.join(__dirname, '.');
-    const profilePath = path.join(rootDir, 'data/profile.json');
-    const templatePath = path.join(__dirname, 'template.html');
-    const distDir = path.join(__dirname, 'dist');
-    const outputPath = path.join(distDir, 'resume.pdf');
-
-    if (!fs.existsSync(distDir)) {
-        fs.mkdirSync(distDir, {recursive: true});
-    }
-
-
-    const profileData = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
-    const template = fs.readFileSync(templatePath, 'utf8');
-
+function prepareData(profileData, rootDir) {
     // Pre-process data for template
-    profileData.experience = profileData.experience.map(job => {
+    const preparedData = { ...profileData };
+    preparedData.experience = (preparedData.experience || []).map(job => {
         const metaParts = (job.meta || "").split(",");
         const company = metaParts[0] ? metaParts[0].trim() : "";
         const location_date = metaParts.slice(1).join(",").trim();
@@ -59,17 +46,39 @@ async function build() {
     });
 
     // Convert avatar to base64
-    if (profileData.avatar) {
-        const avatarPath = path.join(rootDir, 'data', path.basename(profileData.avatar));
+    if (preparedData.avatar) {
+        const avatarPath = path.join(rootDir, 'common-data', path.basename(preparedData.avatar));
         if (fs.existsSync(avatarPath)) {
             const avatarBase64 = fs.readFileSync(avatarPath).toString('base64');
             const ext = path.extname(avatarPath).replace('.', '');
-            profileData.avatar_base64 = `data:image/${ext};base64,${avatarBase64}`;
+            preparedData.avatar_base64 = `data:image/${ext};base64,${avatarBase64}`;
         }
     }
+    return preparedData;
+}
 
-    const html = renderTemplate(template, profileData);
-    const tempHtmlPath = path.join(__dirname, 'temp.html');
+function getRenderedHtml() {
+    const rootDir = path.join(__dirname, '../..');
+    const profilePath = path.join(rootDir, 'common-data/profile.json');
+    const templatePath = path.join(__dirname, 'template.html');
+
+    const profileData = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
+    const template = fs.readFileSync(templatePath, 'utf8');
+
+    const preparedData = prepareData(profileData, rootDir);
+    return renderTemplate(template, preparedData);
+}
+
+async function build() {
+    const distDir = path.join(__dirname, '../dist');
+    const outputPath = path.join(distDir, 'resume.pdf');
+
+    if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir, {recursive: true});
+    }
+
+    const html = getRenderedHtml();
+    const tempHtmlPath = path.join(__dirname, '../temp.html');
     fs.writeFileSync(tempHtmlPath, html);
 
     const browser = await puppeteer.launch({
@@ -90,11 +99,20 @@ async function build() {
     });
 
     await browser.close();
-    fs.unlinkSync(tempHtmlPath);
+    if (fs.existsSync(tempHtmlPath)) {
+        fs.unlinkSync(tempHtmlPath);
+    }
     console.log(`PDF Resume generated at ${outputPath}`);
 }
 
-build().catch(err => {
-    console.error('Error generating PDF:', err);
-    process.exit(1);
-});
+module.exports = {
+    getRenderedHtml,
+    build
+};
+
+if (require.main === module) {
+    build().catch(err => {
+        console.error('Error generating PDF:', err);
+        process.exit(1);
+    });
+}

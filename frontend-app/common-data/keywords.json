@@ -1,0 +1,61 @@
+{
+  "groups": [
+    {
+      "targets": [
+        "summary"
+      ],
+      "keywords": [
+        "software engineer",
+        "Java",
+        "automation and building",
+        "end-to-end solutions",
+        "backend",
+        "APIs",
+        "frontend",
+        "infrastructure",
+        "CI/CD",
+        "business value",
+        "JavaScript",
+        "Python"
+      ]
+    },
+    {
+      "targets": [
+        "experience[].description",
+        "experience[].bullets[]"
+      ],
+      "keywords": [
+        "microservices",
+        "Java",
+        "Collaborated",
+        "Kubernetes",
+        "data transformation",
+        "product goals",
+        "Pull Requests",
+        "design",
+        "implementation",
+        "maintenance",
+        "code quality",
+        "unit tests",
+        "production systems",
+        "architectural improvements",
+        "AWS",
+        "CI/CD",
+        "scalable",
+        "cloud infrastructure",
+        "Terraform",
+        "third-party APIs",
+        "GitLab",
+        "Intershop",
+        "maintained",
+        "Developed",
+        "Debugged",
+        "Monitored",
+        "Jenkins",
+        "Angular",
+        "eCommerce",
+        "Openbravo ERP"
+      ]
+    }
+  ]
+}

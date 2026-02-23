@@ -2,11 +2,16 @@
   "name": "resume-pdf-builder",
   "version": "1.0.0",
   "description": "Generates PDF resume from template and data",
-  "main": "builder.js",
+  "main": "src/builder.js",
   "scripts": {
-    "build": "node builder.js"
+    "build": "node src/builder.js",
+    "dev": "node src/dev.js"
   },
   "dependencies": {
     "puppeteer": "^24.35.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "nodemon": "^3.1.14"
   }
 }

@@ -1,16 +1,84 @@
-# React + Vite
+# Frontend App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal web page built with Vite, React, Tailwind CSS, and React Router.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/)
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.  **Clone the repository** (if you haven't already).
+2.  **Navigate to the frontend directory**:
+    ```bash
+    cd frontend-app/frontend-app
+    ```
+3.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+To start the development server with Hot Module Replacement (HMR):
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+## Production Build
+
+To build the application for production:
+
+```bash
+npm run build
+```
+
+The output will be in the `dist` directory.
+
+To preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Linting and Formatting
+
+### Linting
+
+To run ESLint and check for code quality issues:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issues:
+
+```bash
+npm run lint:fix
+```
+
+### Formatting
+
+To check code formatting with Prettier:
+
+```bash
+npm run format:check
+```
+
+To format all files with Prettier:
+
+```bash
+npm run format
+```
+
+## Tech Stack
+
+- **Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Routing**: [React Router 7](https://reactrouter.com/)
+- **Markdown Support**: [React Markdown](https://github.com/remarkjs/react-markdown) & [Mermaid](https://mermaid.js.org/)

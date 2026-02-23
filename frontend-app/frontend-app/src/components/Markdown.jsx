@@ -12,9 +12,8 @@ mermaid.initialize({
 export function Markdown({ content }) {
   const containerRef = useRef(null)
 
-  if (!content) return null
-
   useEffect(() => {
+    if (!content) return
     let cancelled = false
 
     const renderMermaid = async () => {
@@ -74,18 +73,18 @@ export function Markdown({ content }) {
     <div ref={containerRef} className="markdown-content">
       <ReactMarkdown
         components={{
-          h3: ({ node, ...props }) => <h3 className="section-title mt-12" {...props} />,
-          ul: ({ node, ...props }) => (
+          h3: ({ ...props }) => <h3 className="section-title mt-12" {...props} />,
+          ul: ({ ...props }) => (
             <ul
               className="list-disc list-outside ml-[1.2rem] mt-[10px] space-y-1.5 text-foreground"
               {...props}
             />
           ),
-          li: ({ node, ...props }) => <li className="mb-[6px]" {...props} />,
-          p: ({ node, ...props }) => (
+          li: ({ ...props }) => <li className="mb-[6px]" {...props} />,
+          p: ({ ...props }) => (
             <p className="text-[1.05rem] leading-[1.7] text-foreground" {...props} />
           ),
-          code: ({ node, className, children, ...props }) => (
+          code: ({ className, children, ...props }) => (
             <code className={className} {...props}>
               {children}
             </code>

@@ -4,8 +4,8 @@ const fs = require('fs');
 const os = require('os');
 const { getRenderedHtml } = require('./builder');
 
-const rootDir = path.join(__dirname, '../..');
-const profilePath = path.join(rootDir, 'common-data/profile.json');
+const dataDir = path.join(__dirname, '../data');
+const profilePath = path.join(dataDir, 'profile.json');
 const templatePath = path.join(__dirname, 'template.html');
 
 // Create a temp directory for development

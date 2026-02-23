@@ -97,9 +97,9 @@ function highlightByPath(data, path, keywords) {
     }
 }
 
-function prepareData(profileData, rootDir) {
+function prepareData(profileData, dataDir) {
     // Load keywords and targets
-    const keywordsPath = path.join(rootDir, 'common-data/keywords.json');
+    const keywordsPath = path.join(dataDir, 'keywords.json');
     let keywordsConfig = {keywords: [], targets: []};
     if (fs.existsSync(keywordsPath)) {
         try {
@@ -159,7 +159,7 @@ function prepareData(profileData, rootDir) {
 
     // Convert avatar to base64
     if (preparedData.avatar) {
-        const avatarPath = path.join(rootDir, 'common-data', path.basename(preparedData.avatar));
+        const avatarPath = path.join(dataDir, path.basename(preparedData.avatar));
         if (fs.existsSync(avatarPath)) {
             const avatarBase64 = fs.readFileSync(avatarPath).toString('base64');
             const ext = path.extname(avatarPath).replace('.', '');
@@ -170,14 +170,14 @@ function prepareData(profileData, rootDir) {
 }
 
 function getRenderedHtml() {
-    const rootDir = path.join(__dirname, '../..');
-    const profilePath = path.join(rootDir, 'common-data/profile.json');
+    const dataDir = path.join(__dirname, '../data');
+    const profilePath = path.join(dataDir, 'profile.json');
     const templatePath = path.join(__dirname, 'template.html');
 
     const profileData = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
     const template = fs.readFileSync(templatePath, 'utf8');
 
-    const preparedData = prepareData(profileData, rootDir);
+    const preparedData = prepareData(profileData, dataDir);
     return renderTemplate(template, preparedData);
 }
 

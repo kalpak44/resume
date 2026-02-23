@@ -5,6 +5,7 @@ import { Resume } from './pages/Resume.jsx'
 import { ProjectDetails } from './pages/ProjectDetails.jsx'
 import { BlogDetails } from './pages/BlogDetails.jsx'
 import { Blogs } from './pages/Blogs.jsx'
+import { NotFound } from './pages/NotFound.jsx'
 
 function App() {
   const [profile, setProfile] = useState(null)
@@ -46,9 +47,10 @@ function App() {
       <Layout theme={theme} toggleTheme={toggleTheme} profile={profile}>
         <Routes>
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
+          <Route path="*" element={<NotFound />} />
+          {/*<Route path="/blogs" element={<Blogs />} />*/}
+          {/*<Route path="/blogs/:id" element={<BlogDetails />} />*/}
         </Routes>
       </Layout>
     </Router>

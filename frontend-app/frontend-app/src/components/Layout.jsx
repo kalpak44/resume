@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { ParticlesNetwork } from './ParticlesNetwork.jsx'
 
 export function Layout({ children, theme, toggleTheme, profile }) {
   const location = useLocation()
@@ -11,9 +12,13 @@ export function Layout({ children, theme, toggleTheme, profile }) {
 
   const isProject = location.pathname.startsWith('/projects/')
   const isBlog = location.pathname.startsWith('/blog')
+  const isHome = location.pathname === '/'
+  const isNotFound = !isHome && !isProject && !isBlog
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-[980px]">
+    <>
+      <ParticlesNetwork theme={theme} />
+      <div className="container mx-auto px-4 py-12 max-w-[980px]">
       <button
         onClick={toggleTheme}
         className="fixed top-5 right-5 w-11 h-11 flex items-center justify-center rounded-xl border border-line-light/85 dark:border-line-dark/85 hover:bg-line-light/20 dark:hover:bg-line-dark/20 transition-all transform hover:-translate-y-px cursor-pointer z-50"
@@ -22,7 +27,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
         <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`}></i>
       </button>
 
-      {!isProject && !isBlog && (
+      {!isProject && !isBlog && !isNotFound && (
         <div className="topbar">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <div className="flex-shrink-0">
@@ -95,13 +100,14 @@ export function Layout({ children, theme, toggleTheme, profile }) {
         </div>
       )}
 
-      <main className={isProject || isBlog ? '' : 'mt-8'}>{children}</main>
+      <main className={isProject || isBlog || isNotFound ? '' : 'mt-8'}>{children}</main>
 
-      {!isProject && !isBlog && (
+      {!isProject && !isBlog && !isNotFound && (
         <footer className="text-center text-foreground/70 dark:text-foreground/60 mt-12 mb-8 text-[0.9rem]">
           © {new Date().getFullYear()} {profile.name}
         </footer>
       )}
     </div>
+    </>
   )
 }

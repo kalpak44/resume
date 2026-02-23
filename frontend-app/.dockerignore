@@ -1,0 +1,12 @@
+# Exclude the data symlink - we copy common-data explicitly
+cv-pdf-generator/data
+frontend-app/public/data
+
+# Node modules will be installed during build
+node_modules
+**/node_modules
+
+# Development files
+.git
+.gitignore
+*.md

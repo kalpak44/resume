@@ -74,11 +74,3 @@ To format all files with Prettier:
 ```bash
 npm run format
 ```
-
-## Tech Stack
-
-- **Framework**: [React 19](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Routing**: [React Router 7](https://reactrouter.com/)
-- **Markdown Support**: [React Markdown](https://github.com/remarkjs/react-markdown) & [Mermaid](https://mermaid.js.org/)

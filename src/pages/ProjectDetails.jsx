@@ -8,10 +8,17 @@ export function ProjectDetails({ projects }) {
   const project = projects.find((p) => p.id === id)
 
   const [isControlsHovered, setIsControlsHovered] = useState(false)
+  const [detailsMd, setDetailsMd] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [id])
+    if (project && project.details_file) {
+      fetch(`${import.meta.env.BASE_URL}data/${project.details_file}`)
+        .then((res) => res.text())
+        .then((text) => setDetailsMd(text))
+        .catch((err) => console.error('Error loading project details:', err))
+    }
+  }, [id, project])
 
   if (!project) {
     return (
@@ -28,7 +35,7 @@ export function ProjectDetails({ projects }) {
 ${project.description}
 
 ### Key Features & Details
-${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
+${detailsMd || project.details.map((d) => `* ${d}`).join('\n')}
   `.trim()
 
   return (

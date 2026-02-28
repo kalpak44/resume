@@ -16,7 +16,6 @@
       "Zero auth: Players join instantly by entering a name",
       "Bonus: During coding I learned that it's a great game to play with friends, and we still do it from time to time"
     ],
-    "details_md": "* **Backend**: **Spark Java** micro-backend + **WebSockets** (first experience)\n* **Frontend**: **Vanilla JS** + **Tailwind CSS**\n* **Real-time**: **WebSocket**-based state synchronization for multiplayer sessions\n* **Code quality**: **SonarCloud** integration for static analysis and quality gates\n* **Test coverage**: **JaCoCo** reports published into **SonarCloud**\n* **Containerization**: **Docker** image builds using **Jib** (no Dockerfile needed)\n* **Code style**: **Spotify fmt/check** plugin for consistent formatting and validation\n* **No database**: Rooms and game sessions stored in **memory**\n* **Zero auth**: Players join instantly by entering a name\n\n```mermaid\ngraph TD\n    A[Player 1] <-->|WebSocket| B(Spark Java Backend)\n    C[Player 2] <-->|WebSocket| B\n    B -->|Game State| D{In-Memory Storage}\n```\n\n> **Bonus:** Beyond the technical challenge, I discovered that this is a great game to play with friends! We still enjoy playing it together from time to time.",
     "technologies": [
       "Java",
       "Spark Java",
@@ -31,7 +30,8 @@
     ],
     "github": "https://github.com/kalpak44/bunker-party",
     "url": "https://bunker.pavel-usanli.online/",
-    "link": "#"
+    "link": "#",
+    "details_file": "projects/bunker.md"
   },
   {
     "id": "homelab-k8s",
@@ -52,7 +52,6 @@
       "External private servers: **PostgreSQL**, private DNS records, **VPN server**, **NFS storage**",
       "Roadmap: **SSO**, **RAID**, cluster hardening"
     ],
-    "details_md": "* **Platform**: **MicroK8s** Kubernetes cluster running inside a private LAN\n* **GitOps**: **FluxCD** continuously syncs cluster state from GitHub\n* **Ingress & Routing**: **Traefik Ingress** exposes 2 main entrypoints:\n  * `websecure` → **Public HTTPS Entry** (Cloudflare-facing)\n  * `privatewebsecure` → **Private LAN/VPN Secure Entry** (internal-only)\n* **TLS Automation**: **Cloudflare DNS + ACME (Let's Encrypt)** for automatic certificate issuance/renewal\n* **Load Balancing**: **MetalLB LoadBalancer** provides stable LAN IPs and fronts all Traefik entrypoints\n* **Storage**: **NFS server** provides persistent volumes (**PVCs**) for stateful workloads\n* **Security**: **Trivy Operator** performs vulnerability + misconfiguration scanning across workloads\n* **Monitoring**: **Grafana** dashboards for cluster/hardware metrics and Trivy reports\n* **DNS Control**: **AdGuard DNS** distributes ad-blocking + internal DNS across all home devices via router DHCP\n* **Internal Services**: **NGINX landing page**, **pgAdmin**, router proxies, and other personal tools\n* **Custom Apps**: Self-hosted deployments for games (**Bunker**, **Spy**, **Battleship**) + personal **Resume**\n* **External Private Servers**: Dedicated **PostgreSQL**, private DNS records, **NFS storage**, and other LAN services\n* **Roadmap**: **SSO**, **RAID**, cluster hardening and access policy improvements\n\n```mermaid\ngraph TD\n  Internet((Internet)) --> Cloudflare[Cloudflare DNS]\n  Cloudflare --> Edge[Home Router / Firewall + VPN Server]\n\n  Edge -->|DHCP assigns DNS| Devices[Home Devices]\n  Devices -->|DNS queries| AdGuard[AdGuard DNS]\n\n  Edge -->|LAN/VPN Access| WebSecure[Public HTTPS Entry]\n  Edge -->|LAN/VPN Access| PrivateWebSecure[Private LAN/VPN Secure Entry]\n\n  Cluster[MicroK8s Cluster] --> MetalLB[MetalLB LoadBalancer]\n  MetalLB --> Traefik[Traefik Ingress]\n\n  Traefik -->|websecure| WebSecure\n  Traefik -->|privatewebsecure| PrivateWebSecure\n\n  AdGuard -->|LAN DNS -> privatewebsecure| PrivateWebSecure\n\n  Cluster --> Flux[FluxCD GitOps]\n  GitHub[GitHub Repo] --> Flux\n\n  Cluster --> Trivy[Trivy Operator]\n  Cluster --> Grafana[Grafana Dashboards]\n\n  NFS[NFS Server] -->|PV/PVC| Cluster\n  Postgres[(PostgreSQL Server)] --> Cluster\n```\n\n**Purpose:** Build a real home lab from scratch to learn Kubernetes, GitOps workflows, reverse proxy routing, and secure LAN-first service exposure.\n\n**Bonus:** With AdGuard distributed via DHCP, every device automatically gets centralized DNS filtering and internal routing without manual configuration per device.\n\n> **Note:** Most internal services are reachable only through `privatewebsecure` (LAN/VPN). Public-facing apps use `websecure` with Cloudflare-managed DNS + automated TLS.",
     "technologies": [
       "Kubernetes",
       "MicroK8s",
@@ -78,7 +77,8 @@
     ],
     "github": "https://github.com/kalpak44/homelab-k8s",
     "url": "",
-    "link": "#"
+    "link": "#",
+    "details_file": "projects/homelab-k8s.md"
   },
   {
     "id": "telegram-stripe-bot",
@@ -93,7 +93,6 @@
       "Configured runtime via environment variables with optional properties-based fallback for flexible deployments",
       "Added structured logging using SLF4J + Logback for easier troubleshooting and observability"
     ],
-    "details_md": "* Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links\n* Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely\n* Built framework-free Java service with minimal dependencies for fast startup and low memory usage\n* Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments\n* Configured runtime via environment variables with optional properties-based fallback for flexible deployments\n* Added structured logging using SLF4J + Logback for easier troubleshooting and observability\n\n```mermaid\ngraph TD\n  Seller[Seller in Telegram] --> Bot[Java Telegram Bot]\n  Bot --> Stripe[Stripe Checkout Session]\n  Stripe --> Link[Payment Link]\n  Bot --> Seller\n```\n\n**Purpose:** Enable quick payment link creation directly from Telegram without building a full storefront UI.\n\n**Bonus:** Used this project to experiment with multi-architecture Docker image builds (ARM32 for Raspberry Pi) and validate how far a small, framework-free Java service can go in terms of memory efficiency and operational simplicity.",
     "technologies": [
       "Java",
       "Java 17",
@@ -107,7 +106,8 @@
     ],
     "github": "https://github.com/kalpak44/telegram-bot",
     "url": "",
-    "link": "#"
+    "link": "#",
+    "details_file": "projects/telegram-stripe-bot.md"
   },
   {
     "id": "code-viewer-bot",
@@ -121,7 +121,6 @@
       "Set up GitHub Actions to build and package the extension into `.vsix` artifacts",
       "Automated GitHub Releases with multi-platform builds (Windows/macOS) so the extension can be downloaded directly from CI"
     ],
-    "details_md": "* Built a VS Code extension in **JavaScript** that randomly opens workspace files and moves the cursor around like it’s \"busy\"\n* Implemented workspace file discovery + random rotation logic across the project directory\n* Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API\n* Set up GitHub Actions to build and package the extension into `.vsix` artifacts\n* Automated GitHub Releases with **multi-platform builds (Windows/macOS)** so the extension can be downloaded directly from CI\n\n```mermaid\ngraph TD\n  A[Run Extension] --> B[Scan Workspace Files]\n  B --> C[Pick Random File]\n  C --> D[Open in Editor]\n  D --> E[Move Cursor a Bit]\n  E --> C\n```\n\n**Purpose:** A small “because I can” project - play with VS Code extension APIs and automate code browsing.\n\n**Bonus:** Practiced CI/CD + release automation by generating ready-to-install `.vsix` builds for Windows/macOS via GitHub Actions and publishing them through GitHub Releases.\n\n> **Disclaimer:** This bot moves the cursor. It does not fix bugs, write features, or survive standups on your behalf.",
     "technologies": [
       "JavaScript",
       "Node.js",
@@ -132,7 +131,8 @@
     ],
     "github": "https://github.com/kalpak44/code-viewer-bot",
     "url": "",
-    "link": "#"
+    "link": "#",
+    "details_file": "projects/code-viewer-bot.md"
   },
   {
     "id": "simple-k8s-operator",
@@ -146,7 +146,6 @@
       "Learned core Go syntax and patterns commonly used in controller-style codebases",
       "Deepened Kubernetes understanding around controllers, desired state, and cluster extensibility"
     ],
-    "details_md": "* Built a Hello World Kubernetes Operator in **Go** with a minimal reconciliation loop\n* Created and applied custom **CRDs** and controller manifests to a Kubernetes cluster\n* Practiced the full operator workflow: **scaffold → build → deploy → apply manifests → reconcile**\n* Learned practical Go fundamentals relevant to Kubernetes tooling and controllers\n* Improved understanding of Kubernetes internals: controllers, desired state, and reconciliation patterns\n\n**Purpose:** Learn operator fundamentals and Kubernetes extensibility by building a real controller + CRD.\n\n**Bonus:** Solidified the operator mental model and built confidence to implement more advanced operators with stronger Go skills when needed.",
     "technologies": [
       "Go",
       "Kubernetes",
@@ -158,6 +157,7 @@
     ],
     "github": "https://github.com/kalpak44/simple-k8s-operator",
     "url": "",
-    "link": "#"
+    "link": "#",
+    "details_file": "projects/simple-k8s-operator.md"
   }
 ]

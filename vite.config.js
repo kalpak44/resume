@@ -48,6 +48,8 @@ function getContentType(filePath) {
       return 'image/jpeg'
     case '.png':
       return 'image/png'
+    case '.md':
+      return 'text/markdown'
     default:
       return 'application/octet-stream'
   }

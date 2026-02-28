@@ -102,7 +102,7 @@ An API change is **Done** when:
 
 # Breaking Change Checklist (extra guardrail)
 
-If change is breaking:
+If the change is breaking:
 
 - [ ] New version created
 - [ ] Deprecation notice published

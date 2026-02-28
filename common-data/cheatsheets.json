@@ -30,6 +30,12 @@
     "details_file": "cheatsheets/semver.md"
   },
   {
+    "id": "dor-dod",
+    "title": "Definition of Ready (DoR) & Definition of Done (DoD)",
+    "summary": "Practical templates and checklists for API and engineering work covering readiness criteria, implementation standards, testing, security, observability, deployment, and breaking change management.",
+    "details_file": "cheatsheets/dor-dod.md"
+  },
+  {
     "id": "apis-communication",
     "title": "APIs & Communication Protocols",
     "summary": "API design principles and communication styles including REST, GraphQL, RPC (gRPC), and SOAP. Covers resource modeling, versioning, authentication, idempotency, error handling, and best practices for scalable service-to-service and client-server communication.",

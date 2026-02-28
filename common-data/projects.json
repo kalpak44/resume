@@ -1,21 +1,8 @@
 [
   {
     "id": "bunker",
-    "title": "Bunker: Browser-based Party Game (Spark Java, Vanila JS)",
-    "summary": "A fast, browser-based real-time party game inspired by the popular “Bunker” format. Players receive survival characters with hidden attributes and must convince others why they deserve a spot in the bunker during escalating disaster rounds.",
-    "description": "This project is a web adaptation of the “Bunker” party game that I personally enjoy. I built it as a lightweight, real-time multiplayer experience playable directly in the browser. The main goal was to reproduce the original game mechanics online while exploring micro-backend development in Java for the first time using Spark. I also focused heavily on engineering practices by integrating SonarCloud for automated code quality analysis, adding JaCoCo for test coverage reporting, and using Jib for streamlined Docker image builds. Additional tooling such as the Spotify formatting/check plugin helped enforce consistent code style. Real-time gameplay is powered by WebSockets to keep all players synchronized with minimal latency, without requiring authentication or a persistent database.",
-    "details": [
-      "Backend: **Spark Java** micro-backend + **WebSockets** (first experience)",
-      "Frontend: **Vanilla JS** + **Tailwind CSS**",
-      "Real-time: **WebSocket**-based state synchronization for multiplayer sessions",
-      "Code quality: **SonarCloud** integration for static analysis and quality gates",
-      "Test coverage: **JaCoCo** reports published into **SonarCloud**",
-      "Containerization: **Docker** image builds using **Jib** (no Dockerfile needed)",
-      "Code style: **Spotify fmt/check** plugin for consistent formatting and validation",
-      "No database: Rooms and game sessions stored in **memory**",
-      "Zero auth: Players join instantly by entering a name",
-      "Bonus: During coding I learned that it's a great game to play with friends, and we still do it from time to time"
-    ],
+    "title": "Bunker: Browser-based Party Game",
+    "summary": "A fast, browser-based real-time party game inspired by the popular \"Bunker\" format. Players receive survival characters with hidden attributes and must convince others why they deserve a spot in the bunker during escalating disaster rounds.",
     "technologies": [
       "Java",
       "Spark Java",
@@ -30,28 +17,12 @@
     ],
     "github": "https://github.com/kalpak44/bunker-party",
     "url": "https://bunker.pavel-usanli.online/",
-    "link": "#",
     "details_file": "projects/bunker.md"
   },
   {
     "id": "homelab-k8s",
-    "title": "Homelab Kubernetes with FluxCD (MicroK8s GitOps)",
+    "title": "Homelab Kubernetes with FluxCD",
     "summary": "A private homelab Kubernetes platform running on MicroK8s and managed via FluxCD GitOps, with Traefik ingress, Cloudflare-managed TLS, NFS-backed persistent volumes, and built-in monitoring + security scanning.",
-    "description": "This project is a GitOps-managed homelab Kubernetes cluster running inside a private network behind a home router. The cluster is built on MicroK8s and fully deployed through FluxCD, where Git acts as the single source of truth for infrastructure and services. Traffic routing is handled by Traefik with two entrypoints: websecure (public HTTPS with automatic TLS certificates via Cloudflare + ACME) and internal (LAN/VPN-only access for private services). Persistent data is stored on an external NFS server and claimed in the cluster through Kubernetes volumes. The cluster includes Trivy Operator for security checks and Grafana dashboards for hardware metrics and vulnerability reports. Internal-only services include a custom NGINX landing page, router configuration proxies, AdGuard DNS, pgAdmin, and additional utilities. The homelab also includes separate private servers providing PostgreSQL, private DNS records, VPN access, and NFS storage. Future improvements include SSO and RAID-backed storage.",
-    "details": [
-      "Platform: **MicroK8s** Kubernetes cluster inside a private LAN",
-      "GitOps: **FluxCD** syncing cluster state from GitHub",
-      "Ingress: **Traefik** with `websecure` + `internal` entrypoints",
-      "TLS Automation: **Cloudflare DNS + ACME (Let's Encrypt)** for cert renewal",
-      "Networking: **MetalLB** for LoadBalancer services in private network",
-      "Storage: **NFS server** used as persistent volumes (PVCs)",
-      "Security: **Trivy Operator** for vulnerability & configuration scanning",
-      "Monitoring: **Grafana** dashboards for node/hardware metrics + Trivy reports",
-      "Internal services: **NGINX landing page**, **AdGuard DNS**, **pgAdmin**, router proxies, and more",
-      "Custom Apps: Deployments for games (**Bunker**, **Spy**, **Battleship**) and personal **Resume**",
-      "External private servers: **PostgreSQL**, private DNS records, **VPN server**, **NFS storage**",
-      "Roadmap: **SSO**, **RAID**, cluster hardening"
-    ],
     "technologies": [
       "Kubernetes",
       "MicroK8s",
@@ -60,41 +31,24 @@
       "Traefik",
       "MetalLB",
       "Cloudflare",
-      "ACME / Let's Encrypt",
-      "Reverse Proxy",
+      "Let's Encrypt",
       "NFS",
-      "Persistent Volumes",
       "Trivy Operator",
       "Grafana",
       "Prometheus",
       "AdGuard Home",
-      "DNS",
-      "DHCP",
-      "VPN",
       "PostgreSQL",
       "NGINX",
       "Helm"
     ],
     "github": "https://github.com/kalpak44/homelab-k8s",
-    "url": "",
-    "link": "#",
     "details_file": "projects/homelab-k8s.md"
   },
   {
     "id": "telegram-stripe-bot",
-    "title": "Telegram Stripe Payment Bot (Java, Docker, ARM32)",
+    "title": "Telegram Stripe Payment Bot",
     "summary": "A lightweight Telegram bot that generates Stripe Checkout payment links from chat input, built in raw Java and deployed via Docker on Raspberry Pi (ARM32).",
-    "description": "A minimal Telegram bot designed to streamline payment collection for small sellers. The bot collects product details directly in chat (name, quantity, price, currency) and generates a Stripe Checkout session link for one-time payments. Built as a framework-free Java application focused on simplicity, low resource usage, and portable deployment, including ARM32 Docker builds for Raspberry Pi hosting.",
-    "details": [
-      "Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links",
-      "Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely",
-      "Built framework-free Java service with minimal dependencies for fast startup and low memory usage",
-      "Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments",
-      "Configured runtime via environment variables with optional properties-based fallback for flexible deployments",
-      "Added structured logging using SLF4J + Logback for easier troubleshooting and observability"
-    ],
     "technologies": [
-      "Java",
       "Java 17",
       "TelegramBots API",
       "Stripe Java SDK",
@@ -105,59 +59,34 @@
       "Logback"
     ],
     "github": "https://github.com/kalpak44/telegram-bot",
-    "url": "",
-    "link": "#",
     "details_file": "projects/telegram-stripe-bot.md"
   },
   {
     "id": "code-viewer-bot",
-    "title": "Code Viewer Bot (VS Code Extension + Multi-Platform CI Releases)",
+    "title": "Code Viewer Bot",
     "summary": "A tiny VS Code extension that randomly opens files and wiggles the cursor - because apparently being \"active\" is a KPI now 😄",
-    "description": "A fun experimental Visual Studio Code extension built after hearing stories about how some workplaces obsess over “activity status” in chat apps. This extension randomly opens files from the current project and performs simple cursor movements - like a tiny developer hamster running in a wheel.\n\nTechnically, the real goal was to experiment with VS Code extension APIs in plain JavaScript and set up a CI pipeline that produces downloadable builds for multiple platforms (Windows/macOS) via GitHub Releases.",
-    "details": [
-      "Built a VS Code extension in JavaScript that randomly opens workspace files and moves the cursor around like it’s \"busy\"",
-      "Implemented workspace file discovery + random rotation logic across the project directory",
-      "Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API",
-      "Set up GitHub Actions to build and package the extension into `.vsix` artifacts",
-      "Automated GitHub Releases with multi-platform builds (Windows/macOS) so the extension can be downloaded directly from CI"
-    ],
     "technologies": [
       "JavaScript",
       "Node.js",
       "VS Code Extension API",
       "GitHub Actions",
-      "CI/CD",
-      "GitHub Releases"
+      "CI/CD"
     ],
     "github": "https://github.com/kalpak44/code-viewer-bot",
-    "url": "",
-    "link": "#",
     "details_file": "projects/code-viewer-bot.md"
   },
   {
     "id": "simple-k8s-operator",
-    "title": "Simple Kubernetes Operator (Go, CRDs, Controller Runtime)",
+    "title": "Simple Kubernetes Operator",
     "summary": "A sandbox Kubernetes operator written in Go to explore CRDs, reconciliation loops, and the end-to-end operator development workflow.",
-    "description": "A small experimental Kubernetes Operator built to understand how operators work internally and how custom controllers extend Kubernetes. The project includes a basic Custom Resource Definition (CRD) and a controller that reconciles resource state inside a cluster. While intentionally lightweight and used mainly for learning, it provided hands-on experience with operator scaffolding, manifests, and the full build → deploy → apply cycle on a real Kubernetes environment.",
-    "details": [
-      "Built a Hello World Kubernetes Operator in Go with a minimal reconciliation loop",
-      "Created and applied custom CRDs and controller manifests to a Kubernetes cluster",
-      "Practiced the Kubernetes operator development workflow: scaffold → build → deploy → reconcile",
-      "Learned core Go syntax and patterns commonly used in controller-style codebases",
-      "Deepened Kubernetes understanding around controllers, desired state, and cluster extensibility"
-    ],
     "technologies": [
       "Go",
       "Kubernetes",
-      "Operators",
       "CRDs",
       "Controller Runtime",
-      "kubectl",
-      "YAML Manifests"
+      "kubectl"
     ],
     "github": "https://github.com/kalpak44/simple-k8s-operator",
-    "url": "",
-    "link": "#",
     "details_file": "projects/simple-k8s-operator.md"
   }
 ]

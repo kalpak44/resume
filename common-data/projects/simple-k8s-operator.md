@@ -1,3 +1,7 @@
+A small experimental Kubernetes Operator built to understand how operators work internally and how custom controllers extend Kubernetes. The project includes a basic Custom Resource Definition (CRD) and a controller that reconciles resource state inside a cluster. While intentionally lightweight and used mainly for learning, it provided hands-on experience with operator scaffolding, manifests, and the full build → deploy → apply cycle on a real Kubernetes environment.
+
+### Key Features & Details
+
 * Built a Hello World Kubernetes Operator in **Go** with a minimal reconciliation loop
 * Created and applied custom **CRDs** and controller manifests to a Kubernetes cluster
 * Practiced the full operator workflow: **scaffold → build → deploy → apply manifests → reconcile**

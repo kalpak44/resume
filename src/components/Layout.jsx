@@ -94,7 +94,7 @@ export function Layout({ children, theme, toggleTheme, profile }) {
                       {btn.text}
                     </a>
                   ))}
-                
+
                   <Link
                     to="/cheat-sheets"
                     className="h-11 inline-flex items-center px-4 rounded-xl font-medium border border-line-light dark:border-line-dark hover:bg-line-light/10 dark:hover:bg-line-dark/10 transition-all transform hover:-translate-y-px active:translate-y-0"

@@ -8,14 +8,14 @@ export function ProjectDetails({ projects }) {
   const project = projects.find((p) => p.id === id)
 
   const [isControlsHovered, setIsControlsHovered] = useState(false)
-  const [detailsMd, setDetailsMd] = useState('')
+  const [markdownContent, setMarkdownContent] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (project && project.details_file) {
+    if (project?.details_file) {
       fetch(`${import.meta.env.BASE_URL}data/${project.details_file}`)
         .then((res) => res.text())
-        .then((text) => setDetailsMd(text))
+        .then((text) => setMarkdownContent(text))
         .catch((err) => console.error('Error loading project details:', err))
     }
   }, [id, project])
@@ -30,13 +30,6 @@ export function ProjectDetails({ projects }) {
       </div>
     )
   }
-
-  const markdownContent = `
-${project.description}
-
-### Key Features & Details
-${detailsMd || project.details.map((d) => `* ${d}`).join('\n')}
-  `.trim()
 
   return (
     <div className="space-y-8">
@@ -134,15 +127,19 @@ ${detailsMd || project.details.map((d) => `* ${d}`).join('\n')}
           <div>
             <Markdown content={markdownContent} />
 
-            <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
+            {project.technologies && project.technologies.length > 0 && (
+              <>
+                <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
 
-            <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
-              {project.technologies.map((tech, idx) => (
-                <span key={idx} className="pill pill-primary">
-                  {tech}
-                </span>
-              ))}
-            </div>
+                <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
+                  {project.technologies.map((tech, idx) => (
+                    <span key={idx} className="pill pill-primary">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

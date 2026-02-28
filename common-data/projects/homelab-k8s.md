@@ -1,3 +1,7 @@
+This project is a GitOps-managed homelab Kubernetes cluster running inside a private network behind a home router. The cluster is built on MicroK8s and fully deployed through FluxCD, where Git acts as the single source of truth for infrastructure and services. Traffic routing is handled by Traefik with two entrypoints: websecure (public HTTPS with automatic TLS certificates via Cloudflare + ACME) and internal (LAN/VPN-only access for private services). Persistent data is stored on an external NFS server and claimed in the cluster through Kubernetes volumes. The cluster includes Trivy Operator for security checks and Grafana dashboards for hardware metrics and vulnerability reports. Internal-only services include a custom NGINX landing page, router configuration proxies, AdGuard DNS, pgAdmin, and additional utilities. The homelab also includes separate private servers providing PostgreSQL, private DNS records, VPN access, and NFS storage. Future improvements include SSO and RAID-backed storage.
+
+### Key Features & Details
+
 * **Platform**: **MicroK8s** Kubernetes cluster running inside a private LAN
 * **GitOps**: **FluxCD** continuously syncs cluster state from GitHub
 * **Ingress & Routing**: **Traefik Ingress** exposes 2 main entrypoints:

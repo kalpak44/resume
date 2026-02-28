@@ -1,7 +1,7 @@
 [
   {
     "id": "bunker",
-    "title": "Bunker — Real-Time Browser Party Game",
+    "title": "Bunker - Real-Time Browser Party Game",
     "summary": "A fast, browser-based real-time party game inspired by the popular \"Bunker\" format. Players receive survival characters with hidden attributes and must convince others why they deserve a spot in the bunker during escalating disaster rounds.",
     "technologies": [
       "Java",
@@ -46,7 +46,7 @@
   },
   {
     "id": "telegram-stripe-bot",
-    "title": "Telegram Stripe Bot — Java Payment Automation",
+    "title": "Telegram Stripe Bot - Java Payment Automation",
     "summary": "A lightweight Telegram bot that generates Stripe Checkout payment links from chat input, built in raw Java and deployed via Docker on Raspberry Pi (ARM32).",
     "technologies": [
       "Java 17",
@@ -63,7 +63,7 @@
   },
   {
     "id": "code-viewer-bot",
-    "title": "Code Viewer Bot — VS Code Automation Experiment",
+    "title": "Code Viewer Bot - VS Code Automation Experiment",
     "summary": "A tiny VS Code extension that randomly opens files and wiggles the cursor - because apparently being \"active\" is a KPI now 😄",
     "technologies": [
       "JavaScript",
@@ -77,7 +77,7 @@
   },
   {
     "id": "k8s-utility-containers",
-    "title": "Kubernetes Utility Containers — DevOps Automation Images",
+    "title": "Kubernetes Utility Containers - DevOps Automation Images",
     "summary": "Lightweight production-ready Docker utility containers for Kubernetes environments. Includes a PostgreSQL backup/restore image with AWS S3 integration and retention policies, and a kubectl + AWS CLI toolbox image designed for automation jobs such as ECR secret refresh, cluster maintenance, and GitOps workflows.",
     "technologies": [
       "Docker",

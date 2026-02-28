@@ -30,6 +30,12 @@
     "details_file": "cheatsheets/semver.md"
   },
   {
+    "id": "apis-communication",
+    "title": "APIs & Communication Protocols",
+    "summary": "API design principles and communication styles including REST, GraphQL, RPC (gRPC), and SOAP. Covers resource modeling, versioning, authentication, idempotency, error handling, and best practices for scalable service-to-service and client-server communication.",
+    "details_file": "cheatsheets/apis-communication.md"
+  },
+  {
     "id": "db-transactions",
     "title": "Database Transactions",
     "summary": "Database transactions ensure data integrity using ACID properties, commit/rollback mechanisms, and connection pooling.",

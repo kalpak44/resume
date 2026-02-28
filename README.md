@@ -1,6 +1,17 @@
-# Frontend App
+# Pavel Usanli - Software Engineer
 
-Personal web page built with Vite, React, Tailwind CSS, and React Router.
+Personal portfolio and resume website showcasing my experience as a Software Engineer specializing in Java, microservices, and cloud infrastructure. Built with Vite, React, Tailwind CSS, and React Router.
+
+## About
+
+I'm a Software Engineer with expertise in:
+- **Backend**: Java, Spring Boot, Microservices, RESTful APIs
+- **Cloud & DevOps**: AWS, Azure, Kubernetes, Docker, Terraform, CI/CD (Jenkins, GitLab CI/CD)
+- **Frontend**: React, Angular, JavaScript
+- **Data**: MongoDB, ETL pipelines
+- **Additional**: Web3, Smart Contracts, Solidity
+
+Currently working at foryouandyourcustomers (2020-Present) and Ispolink (2022-Present), with previous experience at Intershop Communications AG and Methodia.
 
 ## Prerequisites
 

@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout.jsx'
 import { Resume } from './pages/Resume.jsx'
 import { ProjectDetails } from './pages/ProjectDetails.jsx'
-import { BlogDetails } from './pages/BlogDetails.jsx'
-import { Blogs } from './pages/Blogs.jsx'
 import { NotFound } from './pages/NotFound.jsx'
 
 function App() {
@@ -49,8 +47,6 @@ function App() {
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
           <Route path="*" element={<NotFound />} />
-          {/*<Route path="/blogs" element={<Blogs />} />*/}
-          {/*<Route path="/blogs/:id" element={<BlogDetails />} />*/}
         </Routes>
       </Layout>
     </Router>

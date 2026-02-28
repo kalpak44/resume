@@ -1,7 +1,7 @@
-How services talk to each other (Sync vs Async).
+How services communicate with each other (Sync vs. Async).
 
-- **Sync** → Request / Response (wait for answer)
-- **Async** → Send a message / event (process later)
+- **Sync** → Request/Response (wait for answer)
+- **Async** → Send a message/event (process later)
 
 # 1) Synchronous Communication
 
@@ -14,7 +14,7 @@ sequenceDiagram
 
     A->>B: Request
     B-->>A: Response
-````
+```
 
 ## Common Technologies
 
@@ -118,13 +118,13 @@ flowchart LR
 * Multiple services need same data
 * High throughput
 
-# 3) Sync vs. Async (Quick Decision)
+# 3) Sync vs. Async (Quick Decision Guide)
 
 ## Use Sync
 
 * Need immediate result
 * Simple request/response
-* User waiting
+* User is waiting
 
 ## Use Async
 
@@ -135,5 +135,5 @@ flowchart LR
 
 # Key Takeaway
 
-Sync → Simple but tightly coupled
-Async → More scalable, resilient, and flexible
+**Sync** → Simple but tightly coupled
+**Async** → More scalable, resilient, and flexible

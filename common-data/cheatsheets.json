@@ -8,31 +8,31 @@
   {
     "id": "microservices",
     "title": "Microservice Patterns",
-    "summary": "Distributed architectures patterns like Saga, Event Sourcing, and resiliency strategies like Retry and Exponential Backoff.",
+    "summary": "Distributed architecture patterns including API Gateway, Strangler Fig, CQRS, Outbox, and Idempotency. Covers database-per-service, service discovery, and resilience strategies for building scalable microservices.",
     "details_file": "cheatsheets/microservices.md"
   },
   {
     "id": "service-to-service-communication",
     "title": "Service-to-Service Communication (Sync vs Async)",
-    "summary": "Simple guide to service-to-service communication: synchronous request/response (REST, gRPC, SOAP) vs asynchronous messaging and streaming (RabbitMQ, ActiveMQ, Kafka). Covers when to use each, trade-offs, reliability patterns, and common pitfalls.",
+    "summary": "Guide to service-to-service communication: synchronous request/response (REST, gRPC, SOAP) vs. asynchronous messaging and streaming (RabbitMQ, ActiveMQ, Kafka). Covers when to use each approach, trade-offs, reliability patterns, and common pitfalls.",
     "details_file": "cheatsheets/service-to-service-communication.md"
   },
   {
     "id": "kubernetes",
     "title": "Kubernetes Management",
-    "summary": "Master cluster operations with kubectl, k9s, and essential YAML manifests for various K8s resources.",
+    "summary": "Essential kubectl commands, k9s terminal UI, and YAML manifest examples for managing Kubernetes resources including Pods, Deployments, Services, ConfigMaps, Secrets, Jobs, and CronJobs.",
     "details_file": "cheatsheets/kubernetes.md"
   },
   {
     "id": "sdlc",
-    "title": "SDLC Methodology",
-    "summary": "The Software Development Life Cycle (SDLC) is a structured process for designing, developing, and testing high-quality software.",
+    "title": "Software Development Life Cycle (SDLC)",
+    "summary": "Structured process for designing, developing, and testing high-quality software. Covers the six phases (Planning, Analysis, Design, Implementation, Testing, Maintenance) and common methodologies (Waterfall, Agile, Scrum, Kanban, DevOps, Spiral).",
     "details_file": "cheatsheets/sdlc.md"
   },
   {
     "id": "semver",
-    "title": "Semantic Versioning",
-    "summary": "Semantic Versioning (SemVer) is a versioning scheme that conveys meaning about the underlying changes with a three-part number: MAJOR.MINOR.PATCH.",
+    "title": "Semantic Versioning (SemVer)",
+    "summary": "Versioning scheme using MAJOR.MINOR.PATCH format to communicate the nature of changes. Covers incrementing rules, pre-release versions, build metadata, and dependency management best practices.",
     "details_file": "cheatsheets/semver.md"
   },
   {

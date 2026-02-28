@@ -12,7 +12,7 @@ A few main commands to interact with clusters:
 
 ### k9s: Terminal UI for Kubernetes
 
-For a more productive experience, I highly recommend to use **[k9s](https://k9scli.io/)**. It provides a terminal-based
+For a more productive experience, I highly recommend using **[k9s](https://k9scli.io/)**. It provides a terminal-based
 UI to manage your clusters, view logs, shell into pods, and more, without typing long kubectl commands.
 
 ### Manifest Examples

@@ -143,5 +143,3 @@ Services find each other dynamically rather than via hard-coded addresses.
 * Include metadata: `event_id`, `occurred_at`, `schema_version`, `producer`
 * Design consumers to be **idempotent** and tolerate out-of-order delivery
 
-If you want, I can add a short “When to use / when not to use” bullet under each pattern to match the decision-making
-style too.

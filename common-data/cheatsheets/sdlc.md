@@ -1,4 +1,4 @@
-SDLC is a structured process used by software developers to design, develop, and test high-quality software. It aims to produce a high-quality product that meets or exceeds customer expectations, within reach of time and cost estimates.
+SDLC is a structured process used by software developers to design, develop, and test high-quality software. It aims to produce a high-quality product that meets or exceeds customer expectations within the time and cost estimates.
 
 ### SDLC Phases
 

@@ -76,17 +76,21 @@
     "details_file": "projects/code-viewer-bot.md"
   },
   {
-    "id": "simple-k8s-operator",
-    "title": "Simple Kubernetes Operator",
-    "summary": "A sandbox Kubernetes operator written in Go to explore CRDs, reconciliation loops, and the end-to-end operator development workflow.",
+    "id": "k8s-utility-containers",
+    "title": "Kubernetes Utility Containers",
+    "summary": "Lightweight production-ready Docker utility containers for Kubernetes environments. Includes a PostgreSQL backup/restore image with AWS S3 integration and retention policies, and a kubectl + AWS CLI toolbox image designed for automation jobs such as ECR secret refresh, cluster maintenance, and GitOps workflows.",
     "technologies": [
-      "Go",
+      "Docker",
       "Kubernetes",
-      "CRDs",
-      "Controller Runtime",
-      "kubectl"
+      "PostgreSQL",
+      "AWS CLI",
+      "S3",
+      "kubectl",
+      "Alpine Linux",
+      "Shell Scripting",
+      "GitHub Actions",
+      "GHCR"
     ],
-    "github": "https://github.com/kalpak44/simple-k8s-operator",
-    "details_file": "projects/simple-k8s-operator.md"
+    "details_file": "projects/k8s-utility-containers.md"
   }
 ]

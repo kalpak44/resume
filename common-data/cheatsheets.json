@@ -12,6 +12,12 @@
     "details_file": "cheatsheets/microservices.md"
   },
   {
+    "id": "service-to-service-communication",
+    "title": "Service-to-Service Communication (Sync vs Async)",
+    "summary": "Simple guide to service-to-service communication: synchronous request/response (REST, gRPC, SOAP) vs asynchronous messaging and streaming (RabbitMQ, ActiveMQ, Kafka). Covers when to use each, trade-offs, reliability patterns, and common pitfalls.",
+    "details_file": "cheatsheets/service-to-service-communication.md"
+  },
+  {
     "id": "kubernetes",
     "title": "Kubernetes Management",
     "summary": "Master cluster operations with kubectl, k9s, and essential YAML manifests for various K8s resources.",

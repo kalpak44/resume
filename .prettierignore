@@ -4,3 +4,6 @@ dist
 coverage
 *.log
 package-lock.json
+cv-pdf-generator
+common-data
+.github

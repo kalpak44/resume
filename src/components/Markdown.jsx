@@ -73,8 +73,12 @@ export function Markdown({ content }) {
     <div ref={containerRef} className="markdown-content">
       <ReactMarkdown
         components={{
-          h1: ({ ...props }) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
-          h2: ({ ...props }) => <h2 className="text-2xl font-bold mt-8 mb-4" {...props} />,
+          h1: ({ ...props }) => (
+            <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />
+          ),
+          h2: ({ ...props }) => (
+            <h2 className="text-2xl font-bold mt-8 mb-4" {...props} />
+          ),
           h3: ({ ...props }) => <h3 className="section-title mt-12" {...props} />,
           ul: ({ ...props }) => (
             <ul

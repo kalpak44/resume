@@ -171,6 +171,16 @@ export function Resume({ profile, projects }) {
           ))}
         </div>
       </div>
+
+      <div className="flex justify-center pt-8 pb-8">
+        <Link
+          to="/cheat-sheets"
+          className="h-11 inline-flex items-center px-6 rounded-xl font-medium bg-primary text-white hover:bg-primary-hover shadow-[0_10px_22px_rgba(37,99,235,0.18)] transition-all transform hover:-translate-y-px active:translate-y-0"
+        >
+          <i className="fa-solid fa-book mr-2"></i>
+          View Cheat Sheets
+        </Link>
+      </div>
     </>
   )
 }

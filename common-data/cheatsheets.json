@@ -1,0 +1,32 @@
+[
+  {
+    "id": "microservices",
+    "title": "Microservice Patterns",
+    "summary": "Distributed architectures patterns like Saga, Event Sourcing, and resiliency strategies like Retry and Exponential Backoff.",
+    "details_file": "cheatsheets/microservices.md"
+  },
+  {
+    "id": "kubernetes",
+    "title": "Kubernetes Management",
+    "summary": "Master cluster operations with kubectl, k9s, and essential YAML manifests for various K8s resources.",
+    "details_file": "cheatsheets/kubernetes.md"
+  },
+  {
+    "id": "sdlc",
+    "title": "SDLC Methodology",
+    "summary": "The Software Development Life Cycle (SDLC) is a structured process for designing, developing, and testing high-quality software.",
+    "details_file": "cheatsheets/sdlc.md"
+  },
+  {
+    "id": "semver",
+    "title": "Semantic Versioning",
+    "summary": "Semantic Versioning (SemVer) is a versioning scheme that conveys meaning about the underlying changes with a three-part number: MAJOR.MINOR.PATCH.",
+    "details_file": "cheatsheets/semver.md"
+  },
+  {
+    "id": "db-transactions",
+    "title": "Database Transactions",
+    "summary": "Database transactions ensure data integrity using ACID properties, commit/rollback mechanisms, and connection pooling.",
+    "details_file": "cheatsheets/db-transactions.md"
+  }
+]

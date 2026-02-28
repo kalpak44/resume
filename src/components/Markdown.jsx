@@ -85,16 +85,21 @@ export function Markdown({ content }) {
             <p className="text-[1.05rem] leading-[1.7] text-foreground" {...props} />
           ),
           a: ({ ...props }) => (
-            <a className="text-primary hover:underline underline" target="_blank" rel="noopener noreferrer" {...props} />
+            <a
+              className="text-primary hover:underline underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              {...props}
+            />
           ),
           code: ({ inline, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '')
             const codeString = String(children).replace(/\n$/, '')
-            
+
             // In react-markdown v10, code blocks might have inline=false
             // but for some single backtick usage it might be true or undefined.
             // If it has a language-class and is not inline, we treat it as a block.
-            
+
             if (!inline && match && match[1] === 'mermaid') {
               return (
                 <code className={className} {...props}>
@@ -107,13 +112,16 @@ export function Markdown({ content }) {
               // It's a code block
               const handleCopy = (e) => {
                 const btn = e.currentTarget
-                navigator.clipboard.writeText(codeString)
+                navigator.clipboard
+                  .writeText(codeString)
                   .then(() => {
                     const originalText = btn.innerText
                     btn.innerText = 'Copied!'
-                    setTimeout(() => { btn.innerText = originalText }, 2000)
+                    setTimeout(() => {
+                      btn.innerText = originalText
+                    }, 2000)
                   })
-                  .catch(err => console.error('Failed to copy!', err))
+                  .catch((err) => console.error('Failed to copy!', err))
               }
 
               return (
@@ -130,7 +138,10 @@ export function Markdown({ content }) {
                     </button>
                   </div>
                   <pre className="p-4 overflow-x-auto m-0 bg-transparent">
-                    <code className={`${className} !bg-transparent !p-0 !m-0 !border-0 text-[0.95rem] leading-relaxed text-slate-800 dark:text-slate-200`} {...props}>
+                    <code
+                      className={`${className} !bg-transparent !p-0 !m-0 !border-0 text-[0.95rem] leading-relaxed text-slate-800 dark:text-slate-200`}
+                      {...props}
+                    >
                       {children}
                     </code>
                   </pre>
@@ -143,13 +154,16 @@ export function Markdown({ content }) {
             if (!inline && (match || codeString.includes('\n'))) {
               const handleCopy = (e) => {
                 const btn = e.currentTarget
-                navigator.clipboard.writeText(codeString)
+                navigator.clipboard
+                  .writeText(codeString)
                   .then(() => {
                     const originalText = btn.innerText
                     btn.innerText = 'Copied!'
-                    setTimeout(() => { btn.innerText = originalText }, 2000)
+                    setTimeout(() => {
+                      btn.innerText = originalText
+                    }, 2000)
                   })
-                  .catch(err => console.error('Failed to copy!', err))
+                  .catch((err) => console.error('Failed to copy!', err))
               }
               return (
                 <div className="relative group my-6 border border-line-light/60 dark:border-white/10 rounded-xl overflow-hidden bg-slate-50 dark:bg-[#1e1e1e] transition-colors shadow-sm">
@@ -165,7 +179,10 @@ export function Markdown({ content }) {
                     </button>
                   </div>
                   <pre className="p-4 overflow-x-auto m-0 bg-transparent">
-                    <code className={`${className || ''} !bg-transparent !p-0 !m-0 !border-0 text-[0.95rem] leading-relaxed text-slate-800 dark:text-slate-200`} {...props}>
+                    <code
+                      className={`${className || ''} !bg-transparent !p-0 !m-0 !border-0 text-[0.95rem] leading-relaxed text-slate-800 dark:text-slate-200`}
+                      {...props}
+                    >
                       {children}
                     </code>
                   </pre>
@@ -173,28 +190,34 @@ export function Markdown({ content }) {
               )
             }
 
-            // Inline code: check if it starts and ends with ` to be extra safe, 
+            // Inline code: check if it starts and ends with ` to be extra safe,
             // but react-markdown usually handles this.
             // We also want to allow copying inline code if it looks like a command.
-            const isCommand = codeString.startsWith('kubectl') || codeString.startsWith('git') || codeString.includes(' --')
+            const isCommand =
+              codeString.startsWith('kubectl') ||
+              codeString.startsWith('git') ||
+              codeString.includes(' --')
 
             if (isCommand) {
-               const handleCopy = (e) => {
-                navigator.clipboard.writeText(codeString)
+              const handleCopy = (e) => {
+                navigator.clipboard
+                  .writeText(codeString)
                   .then(() => {
                     const btn = e.currentTarget.querySelector('.copy-tip')
                     if (btn) {
                       btn.classList.remove('opacity-0')
-                      setTimeout(() => { btn.classList.add('opacity-0') }, 2000)
+                      setTimeout(() => {
+                        btn.classList.add('opacity-0')
+                      }, 2000)
                     }
                   })
-                  .catch(err => console.error('Failed to copy!', err))
+                  .catch((err) => console.error('Failed to copy!', err))
               }
 
               return (
-                <code 
+                <code
                   onClick={handleCopy}
-                  className={`${className || ''} bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono cursor-pointer hover:bg-slate-200 dark:hover:bg-white/20 transition-colors relative group/inline`} 
+                  className={`${className || ''} bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono cursor-pointer hover:bg-slate-200 dark:hover:bg-white/20 transition-colors relative group/inline`}
                   title="Click to copy"
                   {...props}
                 >
@@ -207,7 +230,10 @@ export function Markdown({ content }) {
             }
 
             return (
-              <code className={`${className || ''} bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono`} {...props}>
+              <code
+                className={`${className || ''} bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono`}
+                {...props}
+              >
                 {children}
               </code>
             )

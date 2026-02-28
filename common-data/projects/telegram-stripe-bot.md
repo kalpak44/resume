@@ -1,3 +1,7 @@
+A minimal Telegram bot designed to streamline payment collection for small sellers. The bot collects product details directly in chat (name, quantity, price, currency) and generates a Stripe Checkout session link for one-time payments. Built as a framework-free Java application focused on simplicity, low resource usage, and portable deployment, including ARM32 Docker builds for Raspberry Pi hosting.
+
+### Key Features & Details
+
 * Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links
 * Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely
 * Built framework-free Java service with minimal dependencies for fast startup and low memory usage

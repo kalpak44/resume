@@ -54,8 +54,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
-          <Route path="/cheat-sheets" element={<CheatSheets cheatsheets={cheatsheets} />} />
-          <Route path="/cheat-sheets/:id" element={<CheatSheetDetails cheatsheets={cheatsheets} />} />
+          <Route
+            path="/cheat-sheets"
+            element={<CheatSheets cheatsheets={cheatsheets} />}
+          />
+          <Route
+            path="/cheat-sheets/:id"
+            element={<CheatSheetDetails cheatsheets={cheatsheets} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>

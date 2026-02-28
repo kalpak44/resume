@@ -18,32 +18,34 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY cv-pdf-generator/package*.json ./cv-pdf-generator/
-COPY frontend-app/package*.json ./frontend-app/
+COPY package*.json ./
 
 WORKDIR /app/cv-pdf-generator
 RUN npm ci
 
-WORKDIR /app/frontend-app
+WORKDIR /app
 RUN npm ci
 
 WORKDIR /app
 COPY cv-pdf-generator ./cv-pdf-generator
 COPY common-data ./cv-pdf-generator/data
-COPY frontend-app ./frontend-app
-COPY common-data ./frontend-app/public/data
+COPY src ./src
+COPY public ./public
+COPY index.html vite.config.js ./
+COPY common-data ./public/data
 
 WORKDIR /app/cv-pdf-generator
 RUN npm run build
 
-WORKDIR /app/frontend-app
+WORKDIR /app
 RUN npm run build
 
-RUN mkdir -p /app/frontend-app/dist/assets && \
-    cp /app/cv-pdf-generator/dist/resume.pdf /app/frontend-app/dist/assets/resume.pdf
+RUN mkdir -p /app/dist/assets && \
+    cp /app/cv-pdf-generator/dist/resume.pdf /app/dist/assets/resume.pdf
 
 
 # Stage 2: Nginx
 FROM nginx:latest
-COPY --from=builder /app/frontend-app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx-config/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

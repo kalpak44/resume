@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - "common-data/**"
       - "src/**"
       - "public/**"
       - "package*.json"

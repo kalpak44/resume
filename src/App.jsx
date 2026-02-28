@@ -3,11 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout.jsx'
 import { Resume } from './pages/Resume.jsx'
 import { ProjectDetails } from './pages/ProjectDetails.jsx'
+import { CheatSheets } from './pages/CheatSheets.jsx'
+import { CheatSheetDetails } from './pages/CheatSheetDetails.jsx'
 import { NotFound } from './pages/NotFound.jsx'
 
 function App() {
   const [profile, setProfile] = useState(null)
   const [projects, setProjects] = useState([])
+  const [cheatsheets, setCheatsheets] = useState([])
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('theme')
     if (saved === 'light' || saved === 'dark') return saved
@@ -29,6 +32,11 @@ function App() {
       .then((res) => res.json())
       .then((data) => setProjects(data))
       .catch((err) => console.error('Error loading projects:', err))
+
+    fetch(`${import.meta.env.BASE_URL}data/cheatsheets.json`)
+      .then((res) => res.json())
+      .then((data) => setCheatsheets(data))
+      .catch((err) => console.error('Error loading cheatsheets:', err))
   }, [])
 
   useEffect(() => {
@@ -46,6 +54,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Resume profile={profile} projects={projects} />} />
           <Route path="/projects/:id" element={<ProjectDetails projects={projects} />} />
+          <Route path="/cheat-sheets" element={<CheatSheets cheatsheets={cheatsheets} />} />
+          <Route path="/cheat-sheets/:id" element={<CheatSheetDetails cheatsheets={cheatsheets} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>

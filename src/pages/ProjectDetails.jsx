@@ -1,11 +1,13 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Markdown } from '../components/Markdown.jsx'
 
 export function ProjectDetails({ projects }) {
   const { id } = useParams()
   const navigate = useNavigate()
   const project = projects.find((p) => p.id === id)
+
+  const [isControlsHovered, setIsControlsHovered] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -31,45 +33,109 @@ ${project.details_md || project.details.map((d) => `* ${d}`).join('\n')}
 
   return (
     <div className="space-y-8">
-      <div className="card-flat">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-          <div>
-            <h2 className="text-3xl font-bold">{project.title}</h2>
-          </div>
-          <div className="flex gap-2">
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+      <div className="card-flat relative">
+        <div
+          className="absolute top-4 left-4 z-10 flex gap-2"
+          onMouseEnter={() => setIsControlsHovered(true)}
+          onMouseLeave={() => setIsControlsHovered(false)}
+        >
+          <button
+            onClick={() => navigate('/')}
+            className="w-3 h-3 rounded-full bg-[#ff5f57] flex items-center justify-center cursor-pointer"
+            aria-label="Close"
+          >
+            {isControlsHovered && (
+              <svg
+                className="w-2 h-2 text-[#8d0e0a]"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
               >
-                <i className="fa-brands fa-github mr-2"></i>GitHub
-              </a>
+                <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
+              </svg>
             )}
-            {project.url && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+          </button>
+
+          <button
+            type="button"
+            className="w-3 h-3 rounded-full bg-[#febc2e] flex items-center justify-center cursor-pointer"
+            aria-label="Minimize"
+          >
+            {isControlsHovered && (
+              <svg
+                className="w-2 h-2 text-[#8d6302]"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
               >
-                <i className="fa-solid fa-external-link mr-2"></i>Live Demo
-              </a>
+                <path d="M2 6h8" strokeLinecap="round" />
+              </svg>
             )}
-          </div>
+          </button>
+
+          <button
+            type="button"
+            className="w-3 h-3 rounded-full bg-[#28c840] flex items-center justify-center cursor-pointer"
+            aria-label="Maximize"
+          >
+            {isControlsHovered && (
+              <svg
+                className="w-2 h-2 text-[#0d5215]"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d="M2 6h8M6 2v8" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
         </div>
 
-        <div>
-          <Markdown content={markdownContent} />
+        <div className="pt-12">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+            <div>
+              <h2 className="text-3xl font-bold">{project.title}</h2>
+            </div>
 
-          <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
-          <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
-            {project.technologies.map((tech, idx) => (
-              <span key={idx} className="pill pill-primary">
-                {tech}
-              </span>
-            ))}
+            <div className="flex gap-2">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+                >
+                  <i className="fa-brands fa-github mr-2"></i>GitHub
+                </a>
+              )}
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+                >
+                  <i className="fa-solid fa-external-link mr-2"></i>Live Demo
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Markdown content={markdownContent} />
+
+            <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
+
+            <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
+              {project.technologies.map((tech, idx) => (
+                <span key={idx} className="pill pill-primary">
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

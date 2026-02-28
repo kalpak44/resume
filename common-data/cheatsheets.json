@@ -1,5 +1,11 @@
 [
   {
+    "id": "cicd-deployments",
+    "title": "CI/CD & Deployment Strategies",
+    "summary": "Continuous Integration and Continuous Delivery (CI/CD) practices including blue-green and canary deployments, pull-based vs push-based pipelines, and GitOps workflows for automated, reliable releases.",
+    "details_file": "cheatsheets/cicd-deployments.md"
+  },
+  {
     "id": "microservices",
     "title": "Microservice Patterns",
     "summary": "Distributed architectures patterns like Saga, Event Sourcing, and resiliency strategies like Retry and Exponential Backoff.",

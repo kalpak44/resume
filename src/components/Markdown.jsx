@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import mermaid from 'mermaid'
 
 mermaid.initialize({
@@ -72,6 +73,7 @@ export function Markdown({ content }) {
   return (
     <div ref={containerRef} className="markdown-content">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ ...props }) => (
             <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />
@@ -95,6 +97,33 @@ export function Markdown({ content }) {
               className="text-primary hover:underline underline"
               target="_blank"
               rel="noopener noreferrer"
+              {...props}
+            />
+          ),
+          table: ({ ...props }) => (
+            <div className="overflow-x-auto my-6">
+              <table
+                className="min-w-full border-collapse border border-slate-300 dark:border-slate-600"
+                {...props}
+              />
+            </div>
+          ),
+          thead: ({ ...props }) => (
+            <thead className="bg-slate-100 dark:bg-slate-800" {...props} />
+          ),
+          tbody: ({ ...props }) => <tbody {...props} />,
+          tr: ({ ...props }) => (
+            <tr className="border-b border-slate-300 dark:border-slate-600" {...props} />
+          ),
+          th: ({ ...props }) => (
+            <th
+              className="px-4 py-2 text-left font-semibold border border-slate-300 dark:border-slate-600"
+              {...props}
+            />
+          ),
+          td: ({ ...props }) => (
+            <td
+              className="px-4 py-2 border border-slate-300 dark:border-slate-600"
               {...props}
             />
           ),

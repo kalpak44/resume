@@ -6,47 +6,47 @@ import { ProjectDetails } from './pages/ProjectDetails.jsx'
 import { CheatSheets } from './pages/CheatSheets.jsx'
 import { CheatSheetDetails } from './pages/CheatSheetDetails.jsx'
 import { NotFound } from './pages/NotFound.jsx'
+import { ThemeProvider, useTheme } from './context/ThemeContext.jsx'
+
+const BASE_URL = import.meta.env.BASE_URL
+const DATA_BASE_URL = `${BASE_URL}data/`
 
 function App() {
   const [profile, setProfile] = useState(null)
   const [projects, setProjects] = useState([])
   const [cheatsheets, setCheatsheets] = useState([])
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('theme')
-    if (saved === 'light' || saved === 'dark') return saved
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  })
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/profile.json`)
+    fetch(`${DATA_BASE_URL}profile.json`)
       .then((res) => res.json())
       .then((data) => {
         if (data.avatar && data.avatar.startsWith('./data/')) {
-          data.avatar = `${import.meta.env.BASE_URL}${data.avatar.substring(2)}`
+          data.avatar = `${BASE_URL}${data.avatar.substring(2)}`
         }
         setProfile(data)
       })
       .catch((err) => console.error('Error loading profile:', err))
 
-    fetch(`${import.meta.env.BASE_URL}data/projects.json`)
+    fetch(`${DATA_BASE_URL}projects.json`)
       .then((res) => res.json())
       .then((data) => setProjects(data))
       .catch((err) => console.error('Error loading projects:', err))
 
-    fetch(`${import.meta.env.BASE_URL}data/cheatsheets.json`)
+    fetch(`${DATA_BASE_URL}cheatsheets.json`)
       .then((res) => res.json())
       .then((data) => setCheatsheets(data))
       .catch((err) => console.error('Error loading cheatsheets:', err))
   }, [])
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
-  }, [theme])
+  return (
+    <ThemeProvider>
+      <AppContent profile={profile} projects={projects} cheatsheets={cheatsheets} />
+    </ThemeProvider>
+  )
+}
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
-  }
+function AppContent({ profile, projects, cheatsheets }) {
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <Router>

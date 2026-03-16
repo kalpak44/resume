@@ -150,27 +150,27 @@ Common practices to improve reliability:
 
 **Monitoring**
 
-* Prometheus
-* Grafana
-* Datadog
+* [Prometheus](https://prometheus.io/)
+* [Grafana](https://grafana.com/)
+* [Datadog](https://www.datadog.com/)
 
 **Redundancy**
 
-* load balancing
-* replication
+* [load balancing](https://pavel-usanli.online/cheat-sheets/apis-communication) (NGINX, HAProxy)
+* [replication](https://pavel-usanli.online/cheat-sheets/db-transactions) (Read Replicas, Multi-Master)
 * multi-zone deployment
 
 **Fault Tolerance**
 
-* retries
-* exponential backoff
-* circuit breakers
+* retries (Exponential Backoff)
+* [circuit breakers](https://pavel-usanli.online/cheat-sheets/microservices) (Resilience4j, Opossum)
+* bulkhead pattern
 
 **Incident Management**
 
-* alerting
+* alerting (Opsgenie, PagerDuty)
 * runbooks
-* postmortems
+* [postmortems](https://sre.google/sre-book/postmortem-culture/)
 
 ### Quick Summary
 

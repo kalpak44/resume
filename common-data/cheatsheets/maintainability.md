@@ -120,16 +120,17 @@ Tests make refactoring safer.
 
 Common test types:
 
-* unit tests
-* integration tests
-* end-to-end tests
+* **Unit Tests**: [JUnit](https://junit.org/) (Java), [Jest](https://jestjs.io/) (JS/TS)
+* **Integration Tests**: [Testcontainers](https://www.testcontainers.org/) (
+  Java/JS), [Supertest](https://github.com/ladjs/supertest) (JS)
+* **End-to-End Tests**: [Playwright](https://playwright.dev/) (JS), [Selenium](https://www.selenium.dev/) (Java)
 
 **Documentation**
 
 Useful documentation includes:
 
-* architecture diagrams
-* API documentation
+* Architecture Diagrams ([C4 Model](https://pavel-usanli.online/cheat-sheets/c4-model))
+* API Documentation ([Swagger/OpenAPI](https://swagger.io/))
 * README files
 
 **Consistent Coding Standards**
@@ -140,11 +141,29 @@ Use shared standards:
 * naming conventions
 * project structure
 
+**Dependency Management**
+
+Keep dependencies up to date to avoid security risks and technical debt.
+
+* [Maven](https://maven.apache.org/) / [Gradle](https://gradle.org/) (Java)
+* [npm](https://www.npmjs.com/) / [yarn](https://yarnpkg.com/) (JS/TS)
+*
+Tools: [Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate), [Dependabot](https://docs.github.com/en/code-security/dependabot)
+
 Tools:
 
-* linters
-* formatters
-* static analysis
+**Static Analysis**
+
+* [SonarQube](https://www.sonarqube.org/) (Java, JavaScript, etc.)
+* [Checkstyle](https://checkstyle.sourceforge.io/) (Java)
+* [ESLint](https://eslint.org/) (JavaScript/TypeScript)
+
+**Formatters**
+
+* [Google Java Formatter](https://github.com/google/google-java-format) (Java)
+* [Spotless](https://github.com/diffplug/spotless) (Java, etc. – can use Spotify or Google style)
+* [Prettier](https://prettier.io/) (JavaScript/TypeScript)
+* [Spotify Java Formatter](https://github.com/spotify/fmt-maven-plugin) (Maven plugin for Java)
 
 ### Refactoring
 
@@ -175,6 +194,12 @@ Percentage of code covered by tests.
 ```text
 Code Coverage = Tested Code / Total Code
 ```
+
+Tools:
+
+* [Jacoco](https://www.jacoco.org/) (Java)
+* [Istanbul](https://istanbul.js.org/) (JavaScript/TypeScript)
+* [SonarQube](https://www.sonarqube.org/) (Multi-language)
 
 **Technical Debt**
 

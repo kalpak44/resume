@@ -191,12 +191,12 @@ Trade-offs are unavoidable.
 
 # 5. Writing Good NFRs
 
-## ❌ Bad
+##  Bad
 
 * "System should be fast"
 * "System must be secure"
 
-## ✅ Good
+##  Good
 
 * "p95 response time < 200ms under 5,000 RPS"
 * "99.9% uptime monthly"

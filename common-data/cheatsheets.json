@@ -64,5 +64,17 @@
     "title": "C4 Model (Architecture Description)",
     "summary": "A hierarchical approach to documenting software architecture using Context, Container, Component, and Code diagrams. Focuses on clarity, abstraction levels, system boundaries, and stakeholder communication.",
     "details_file": "cheatsheets/c4-model.md"
+  },
+  {
+    "id": "reliability-sre",
+    "title": "Reliability & SRE Metrics",
+    "summary": "Reliability practices for building stable systems including availability, MTTR, MTBF, error rates, latency percentiles, and Google SRE concepts such as SLI, SLO, SLA, error budgets, and the four golden signals used in production monitoring.",
+    "details_file": "cheatsheets/reliability-sre.md"
+  },
+  {
+    "id": "maintainability",
+    "title": "Maintainability",
+    "summary": "Software maintainability principles for building systems that are easy to understand, modify, and extend. Covers modular design, separation of concerns, low coupling, high cohesion, code readability, refactoring practices, automated testing, and common maintainability metrics.",
+    "details_file": "cheatsheets/maintainability.md"
   }
 ]

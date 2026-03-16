@@ -8,7 +8,7 @@ A maintainable system allows developers to:
 * reduce technical debt
 
 Maintainability is an
-important[Non-Functional Requirement (NFR)](https://pavel-usanli.online/cheat-sheets/non-functional-requirements).
+important [Non-Functional Requirement (NFR)](https://pavel-usanli.online/cheat-sheets/non-functional-requirements).
 
 ### Why Maintainability Matters
 

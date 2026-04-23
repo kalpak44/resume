@@ -13,48 +13,48 @@ function App() {
     <ThemeProvider>
       <Router>
         <Routes>
-        <Route path="/" element={<CinematicResume />} />
+          <Route path="/" element={<CinematicResume />} />
 
-        <Route
-          path="/projects"
-          element={
-            <Layout>
-              <Projects />
-            </Layout>
-          }
-        />
-        <Route
-          path="/projects/:id"
-          element={
-            <Layout>
-              <ProjectDetails />
-            </Layout>
-          }
-        />
-        <Route
-          path="/cheat-sheets"
-          element={
-            <Layout>
-              <CheatSheets />
-            </Layout>
-          }
-        />
-        <Route
-          path="/cheat-sheets/:id"
-          element={
-            <Layout>
-              <CheatSheetDetails />
-            </Layout>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <Layout>
-              <NotFound />
-            </Layout>
-          }
-        />
+          <Route
+            path="/projects"
+            element={
+              <Layout>
+                <Projects />
+              </Layout>
+            }
+          />
+          <Route
+            path="/projects/:id"
+            element={
+              <Layout>
+                <ProjectDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/cheat-sheets"
+            element={
+              <Layout>
+                <CheatSheets />
+              </Layout>
+            }
+          />
+          <Route
+            path="/cheat-sheets/:id"
+            element={
+              <Layout>
+                <CheatSheetDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Layout>
+                <NotFound />
+              </Layout>
+            }
+          />
         </Routes>
       </Router>
     </ThemeProvider>

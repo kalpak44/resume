@@ -4,9 +4,11 @@ WORKDIR /app
 
 COPY cv-pdf-generator/pom.xml ./cv-pdf-generator/
 COPY cv-pdf-generator/src ./cv-pdf-generator/src
+COPY cv-pdf-generator/data ./cv-pdf-generator/data
 
-RUN mvn -Dmaven.repo.local=/tmp/mvn-repo -DskipTests -f cv-pdf-generator/pom.xml package \
-    && mvn -Dmaven.repo.local=/tmp/mvn-repo -f cv-pdf-generator/pom.xml exec:java \
+RUN RESUME_DATA_DIR=cv-pdf-generator/data \
+    mvn -Dmaven.repo.local=/tmp/mvn-repo -DskipTests -f cv-pdf-generator/pom.xml \
+    package exec:java \
     -Dexec.mainClass=online.pavelusanli.resume.ResumeApp \
     -Dexec.args="build /tmp/resume.pdf"
 

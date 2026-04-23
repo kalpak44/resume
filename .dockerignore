@@ -1,28 +1,10 @@
-# Exclude the data symlink - we copy common-data explicitly
-cv-pdf-generator/data
-public/data
-
-# Node modules will be installed during build
-node_modules
-**/node_modules
-
-# Build artifacts
-dist
-**/dist
-
-# Development files
+web-page-app/node_modules
+web-page-app/dist
+web-page-app/dist-ssr
+cv-pdf-generator/target
+.mvn/repository
 .git
-.gitignore
 .github
-*.md
-.idea
 .DS_Store
-
-# Config files not needed in build
-.prettierrc
-.prettierignore
-eslint.config.js
-
-# IDE and OS files
-.vscode
+.vite
 *.log

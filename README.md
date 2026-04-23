@@ -2,7 +2,7 @@
 
 Software Engineer specializing in Java, microservices, and cloud infrastructure.
 
-🚀 **Explore my work:** [pavel-usanli.online](https://pavel-usanli.online/)
+🚀 **Explore my work:** [www.pavel-usanli.online](https://pavel-usanli.online/)
 
 ---
 

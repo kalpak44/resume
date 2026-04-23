@@ -5,30 +5,24 @@ on:
     branches:
       - main
     paths:
-      - "common-data/**"
-      - "src/**"
-      - "public/**"
-      - "package*.json"
-      - "vite.config.js"
-      - "Dockerfile"
+      - "cv-pdf-generator/**"
+      - "web-page-app/**"
+      - ".gitignore"
       - ".dockerignore"
-      - "nginx-config/**"
       - ".github/workflows/publish-frontend.yml"
   pull_request:
     branches:
       - main
     paths:
-      - "src/**"
-      - "public/**"
-      - "package*.json"
-      - "vite.config.js"
-      - "Dockerfile"
+      - "cv-pdf-generator/**"
+      - "web-page-app/**"
+      - ".gitignore"
       - ".dockerignore"
-      - "nginx-config/**"
+      - ".github/workflows/publish-frontend.yml"
   workflow_dispatch:
 
 jobs:
-  lint-and-format:
+  lint-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -39,19 +33,37 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: web-page-app/package-lock.json
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
 
       - name: Install dependencies
+        working-directory: web-page-app
         run: npm ci
 
       - name: Check formatting
+        working-directory: web-page-app
         run: npm run format:check
 
       - name: Run linter
+        working-directory: web-page-app
         run: npm run lint
 
+      - name: Build resume PDF
+        working-directory: web-page-app
+        run: npm run build:resume
+
+      - name: Build site
+        working-directory: web-page-app
+        run: npm run build
+
   publish-frontend:
-    needs: lint-and-format
+    needs: lint-and-build
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     permissions:
@@ -89,6 +101,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: web-page-app/docker/Dockerfile
           push: true
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}

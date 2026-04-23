@@ -1,38 +1,32 @@
 # CV PDF Generator
 
-This tool generates a PDF resume from a template and data.
+Java app that renders the CV template and generates the PDF used by the website.
 
-## Requirements
+## Run
 
-- Node.js
-- npm
-
-## Development
-
-To develop the template and styles with live preview in the browser:
+Build the jar/classes:
 
 ```bash
-npm run dev
+mvn -Dmaven.repo.local=../.mvn/repository -DskipTests package
 ```
 
-This will:
-1. Start a local server at [http://localhost:3000](http://localhost:3000).
-2. Watch for changes in `template.html` and `../common-data/profile.json`.
-3. Automatically refresh the browser when changes are saved.
-
-## Build
-
-To generate the final PDF:
+Generate a PDF to an explicit location:
 
 ```bash
-npm run build
+mvn -Dmaven.repo.local=../.mvn/repository -DskipTests package exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args="build ../web-page-app/public/assets/resume.pdf"
 ```
 
-The PDF will be generated at `dist/resume.pdf`.
+Start the live preview server:
 
-## Structure
+```bash
+mvn -Dmaven.repo.local=../.mvn/repository exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args="serve"
+```
 
-- `builder.js`: Core logic for rendering the template and generating the PDF using Puppeteer.
-- `template.html`: The HTML/CSS template for the resume.
-- `dev.js`: Development server for live preview.
-- `../common-data/profile.json`: The data source for the resume.
+Run the unit and integration tests:
+
+```bash
+mvn -Dmaven.repo.local=../.mvn/repository test
+```
+
+The template and profile image are loaded from classpath resources. The build output path is passed explicitly, so the generator stays independent from the website layout.
+Optional overrides can live in `.env` via `RESUME_OUTPUT_PATH` and `RESUME_PREVIEW_PORT`, with CLI args taking priority.

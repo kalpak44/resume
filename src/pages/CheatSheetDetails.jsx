@@ -23,15 +23,28 @@ function WindowControls({ onClose }) {
         onClick={onClose}
         aria-label="Close"
         style={{
-          width: '13px', height: '13px', borderRadius: '50%',
-          background: '#ff5f57', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '13px',
+          height: '13px',
+          borderRadius: '50%',
+          background: '#ff5f57',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: hovered ? '0 0 8px rgba(255,95,87,0.6)' : 'none',
           transition: 'box-shadow 0.2s',
         }}
       >
         {hovered && (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
+          <svg
+            width="6"
+            height="6"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="#8d0e0a"
+            strokeWidth="1.8"
+          >
             <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
           </svg>
         )}
@@ -42,9 +55,15 @@ function WindowControls({ onClose }) {
           type="button"
           aria-label={['Minimize', 'Maximize'][i]}
           style={{
-            width: '13px', height: '13px', borderRadius: '50%',
-            background: color, border: 'none', cursor: 'default',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: '13px',
+            height: '13px',
+            borderRadius: '50%',
+            background: color,
+            border: 'none',
+            cursor: 'default',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         />
       ))}
@@ -78,9 +97,12 @@ export function CheatSheetDetails() {
         <button
           onClick={() => navigate(-1)}
           style={{
-            background: 'none', border: 'none',
-            color: C.cyan, cursor: 'pointer',
-            fontSize: '0.95rem', textDecoration: 'underline',
+            background: 'none',
+            border: 'none',
+            color: C.cyan,
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            textDecoration: 'underline',
           }}
         >
           Go back

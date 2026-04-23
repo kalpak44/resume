@@ -5,20 +5,39 @@ export const profile = {
 
   meta: [
     { icon: 'fa-solid fa-location-dot', text: 'Sofia City, Bulgaria' },
-    { icon: 'fa-solid fa-envelope', text: 'pavel.usanli@gmail.com', link: 'mailto:pavel.usanli@gmail.com' },
+    {
+      icon: 'fa-solid fa-envelope',
+      text: 'pavel.usanli@gmail.com',
+      link: 'mailto:pavel.usanli@gmail.com',
+    },
     { icon: 'fa-solid fa-phone', text: '+(359) 887 731 472', link: 'tel:+359887731472' },
   ],
 
   buttons: [
-    { text: 'LinkedIn', icon: 'fab fa-linkedin', class: 'btn btn-primary', href: 'https://www.linkedin.com/in/pavel-usanli-721946102' },
-    { text: 'GitHub', icon: 'fa-brands fa-github', class: 'btn btn-outline-secondary', href: 'https://github.com/kalpak44' },
-    { text: 'Resume', icon: 'fa-solid fa-download', class: 'btn btn-outline-secondary', href: '/assets/resume.pdf' },
+    {
+      text: 'LinkedIn',
+      icon: 'fab fa-linkedin',
+      class: 'btn btn-primary',
+      href: 'https://www.linkedin.com/in/pavel-usanli-721946102',
+    },
+    {
+      text: 'GitHub',
+      icon: 'fa-brands fa-github',
+      class: 'btn btn-outline-secondary',
+      href: 'https://github.com/kalpak44',
+    },
+    {
+      text: 'Resume',
+      icon: 'fa-solid fa-download',
+      class: 'btn btn-outline-secondary',
+      href: '/assets/resume.pdf',
+    },
   ],
 
   summary:
     "I'm a Software Engineer with a focus on Java, passionate about automation and building complete, reliable systems. " +
-    "I enjoy developing and maintaining end-to-end solutions — from backend services and APIs to frontend features, " +
-    "infrastructure, and CI/CD. While Java is my main language, I also love working with JavaScript and Python, and " +
+    'I enjoy developing and maintaining end-to-end solutions — from backend services and APIs to frontend features, ' +
+    'infrastructure, and CI/CD. While Java is my main language, I also love working with JavaScript and Python, and ' +
     "I'm always experimenting with new tools and approaches to deliver practical business value.",
 
   experience: [
@@ -32,8 +51,26 @@ export const profile = {
         'Implemented unit tests and test cases, supporting reliable releases and stable production systems.',
         'Proposed and documented architectural improvements and best practices to maintain a clean and scalable codebase.',
       ],
-      technologies: ['Azure DevOps', 'Kubernetes', 'MongoDB', 'Jenkins', 'Azure Key Vaults'],
-      skills: ['Java', 'Docker', 'Azure', 'Kubernetes', 'Spring Boot', 'Microservices', 'ETL', 'Containers', 'CI/CD', 'Jenkins', 'React'],
+      technologies: [
+        'Azure DevOps',
+        'Kubernetes',
+        'MongoDB',
+        'Jenkins',
+        'Azure Key Vaults',
+      ],
+      skills: [
+        'Java',
+        'Docker',
+        'Azure',
+        'Kubernetes',
+        'Spring Boot',
+        'Microservices',
+        'ETL',
+        'Containers',
+        'CI/CD',
+        'Jenkins',
+        'React',
+      ],
     },
     {
       title: 'Software Engineer',
@@ -45,7 +82,19 @@ export const profile = {
         'Monitored and debugged cloud infrastructure and services.',
       ],
       technologies: ['AWS', 'GitLab CI/CD', 'Terraform', 'Jenkins', 'Node.js'],
-      skills: ['Web3', 'Microservices', 'Containers', 'AWS', 'CI/CD', 'Node.js', 'Jenkins', 'Smart Contracts', 'Solidity', 'Terraform', 'React'],
+      skills: [
+        'Web3',
+        'Microservices',
+        'Containers',
+        'AWS',
+        'CI/CD',
+        'Node.js',
+        'Jenkins',
+        'Smart Contracts',
+        'Solidity',
+        'Terraform',
+        'React',
+      ],
     },
     {
       title: 'Full Stack Developer',
@@ -55,7 +104,14 @@ export const profile = {
         'Integrated web applications with Intershop eCommerce platform.',
         'Developed and implemented RESTful APIs.',
       ],
-      technologies: ['Java', 'Angular', 'Intershop eCommerce platform', 'GIT', 'SVN', 'Jira'],
+      technologies: [
+        'Java',
+        'Angular',
+        'Intershop eCommerce platform',
+        'GIT',
+        'SVN',
+        'Jira',
+      ],
     },
     {
       title: 'Junior Java Developer',

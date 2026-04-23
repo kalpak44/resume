@@ -1,114 +1,203 @@
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Markdown } from '../components/Markdown.jsx'
+import gsap from 'gsap'
+import { projects } from '../data/projects.js'
 
-export function ProjectDetails({ projects }) {
+const C = {
+  cyan: '#00d4ff',
+  purple: '#8b5cf6',
+  text: '#f1f5f9',
+  muted: '#64748b',
+  subtle: '#94a3b8',
+  sky: '#7dd3fc',
+  bg: '#000814',
+}
+
+// macOS-style window controls
+function WindowControls({ onClose }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div
+      style={{ display: 'flex', gap: '7px', alignItems: 'center' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        style={{
+          width: '13px', height: '13px', borderRadius: '50%',
+          background: '#ff5f57', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'box-shadow 0.2s',
+          boxShadow: hovered ? '0 0 8px rgba(255,95,87,0.6)' : 'none',
+        }}
+      >
+        {hovered && (
+          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
+            <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
+          </svg>
+        )}
+      </button>
+      <button
+        type="button"
+        aria-label="Minimize"
+        style={{
+          width: '13px', height: '13px', borderRadius: '50%',
+          background: '#febc2e', border: 'none', cursor: 'default',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        {hovered && (
+          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d6302" strokeWidth="1.8">
+            <path d="M2 6h8" strokeLinecap="round" />
+          </svg>
+        )}
+      </button>
+      <button
+        type="button"
+        aria-label="Maximize"
+        style={{
+          width: '13px', height: '13px', borderRadius: '50%',
+          background: '#28c840', border: 'none', cursor: 'default',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        {hovered && (
+          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#0d5215" strokeWidth="1.8">
+            <path d="M2 6h8M6 2v8" strokeLinecap="round" />
+          </svg>
+        )}
+      </button>
+    </div>
+  )
+}
+
+export function ProjectDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
   const project = projects.find((p) => p.id === id)
 
-  const [isControlsHovered, setIsControlsHovered] = useState(false)
-  const [markdownContent, setMarkdownContent] = useState('')
-
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (project?.details_file) {
-      fetch(`${import.meta.env.BASE_URL}data/${project.details_file}`)
-        .then((res) => res.text())
-        .then((text) => setMarkdownContent(text))
-        .catch((err) => console.error('Error loading project details:', err))
-    }
-  }, [id, project])
+  }, [id])
+
+  useEffect(() => {
+    if (!project) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    gsap.fromTo(
+      '.cin-page-card',
+      { opacity: 0, y: 36, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1 }
+    )
+  }, [project])
 
   if (!project) {
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-bold mb-4">Project not found</h2>
-        <Link to="/" className="text-primary hover:underline">
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '80px 24px',
+          color: C.subtle,
+        }}
+      >
+        <p style={{ fontSize: '1.1rem', marginBottom: '16px' }}>Project not found</p>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: C.cyan,
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            textDecoration: 'underline',
+          }}
+        >
           Back to resume
-        </Link>
+        </button>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8">
-      <div className="card-flat relative">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Header card */}
+      <div
+        className="cin-page-card"
+        style={{
+          borderRadius: '18px',
+          background: 'rgba(255,255,255,0.028)',
+          border: '1px solid rgba(0,212,255,0.1)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(12px)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Window bar */}
         <div
-          className="absolute top-4 left-4 z-10 flex gap-2"
-          onMouseEnter={() => setIsControlsHovered(true)}
-          onMouseLeave={() => setIsControlsHovered(false)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '14px 20px',
+            borderBottom: '1px solid rgba(0,212,255,0.07)',
+            background: 'rgba(0,212,255,0.02)',
+          }}
         >
-          <button
-            onClick={() => navigate('/')}
-            className="w-3 h-3 rounded-full bg-[#ff5f57] flex items-center justify-center cursor-pointer"
-            aria-label="Close"
+          <WindowControls onClose={() => navigate('/')} />
+          <span
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              fontSize: '0.78rem',
+              color: C.muted,
+              fontFamily: 'monospace',
+              letterSpacing: '0.05em',
+            }}
           >
-            {isControlsHovered && (
-              <svg
-                className="w-2 h-2 text-[#8d0e0a]"
-                viewBox="0 0 12 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
-              </svg>
-            )}
-          </button>
-
-          <button
-            type="button"
-            className="w-3 h-3 rounded-full bg-[#febc2e] flex items-center justify-center cursor-pointer"
-            aria-label="Minimize"
-          >
-            {isControlsHovered && (
-              <svg
-                className="w-2 h-2 text-[#8d6302]"
-                viewBox="0 0 12 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M2 6h8" strokeLinecap="round" />
-              </svg>
-            )}
-          </button>
-
-          <button
-            type="button"
-            className="w-3 h-3 rounded-full bg-[#28c840] flex items-center justify-center cursor-pointer"
-            aria-label="Maximize"
-          >
-            {isControlsHovered && (
-              <svg
-                className="w-2 h-2 text-[#0d5215]"
-                viewBox="0 0 12 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M2 6h8M6 2v8" strokeLinecap="round" />
-              </svg>
-            )}
-          </button>
+            {project.title}
+          </span>
         </div>
 
-        <div className="pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-            <div>
-              <h2 className="text-3xl font-bold">{project.title}</h2>
+        <div style={{ padding: '28px 32px' }}>
+          {/* Title row */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              gap: '16px',
+              marginBottom: '24px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <h1
+                style={{
+                  fontSize: 'clamp(1.4rem, 3vw, 2rem)',
+                  fontWeight: 800,
+                  color: C.text,
+                  margin: 0,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {project.title}
+              </h1>
             </div>
 
-            <div className="flex gap-2">
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {project.github && (
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+                  style={linkBtnStyle(C.cyan)}
+                  onMouseEnter={linkHoverIn(C.cyan)}
+                  onMouseLeave={linkHoverOut(C.cyan)}
                 >
-                  <i className="fa-brands fa-github mr-2"></i>GitHub
+                  <i className="fab fa-github" />
+                  GitHub
                 </a>
               )}
               {project.url && (
@@ -116,43 +205,123 @@ export function ProjectDetails({ projects }) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pill pill-primary hover:bg-primary hover:text-white transition-colors"
+                  style={linkBtnStyle(C.purple)}
+                  onMouseEnter={linkHoverIn(C.purple)}
+                  onMouseLeave={linkHoverOut(C.purple)}
                 >
-                  <i className="fa-solid fa-external-link mr-2"></i>Live Demo
+                  <i className="fa-solid fa-arrow-up-right-from-square" />
+                  Live Demo
                 </a>
               )}
             </div>
           </div>
 
-          <div>
-            <Markdown content={markdownContent} />
+          {/* Markdown */}
+          <Markdown content={project.details ?? ''} />
 
-            {project.technologies && project.technologies.length > 0 && (
-              <>
-                <h3 className="text-xl font-bold mt-8 mb-4">Technologies Used</h3>
-
-                <div className="flex flex-wrap gap-x-[6px] gap-y-1 mt-3">
-                  {project.technologies.map((tech, idx) => (
-                    <span key={idx} className="pill pill-primary">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          {/* Tech pills */}
+          {project.technologies?.length > 0 && (
+            <div style={{ marginTop: '32px' }}>
+              <p
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: C.cyan,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  fontFamily: 'monospace',
+                  marginBottom: '12px',
+                }}
+              >
+                Technologies Used
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
+                {project.technologies.map((tech, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: '8px',
+                      background: 'rgba(0,212,255,0.08)',
+                      border: '1px solid rgba(0,212,255,0.18)',
+                      color: C.sky,
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex justify-center pt-4 pb-8">
+      {/* Back button */}
+      <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium group cursor-pointer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'none',
+            border: 'none',
+            color: C.muted,
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = C.cyan)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = C.muted)}
         >
-          <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+          <i
+            className="fa-solid fa-arrow-left"
+            style={{ transition: 'transform 0.2s' }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateX(-4px)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateX(0)')}
+          />
           Back to Resume
         </button>
       </div>
     </div>
   )
+}
+
+// ── Style helpers ──────────────────────────────────────────
+
+function linkBtnStyle(color) {
+  return {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '7px',
+    padding: '8px 18px',
+    borderRadius: '10px',
+    background: color + '12',
+    border: `1px solid ${color}28`,
+    color: C.text,
+    fontSize: '0.85rem',
+    fontWeight: 500,
+    textDecoration: 'none',
+    transition: 'background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s',
+  }
+}
+
+function linkHoverIn(color) {
+  return (e) => {
+    e.currentTarget.style.background = color + '25'
+    e.currentTarget.style.borderColor = color + '55'
+    e.currentTarget.style.transform = 'translateY(-2px)'
+    e.currentTarget.style.boxShadow = `0 4px 18px ${color}28`
+  }
+}
+function linkHoverOut(color) {
+  return (e) => {
+    e.currentTarget.style.background = color + '12'
+    e.currentTarget.style.borderColor = color + '28'
+    e.currentTarget.style.transform = 'translateY(0)'
+    e.currentTarget.style.boxShadow = 'none'
+  }
 }

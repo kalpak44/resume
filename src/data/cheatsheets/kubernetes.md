@@ -1,13 +1,13 @@
 A few main commands to interact with clusters:
 
-* **Create resources**: `kubectl create secret generic <name> --from-literal=key=val`, `kubectl create configmap <name> --from-literal=key=val`
-* **Get resources**: `kubectl get pods`, `kubectl get services`, `kubectl get deployments`
-* **Describe resources**: `kubectl describe pod <pod-name>` (shows detailed events and state)
-* **Logs**: `kubectl logs <pod-name> -f` (follow logs)
-* **Execute command**: `kubectl exec -it <pod-name> -- /bin/bash`
-* **Apply manifest**: `kubectl apply -f <filename>.yaml`
-* **Delete resource**: `kubectl delete -f <filename>.yaml` or `kubectl delete pod <pod-name>`
-* **Context/Namespace**: `kubectl config get-contexts`, `kubectl config use-context <name>`,
+- **Create resources**: `kubectl create secret generic <name> --from-literal=key=val`, `kubectl create configmap <name> --from-literal=key=val`
+- **Get resources**: `kubectl get pods`, `kubectl get services`, `kubectl get deployments`
+- **Describe resources**: `kubectl describe pod <pod-name>` (shows detailed events and state)
+- **Logs**: `kubectl logs <pod-name> -f` (follow logs)
+- **Execute command**: `kubectl exec -it <pod-name> -- /bin/bash`
+- **Apply manifest**: `kubectl apply -f <filename>.yaml`
+- **Delete resource**: `kubectl delete -f <filename>.yaml` or `kubectl delete pod <pod-name>`
+- **Context/Namespace**: `kubectl config get-contexts`, `kubectl config use-context <name>`,
   `kubectl get pods -n <namespace>`
 
 ### k9s: Terminal UI for Kubernetes
@@ -42,8 +42,8 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  APP_COLOR: "blue"
-  API_URL: "https://api.example.com"
+  APP_COLOR: 'blue'
+  API_URL: 'https://api.example.com'
 ```
 
 #### Pod
@@ -144,7 +144,7 @@ spec:
       containers:
         - name: hello
           image: busybox
-          command: [ "echo", "Hello Kubernetes Job!" ]
+          command: ['echo', 'Hello Kubernetes Job!']
       restartPolicy: Never
   backoffLimit: 4
 ```
@@ -159,7 +159,7 @@ kind: CronJob
 metadata:
   name: hello-cronjob
 spec:
-  schedule: "*/1 * * * *"
+  schedule: '*/1 * * * *'
   jobTemplate:
     spec:
       template:
@@ -167,6 +167,6 @@ spec:
           containers:
             - name: hello
               image: busybox
-              command: [ "echo", "Hello from CronJob!" ]
+              command: ['echo', 'Hello from CronJob!']
           restartPolicy: OnFailure
 ```

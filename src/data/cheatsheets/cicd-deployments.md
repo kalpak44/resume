@@ -8,10 +8,10 @@ reduce risk and improve reliability.
 
 Developers frequently merge code into a shared repository. Each merge triggers:
 
-* Automated build
-* Automated tests
-* Static analysis
-* Security scans
+- Automated build
+- Automated tests
+- Static analysis
+- Security scans
 
 ### CI Flow
 
@@ -28,9 +28,9 @@ flowchart LR
 
 After CI succeeds, the system:
 
-* Packages artifacts (Docker image, binary, etc.)
-* Deploys to staging
-* Optionally deploys automatically to production
+- Packages artifacts (Docker image, binary, etc.)
+- Deploys to staging
+- Optionally deploys automatically to production
 
 ### CD Flow
 
@@ -50,8 +50,8 @@ Deployment strategies reduce risk when releasing new versions.
 
 Two identical environments:
 
-* **Blue** → current production
-* **Green** → new version
+- **Blue** → current production
+- **Green** → new version
 
 Traffic switches only after validation.
 
@@ -73,14 +73,14 @@ flowchart LR
 
 ## Pros
 
-* Instant rollback
-* Minimal downtime
-* Simple mental model
+- Instant rollback
+- Minimal downtime
+- Simple mental model
 
 ## Cons
 
-* Doubles infrastructure cost
-* Database migrations must be backward compatible
+- Doubles infrastructure cost
+- Database migrations must be backward compatible
 
 # Canary Deployment
 
@@ -102,22 +102,22 @@ Gradually increase traffic if metrics are healthy.
 1. Deploy v2
 2. Route 5–10% traffic
 3. Monitor:
+   - Error rate
+   - Latency
+   - Business metrics
 
-    * Error rate
-    * Latency
-    * Business metrics
 4. Gradually increase traffic
 
 ## Pros
 
-* Low risk
-* Real production testing
-* Metric-driven rollout
+- Low risk
+- Real production testing
+- Metric-driven rollout
 
 ## Cons
 
-* More complex routing
-* Requires observability
+- More complex routing
+- Requires observability
 
 # Rolling Deployment
 
@@ -157,14 +157,14 @@ flowchart LR
 
 ### Characteristics
 
-* CI system needs cluster credentials
-* Centralized control
-* Traditional model
+- CI system needs cluster credentials
+- Centralized control
+- Traditional model
 
 ### Risks
 
-* Credential leakage
-* Harder to scale across clusters
+- Credential leakage
+- Harder to scale across clusters
 
 # Pull-Based Deployment
 
@@ -183,32 +183,32 @@ flowchart LR
 
 Examples:
 
-* ArgoCD
-* Flux
+- ArgoCD
+- Flux
 
 ### Characteristics
 
-* Cluster has read-only access to Git
-* Declarative desired state
-* Self-healing
+- Cluster has read-only access to Git
+- Declarative desired state
+- Self-healing
 
 # Push vs Pull Comparison
 
-| Aspect | Push | Pull |
-| :--- | :--- | :--- |
-| Who initiates deployment | CI server | Cluster agent |
-| Credentials location | CI | Cluster |
-| Drift detection | Manual | Automatic |
-| Security model | Broader access | Reduced CI privileges |
-| Multi-cluster scaling | Harder | Easier |
+| Aspect                   | Push           | Pull                  |
+| :----------------------- | :------------- | :-------------------- |
+| Who initiates deployment | CI server      | Cluster agent         |
+| Credentials location     | CI             | Cluster               |
+| Drift detection          | Manual         | Automatic             |
+| Security model           | Broader access | Reduced CI privileges |
+| Multi-cluster scaling    | Harder         | Easier                |
 
 # GitOps
 
 GitOps is an operational model where:
 
-* Git is the single source of truth
-* Desired state is declarative (YAML, Helm, Kustomize)
-* Cluster continuously reconciles with Git
+- Git is the single source of truth
+- Desired state is declarative (YAML, Helm, Kustomize)
+- Cluster continuously reconciles with Git
 
 ## GitOps Architecture
 
@@ -246,15 +246,15 @@ sequenceDiagram
 
 Combines:
 
-* Canary
-* Feature flags
-* Automated rollback
+- Canary
+- Feature flags
+- Automated rollback
 
 Often implemented with:
 
-* Argo Rollouts
-* Flagger
-* Service Mesh (Istio, Linkerd)
+- Argo Rollouts
+- Flagger
+- Service Mesh (Istio, Linkerd)
 
 ## Feature Flags
 
@@ -269,19 +269,19 @@ flowchart LR
 
 Benefits:
 
-* Instant enable/disable
-* A/B testing
-* Gradual feature exposure
+- Instant enable/disable
+- A/B testing
+- Gradual feature exposure
 
 # CI/CD Best Practices
 
-* Trunk-based development
-* Small frequent releases
-* Immutable artifacts
-* Automated testing
-* Observability-first deployments
-* Backward-compatible DB migrations
-* Infrastructure as Code (IaC)
+- Trunk-based development
+- Small frequent releases
+- Immutable artifacts
+- Automated testing
+- Observability-first deployments
+- Backward-compatible DB migrations
+- Infrastructure as Code (IaC)
 
 # End-to-End Example
 

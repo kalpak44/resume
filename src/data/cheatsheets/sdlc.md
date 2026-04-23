@@ -23,9 +23,9 @@ graph TD
 
 ### Common Methodologies
 
--   **Waterfall**: Linear and sequential; each phase must be completed before the next begins.
--   **Agile**: Iterative and incremental; focuses on flexibility, collaboration, and customer feedback.
--   **Scrum**: A specific Agile framework using Sprints, Daily Stand-ups, and Retrospectives.
--   **Kanban**: A visual system for managing work as it moves through a process.
--   **DevOps**: A set of practices that combines software development (Dev) and IT operations (Ops).
--   **Spiral**: Combines iterative development with systematic aspects of the Waterfall model, focusing on risk assessment.
+- **Waterfall**: Linear and sequential; each phase must be completed before the next begins.
+- **Agile**: Iterative and incremental; focuses on flexibility, collaboration, and customer feedback.
+- **Scrum**: A specific Agile framework using Sprints, Daily Stand-ups, and Retrospectives.
+- **Kanban**: A visual system for managing work as it moves through a process.
+- **DevOps**: A set of practices that combines software development (Dev) and IT operations (Ops).
+- **Spiral**: Combines iterative development with systematic aspects of the Waterfall model, focusing on risk assessment.

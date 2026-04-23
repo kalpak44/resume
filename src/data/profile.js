@@ -36,7 +36,7 @@ export const profile = {
 
   summary:
     "I'm a Software Engineer with a focus on Java, passionate about automation and building complete, reliable systems. " +
-    'I enjoy developing and maintaining end-to-end solutions — from backend services and APIs to frontend features, ' +
+    'I enjoy developing and maintaining end-to-end solutions - from backend services and APIs to frontend features, ' +
     'infrastructure, and CI/CD. While Java is my main language, I also love working with JavaScript and Python, and ' +
     "I'm always experimenting with new tools and approaches to deliver practical business value.",
 

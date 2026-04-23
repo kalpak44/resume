@@ -252,7 +252,7 @@ export function CinematicNav() {
     return () => clearTimeout(t)
   }, [])
 
-  // Scroll progress bar — works for both .cin-root (snap) and window scroll
+  // Scroll progress bar - works for both .cin-root (snap) and window scroll
   useEffect(() => {
     const container = document.querySelector('.cin-root') || window
     const onScroll = () => {
@@ -288,7 +288,7 @@ export function CinematicNav() {
     return () => observer.disconnect()
   }, [isHome, location.pathname])
 
-  // Derive active display — reset when not on home
+  // Derive active display - reset when not on home
   const displayActive = isHome ? active : ''
 
   const scrollTo = (id) => {

@@ -133,7 +133,7 @@ function SectionLabel({ num, title }) {
           margin: '0 0 14px',
         }}
       >
-        — {num} —
+        - {num} -
       </p>
       <h2
         className="cin-section-heading"
@@ -235,7 +235,7 @@ function HeroSection({ profile }) {
         Software Engineer · Java Specialist · Builder
       </p>
 
-      {/* Name — split into animated characters */}
+      {/* Name - split into animated characters */}
       <div
         className="cin-hero-name"
         style={{
@@ -493,7 +493,7 @@ function AboutSection({ profile }) {
               {
                 num: '∞',
                 label: 'Curiosity',
-                desc: 'Always experimenting — Web3, GitOps, Raspberry Pi bots, homelab K8s',
+                desc: 'Always experimenting - Web3, GitOps, Raspberry Pi bots, homelab K8s',
                 color: C.pink,
               },
             ].map((stat, i) => (
@@ -718,7 +718,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
   }
 
   useEffect(() => {
-    // Initial card positions — first card visible, rest to the right (off-screen)
+    // Initial card positions - first card visible, rest to the right (off-screen)
     cardRefs.current.forEach((card, i) => {
       if (!card) return
       gsap.set(card, { x: i === 0 ? '0%' : '105%' })
@@ -790,7 +790,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
               marginBottom: '8px',
             }}
           >
-            — 02 —
+            - 02 -
           </p>
           <h2
             className="cin-section-heading"
@@ -836,7 +836,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
         </div>
       </div>
 
-      {/* Stacked cards — absolutely positioned, GSAP drives transitions */}
+      {/* Stacked cards - absolutely positioned, GSAP drives transitions */}
       <div
         style={{ flex: 1, position: 'relative', overflow: 'hidden', marginTop: '20px' }}
       >
@@ -1213,7 +1213,7 @@ function ContactSection({ profile }) {
               marginBottom: '20px',
             }}
           >
-            — 04 —
+            - 04 -
           </p>
 
           <h2
@@ -1487,7 +1487,7 @@ export function CinematicResume() {
     }
 
     const ctx = gsap.context(() => {
-      // Hero — character reveal
+      // Hero - character reveal
       gsap.fromTo(
         '.cin-char',
         { opacity: 0, y: 55, rotateX: -75 },
@@ -1526,7 +1526,7 @@ export function CinematicResume() {
         delay: 2.1,
       })
 
-      // Hero — continuous name float
+      // Hero - continuous name float
       gsap.to('.cin-hero-name', {
         y: -10,
         duration: 3.5,
@@ -1653,7 +1653,7 @@ export function CinematicResume() {
 
     let touchStartY = 0
     let touchStartX = 0
-    let touchDir = null // 'h' | 'v' | null — locked on first significant move
+    let touchDir = null // 'h' | 'v' | null - locked on first significant move
 
     const onTouchStart = (e) => {
       touchStartY = e.touches[0].clientY

@@ -204,7 +204,7 @@ export function Projects() {
                 lineHeight: 1.6,
               }}
             >
-              Experiments and hobby builds — not part of my main job, just things I enjoy
+              Experiments and hobby builds - not part of my main job, just things I enjoy
               building.
             </p>
             <div

@@ -10,8 +10,9 @@ import { NotFound } from './pages/NotFound.jsx'
 
 function App() {
   return (
-    <Router>
-      <Routes>
+    <ThemeProvider>
+      <Router>
+        <Routes>
         <Route path="/" element={<CinematicResume />} />
 
         <Route
@@ -54,8 +55,9 @@ function App() {
             </Layout>
           }
         />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 }
 

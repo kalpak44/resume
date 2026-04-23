@@ -180,7 +180,7 @@ function HeroSection({ profile }) {
         position: 'relative',
         zIndex: 1,
         textAlign: 'center',
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,60px) 60px',
+        padding: 'clamp(60px,10vw,120px) clamp(20px,6vw,60px) 40px',
         background:
           'radial-gradient(ellipse at 50% 45%, rgba(0,40,100,0.45) 0%, rgba(0,8,20,0.8) 65%, rgba(0,8,20,0.98) 100%)',
         overflow: 'hidden',
@@ -211,8 +211,7 @@ function HeroSection({ profile }) {
           width: '400px',
           height: '400px',
           borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
           top: '55%',
           left: '60%',
           transform: 'translate(-50%, -50%)',
@@ -247,7 +246,7 @@ function HeroSection({ profile }) {
       >
         <div
           style={{
-            fontSize: 'clamp(52px, 9vw, 118px)',
+            fontSize: 'clamp(32px, 9vw, 118px)',
             fontWeight: 800,
             letterSpacing: '-0.03em',
             display: 'block',
@@ -259,7 +258,7 @@ function HeroSection({ profile }) {
         </div>
         <div
           style={{
-            fontSize: 'clamp(52px, 9vw, 118px)',
+            fontSize: 'clamp(32px, 9vw, 118px)',
             fontWeight: 800,
             letterSpacing: '-0.03em',
             display: 'block',
@@ -285,8 +284,8 @@ function HeroSection({ profile }) {
           marginBottom: '48px',
         }}
       >
-        Building complete, reliable systems end-to-end - from backend microservices and APIs to
-        infrastructure and CI/CD.
+        Building complete, reliable systems end-to-end - from backend microservices and
+        APIs to infrastructure and CI/CD.
       </p>
 
       {/* CTAs */}
@@ -318,7 +317,7 @@ function HeroSection({ profile }) {
           alignItems: 'center',
           gap: '8px',
           color: C.muted,
-          fontSize: '0.68rem',
+          fontSize: '0.75rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
           fontFamily: 'monospace',
@@ -371,7 +370,9 @@ function HeroBtn({ href, icon, label, primary }) {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0) scale(1)'
-        e.currentTarget.style.boxShadow = primary ? `0 0 32px rgba(0, 212, 255, 0.22)` : 'none'
+        e.currentTarget.style.boxShadow = primary
+          ? `0 0 32px rgba(0, 212, 255, 0.22)`
+          : 'none'
       }}
     >
       <i className={icon} aria-hidden="true" />
@@ -425,7 +426,10 @@ function AboutSection({ profile }) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {profile.meta.map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div
+                  key={i}
+                  style={{ display: 'flex', alignItems: 'center', gap: '14px' }}
+                >
                   <div
                     style={{
                       width: '38px',
@@ -439,7 +443,10 @@ function AboutSection({ profile }) {
                       flexShrink: 0,
                     }}
                   >
-                    <i className={item.icon} style={{ color: C.cyan, fontSize: '0.85rem' }} />
+                    <i
+                      className={item.icon}
+                      style={{ color: C.cyan, fontSize: '0.85rem' }}
+                    />
                   </div>
                   {item.link ? (
                     <a
@@ -456,7 +463,9 @@ function AboutSection({ profile }) {
                       {item.text}
                     </a>
                   ) : (
-                    <span style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>{item.text}</span>
+                    <span style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>
+                      {item.text}
+                    </span>
                   )}
                 </div>
               ))}
@@ -464,7 +473,10 @@ function AboutSection({ profile }) {
           </div>
 
           {/* Stats + buttons */}
-          <div className="cin-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          <div
+            className="cin-reveal"
+            style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}
+          >
             {[
               {
                 num: '10+',
@@ -531,7 +543,9 @@ function AboutSection({ profile }) {
               </div>
             ))}
 
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '4px' }}>
+            <div
+              style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '4px' }}
+            >
               {profile.buttons.map((btn, i) => (
                 <a
                   key={i}
@@ -559,8 +573,12 @@ function AboutSection({ profile }) {
                       ? '0 0 20px rgba(0,212,255,0.2)'
                       : 'none',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = 'translateY(-2px)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = 'translateY(0)')
+                  }
                 >
                   {btn.icon && <i className={btn.icon} aria-hidden="true" />}
                   {btn.text}
@@ -603,42 +621,68 @@ function ExperienceSection({ experience, onRegisterNav }) {
     const meta = card.querySelector('.exp-meta')
     const bullets = card.querySelectorAll('.exp-bullet')
     const pills = card.querySelectorAll('.exp-pill')
-    if (company) gsap.fromTo(company, { opacity: 0, y: 24 }, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      ease: 'power3.out',
-      delay: 0.05,
-    })
-    if (role) gsap.fromTo(role, { opacity: 0, x: -28 }, {
-      opacity: 1,
-      x: 0,
-      duration: 0.55,
-      ease: 'power3.out',
-      delay: 0.18,
-    })
-    if (meta) gsap.fromTo(meta, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out', delay: 0.28 })
-    if (bullets.length) gsap.fromTo(bullets, { opacity: 0, x: 28 }, {
-      opacity: 1,
-      x: 0,
-      duration: 0.45,
-      ease: 'power2.out',
-      stagger: 0.07,
-      delay: 0.32,
-    })
-    if (pills.length) gsap.fromTo(pills, { opacity: 0, scale: 0.75 }, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.35,
-      ease: 'back.out(1.6)',
-      stagger: 0.04,
-      delay: 0.55,
-    })
+    if (company)
+      gsap.fromTo(
+        company,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          delay: 0.05,
+        }
+      )
+    if (role)
+      gsap.fromTo(
+        role,
+        { opacity: 0, x: -28 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.55,
+          ease: 'power3.out',
+          delay: 0.18,
+        }
+      )
+    if (meta)
+      gsap.fromTo(
+        meta,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: 'power2.out', delay: 0.28 }
+      )
+    if (bullets.length)
+      gsap.fromTo(
+        bullets,
+        { opacity: 0, x: 28 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.45,
+          ease: 'power2.out',
+          stagger: 0.07,
+          delay: 0.32,
+        }
+      )
+    if (pills.length)
+      gsap.fromTo(
+        pills,
+        { opacity: 0, scale: 0.75 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.35,
+          ease: 'back.out(1.6)',
+          stagger: 0.04,
+          delay: 0.55,
+        }
+      )
   }
 
   const resetCardContent = (card) => {
     if (!card) return
-    card.querySelectorAll('.exp-company,.exp-role,.exp-meta,.exp-bullet,.exp-pill')
+    card
+      .querySelectorAll('.exp-company,.exp-role,.exp-meta,.exp-bullet,.exp-pill')
       .forEach((el) => gsap.set(el, { opacity: 0, x: 0, y: 0, scale: 1 }))
   }
 
@@ -703,7 +747,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
           animateCardContent(cardRefs.current[0])
         }
       },
-      { threshold: 0.5 },
+      { threshold: 0.5 }
     )
     obs.observe(section)
     return () => obs.disconnect()
@@ -735,17 +779,30 @@ function ExperienceSection({ experience, onRegisterNav }) {
         }}
       >
         <div>
-          <p style={{
-            color: C.cyan, fontSize: '0.72rem', fontWeight: 700,
-            letterSpacing: '0.32em', textTransform: 'uppercase',
-            fontFamily: 'monospace', marginBottom: '8px',
-          }}>
+          <p
+            style={{
+              color: C.cyan,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.32em',
+              textTransform: 'uppercase',
+              fontFamily: 'monospace',
+              marginBottom: '8px',
+            }}
+          >
             — 02 —
           </p>
-          <h2 className="cin-section-heading" style={{
-            fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 800,
-            letterSpacing: '-0.025em', lineHeight: 0.95, color: C.text, margin: 0,
-          }}>
+          <h2
+            className="cin-section-heading"
+            style={{
+              fontSize: 'clamp(36px, 6vw, 64px)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              lineHeight: 0.95,
+              color: C.text,
+              margin: 0,
+            }}
+          >
             EXPERIENCE
           </h2>
         </div>
@@ -767,8 +824,10 @@ function ExperienceSection({ experience, onRegisterNav }) {
                   background: active ? color : 'rgba(255,255,255,0.2)',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: 0,
-                  transition: 'width 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.3s',
+                  padding: '10px 6px',
+                  boxSizing: 'content-box',
+                  transition:
+                    'width 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.3s',
                   boxShadow: active ? `0 0 10px ${color}88` : 'none',
                 }}
               />
@@ -778,11 +837,19 @@ function ExperienceSection({ experience, onRegisterNav }) {
       </div>
 
       {/* Stacked cards — absolutely positioned, GSAP drives transitions */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', marginTop: '20px' }}>
+      <div
+        style={{ flex: 1, position: 'relative', overflow: 'hidden', marginTop: '20px' }}
+      >
         {experience.map((job, idx) => {
           const { company, location, type, period } = parseJob(job.meta)
           const color = EXP_COLORS[idx % EXP_COLORS.length]
-          const allTags = [...new Set([...(job.tags || []), ...(job.technologies || []), ...(job.skills || [])])]
+          const allTags = [
+            ...new Set([
+              ...(job.tags || []),
+              ...(job.technologies || []),
+              ...(job.skills || []),
+            ]),
+          ]
 
           return (
             <div
@@ -853,33 +920,58 @@ function ExperienceSection({ experience, onRegisterNav }) {
                     marginBottom: '20px',
                   }}
                 >
-                  {location && <span><i className="fa-solid fa-location-dot"
-                                        style={{ marginRight: '5px', color: color + 'aa' }} />{location}</span>}
-                  {type && <span><i className="fa-solid fa-briefcase"
-                                    style={{ marginRight: '5px', color: color + 'aa' }} />{type}</span>}
-                  {period && <span><i className="fa-solid fa-calendar"
-                                      style={{ marginRight: '5px', color: color + 'aa' }} />{period}</span>}
+                  {location && (
+                    <span>
+                      <i
+                        className="fa-solid fa-location-dot"
+                        style={{ marginRight: '5px', color: color + 'aa' }}
+                      />
+                      {location}
+                    </span>
+                  )}
+                  {type && (
+                    <span>
+                      <i
+                        className="fa-solid fa-briefcase"
+                        style={{ marginRight: '5px', color: color + 'aa' }}
+                      />
+                      {type}
+                    </span>
+                  )}
+                  {period && (
+                    <span>
+                      <i
+                        className="fa-solid fa-calendar"
+                        style={{ marginRight: '5px', color: color + 'aa' }}
+                      />
+                      {period}
+                    </span>
+                  )}
                 </div>
 
                 {/* Gradient divider */}
-                <div style={{
-                  width: '56px',
-                  height: '2px',
-                  background: `linear-gradient(90deg, ${color}, transparent)`,
-                  borderRadius: '1px',
-                  marginBottom: '22px',
-                }} />
+                <div
+                  style={{
+                    width: '56px',
+                    height: '2px',
+                    background: `linear-gradient(90deg, ${color}, transparent)`,
+                    borderRadius: '1px',
+                    marginBottom: '22px',
+                  }}
+                />
 
                 {/* Bullets */}
                 {job.bullets?.length > 0 && (
-                  <ul style={{
-                    listStyle: 'none',
-                    padding: 0,
-                    margin: '0 0 22px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '9px',
-                  }}>
+                  <ul
+                    style={{
+                      listStyle: 'none',
+                      padding: 0,
+                      margin: '0 0 22px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '9px',
+                    }}
+                  >
                     {job.bullets.map((b, bi) => (
                       <li
                         key={bi}
@@ -892,7 +984,16 @@ function ExperienceSection({ experience, onRegisterNav }) {
                           lineHeight: 1.65,
                         }}
                       >
-                        <span style={{ color, flexShrink: 0, fontSize: '0.65rem', marginTop: '5px' }}>▸</span>
+                        <span
+                          style={{
+                            color,
+                            flexShrink: 0,
+                            fontSize: '0.7rem',
+                            marginTop: '4px',
+                          }}
+                        >
+                          ▸
+                        </span>
                         {b}
                       </li>
                     ))}
@@ -1024,7 +1125,8 @@ function SkillsSection() {
                       color: C.text,
                       fontSize: '0.8rem',
                       fontWeight: 500,
-                      transition: 'background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s',
+                      transition:
+                        'background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s',
                       cursor: 'default',
                     }}
                     onMouseEnter={(e) => {
@@ -1185,8 +1287,22 @@ function ContactSection({ profile }) {
               flexWrap: 'wrap',
             }}
           >
-            {linkedIn && <SocialBtn href={linkedIn} icon="fab fa-linkedin" label="LinkedIn" color={C.cyan} />}
-            {github && <SocialBtn href={github} icon="fab fa-github" label="GitHub" color={C.purple} />}
+            {linkedIn && (
+              <SocialBtn
+                href={linkedIn}
+                icon="fab fa-linkedin"
+                label="LinkedIn"
+                color={C.cyan}
+              />
+            )}
+            {github && (
+              <SocialBtn
+                href={github}
+                icon="fab fa-github"
+                label="GitHub"
+                color={C.purple}
+              />
+            )}
             <Link
               to="/cheat-sheets"
               style={{
@@ -1233,7 +1349,7 @@ function ContactSection({ profile }) {
             >
               <p
                 style={{
-                  fontSize: '0.68rem',
+                  fontSize: '0.72rem',
                   fontWeight: 700,
                   color: C.cyan,
                   letterSpacing: '0.22em',
@@ -1248,7 +1364,12 @@ function ContactSection({ profile }) {
                 {edu.school}
               </div>
               <div
-                style={{ color: C.purple, fontWeight: 500, marginBottom: '3px', fontSize: '0.88rem' }}
+                style={{
+                  color: C.purple,
+                  fontWeight: 500,
+                  marginBottom: '3px',
+                  fontSize: '0.88rem',
+                }}
               >
                 {edu.degree}
               </div>
@@ -1348,14 +1469,14 @@ export function CinematicResume() {
   const mainRef = useRef(null)
   const currentIdxRef = useRef(0)
   const isScrollingRef = useRef(false)
-  const expGoToRef = useRef(null)   // set by ExperienceSection via onRegisterNav
+  const expGoToRef = useRef(null) // set by ExperienceSection via onRegisterNav
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     if (reduced) {
       document
         .querySelectorAll(
-          '.cin-char,.cin-hero-label,.cin-hero-subtitle,.cin-hero-ctas,.cin-scroll-ind,.cin-reveal,.cin-job-card,.cin-skill-cat,.cin-section-heading',
+          '.cin-char,.cin-hero-label,.cin-hero-subtitle,.cin-hero-ctas,.cin-scroll-ind,.cin-reveal,.cin-job-card,.cin-skill-cat,.cin-section-heading'
         )
         .forEach((el) => {
           el.style.opacity = '1'
@@ -1370,15 +1491,50 @@ export function CinematicResume() {
       gsap.fromTo(
         '.cin-char',
         { opacity: 0, y: 55, rotateX: -75 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.72, stagger: 0.032, ease: 'back.out(1.4)', delay: 0.25 },
+        {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.72,
+          stagger: 0.032,
+          ease: 'back.out(1.4)',
+          delay: 0.25,
+        }
       )
-      gsap.to('.cin-hero-label', { opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.15 })
-      gsap.to('.cin-hero-subtitle', { opacity: 1, duration: 0.9, ease: 'power3.out', delay: 1.4 })
-      gsap.to('.cin-hero-ctas', { opacity: 1, duration: 0.8, ease: 'power3.out', delay: 1.7 })
-      gsap.to('.cin-scroll-ind', { opacity: 1, duration: 0.6, ease: 'power3.out', delay: 2.1 })
+      gsap.to('.cin-hero-label', {
+        opacity: 1,
+        duration: 0.7,
+        ease: 'power3.out',
+        delay: 0.15,
+      })
+      gsap.to('.cin-hero-subtitle', {
+        opacity: 1,
+        duration: 0.9,
+        ease: 'power3.out',
+        delay: 1.4,
+      })
+      gsap.to('.cin-hero-ctas', {
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        delay: 1.7,
+      })
+      gsap.to('.cin-scroll-ind', {
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power3.out',
+        delay: 2.1,
+      })
 
       // Hero — continuous name float
-      gsap.to('.cin-hero-name', { y: -10, duration: 3.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2.2 })
+      gsap.to('.cin-hero-name', {
+        y: -10,
+        duration: 3.5,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: 2.2,
+      })
     }, mainRef)
 
     // ── Per-section snap reveals (IntersectionObserver) ────
@@ -1397,44 +1553,70 @@ export function CinematicResume() {
             fn()
           }
         },
-        { root, threshold: 0.3 },
+        { root, threshold: 0.3 }
       )
       obs.observe(section)
       observers.push(obs)
     }
 
     onSnap('about', () => {
-      gsap.fromTo('#about .cin-section-heading',
+      gsap.fromTo(
+        '#about .cin-section-heading',
         { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' })
+        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' }
+      )
       gsap.utils.toArray('#about .cin-reveal').forEach((el, i) => {
-        gsap.fromTo(el, { opacity: 0, y: 40, scale: 0.97 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'power3.out', delay: i * 0.13 })
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 40, scale: 0.97 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.75,
+            ease: 'power3.out',
+            delay: i * 0.13,
+          }
+        )
       })
     })
 
     onSnap('experience', () => {
-      gsap.fromTo('#experience .cin-section-heading',
+      gsap.fromTo(
+        '#experience .cin-section-heading',
         { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' })
+        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' }
+      )
     })
 
     onSnap('skills', () => {
-      gsap.fromTo('#skills .cin-section-heading',
+      gsap.fromTo(
+        '#skills .cin-section-heading',
         { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' })
+        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power4.out' }
+      )
       gsap.utils.toArray('.cin-skill-cat').forEach((el, i) => {
-        gsap.fromTo(el, { opacity: 0, y: 36, rotateX: -12 },
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 36, rotateX: -12 },
           {
-            opacity: 1, y: 0, rotateX: 0, duration: 0.65, ease: 'back.out(1.4)',
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 0.65,
+            ease: 'back.out(1.4)',
             delay: 0.1 + (i % 3) * 0.09 + Math.floor(i / 3) * 0.18,
-          })
+          }
+        )
       })
     })
 
     onSnap('contact', () => {
-      gsap.fromTo('#contact .cin-reveal', { opacity: 0, y: 36 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1 })
+      gsap.fromTo(
+        '#contact .cin-reveal',
+        { opacity: 0, y: 36 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1 }
+      )
     })
 
     // ── Custom wheel / touch navigation ───────────────────
@@ -1470,23 +1652,48 @@ export function CinematicResume() {
     }
 
     let touchStartY = 0
+    let touchStartX = 0
+    let touchDir = null // 'h' | 'v' | null — locked on first significant move
+
     const onTouchStart = (e) => {
       touchStartY = e.touches[0].clientY
+      touchStartX = e.touches[0].clientX
+      touchDir = null
+    }
+    const onTouchMove = (e) => {
+      if (touchDir) return
+      const dx = Math.abs(e.touches[0].clientX - touchStartX)
+      const dy = Math.abs(e.touches[0].clientY - touchStartY)
+      if (dx < 8 && dy < 8) return
+      touchDir = dx > dy ? 'h' : 'v'
+      // Prevent browser scroll when swiping horizontally in experience section
+      if (touchDir === 'h' && SNAP_SECTIONS[currentIdxRef.current] === 'experience') {
+        e.preventDefault()
+      }
     }
     const onTouchEnd = (e) => {
       if (isScrollingRef.current) return
       const dy = touchStartY - e.changedTouches[0].clientY
-      if (Math.abs(dy) < 30) return
-      const dir = dy > 0 ? 1 : -1
-      if (SNAP_SECTIONS[currentIdxRef.current] === 'experience' && expGoToRef.current) {
-        const navigated = expGoToRef.current(dir)
-        if (navigated) return
+      const dx = touchStartX - e.changedTouches[0].clientX
+      const isExperience = SNAP_SECTIONS[currentIdxRef.current] === 'experience'
+
+      if (isExperience && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= 40) {
+        // Horizontal swipe → navigate between experience cards
+        const dir = dx > 0 ? 1 : -1
+        if (expGoToRef.current) {
+          const navigated = expGoToRef.current(dir)
+          if (navigated) return
+        }
+        goTo(currentIdxRef.current + dir)
+      } else if (Math.abs(dy) >= 30) {
+        // Vertical swipe → navigate between sections
+        goTo(currentIdxRef.current + (dy > 0 ? 1 : -1))
       }
-      goTo(currentIdxRef.current + dir)
     }
 
     container.addEventListener('wheel', onWheel, { passive: false })
     container.addEventListener('touchstart', onTouchStart, { passive: true })
+    container.addEventListener('touchmove', onTouchMove, { passive: false })
     container.addEventListener('touchend', onTouchEnd, { passive: true })
 
     return () => {
@@ -1494,6 +1701,7 @@ export function CinematicResume() {
       ctx.revert()
       container.removeEventListener('wheel', onWheel)
       container.removeEventListener('touchstart', onTouchStart)
+      container.removeEventListener('touchmove', onTouchMove)
       container.removeEventListener('touchend', onTouchEnd)
     }
   }, [])
@@ -1521,8 +1729,10 @@ export function CinematicResume() {
         .exp-snap-card::-webkit-scrollbar { width: 3px; }
         .exp-snap-card::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
 
-        @media (max-width: 600px) {
-          nav[aria-label="Page navigation"] { display: none !important; }
+        /* Use dynamic viewport height on mobile (fixes iOS Safari address bar) */
+        @supports (height: 100dvh) {
+          .cin-root { height: 100dvh !important; }
+          .cin-snap-section { height: 100dvh !important; }
         }
 
         /* Initial state for section headings (clip-path reveal) */
@@ -1555,16 +1765,19 @@ export function CinematicResume() {
           height: '100vh',
           overflowY: 'scroll',
           position: 'relative',
-          fontFamily: '\'Poppins\', system-ui, sans-serif',
+          fontFamily: "'Poppins', system-ui, sans-serif",
         }}
       >
         <StarField />
         <CinematicNav />
         <HeroSection profile={profile} />
         <AboutSection profile={profile} />
-        <ExperienceSection experience={profile.experience} onRegisterNav={(fn) => {
-          expGoToRef.current = fn
-        }} />
+        <ExperienceSection
+          experience={profile.experience}
+          onRegisterNav={(fn) => {
+            expGoToRef.current = fn
+          }}
+        />
         <SkillsSection />
         <ContactSection profile={profile} />
       </div>

@@ -24,7 +24,8 @@ function LogoButton() {
         textDecoration: 'none',
         padding: '5px 11px',
         borderRadius: '100px',
-        background: 'linear-gradient(135deg, rgba(0,212,255,0.14), rgba(139,92,246,0.14))',
+        background:
+          'linear-gradient(135deg, rgba(0,212,255,0.14), rgba(139,92,246,0.14))',
         border: '1px solid rgba(0,212,255,0.22)',
         color: C.cyan,
         transition: 'box-shadow 0.25s, border-color 0.25s, background 0.25s',
@@ -131,7 +132,9 @@ function NavLink({ to, label, active, hobby }) {
       onMouseEnter={(e) => {
         if (!active) {
           e.currentTarget.style.color = hobby ? '#f472b6' : C.text
-          e.currentTarget.style.background = hobby ? 'rgba(244,114,182,0.07)' : 'rgba(255,255,255,0.07)'
+          e.currentTarget.style.background = hobby
+            ? 'rgba(244,114,182,0.07)'
+            : 'rgba(255,255,255,0.07)'
         }
       }}
       onMouseLeave={(e) => {
@@ -163,7 +166,9 @@ function NavLink({ to, label, active, hobby }) {
 function Breadcrumb({ location }) {
   const parts = location.pathname.split('/').filter(Boolean)
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '0.76rem' }}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '0.76rem' }}
+    >
       <Link
         to="/"
         style={{
@@ -186,7 +191,13 @@ function Breadcrumb({ location }) {
       </Link>
       {parts.map((part, i) => (
         <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.68rem', padding: '0 2px' }}>
+          <span
+            style={{
+              color: 'rgba(255,255,255,0.18)',
+              fontSize: '0.68rem',
+              padding: '0 2px',
+            }}
+          >
             ›
           </span>
           <span
@@ -260,10 +271,7 @@ export function CinematicNav() {
 
   // Active section detection (home only)
   useEffect(() => {
-    if (!isHome) {
-      setActive('')
-      return
-    }
+    if (!isHome) return
     const root = document.querySelector('.cin-root') || null
     const observer = new IntersectionObserver(
       (entries) => {
@@ -279,6 +287,9 @@ export function CinematicNav() {
     })
     return () => observer.disconnect()
   }, [isHome, location.pathname])
+
+  // Derive active display — reset when not on home
+  const displayActive = isHome ? active : ''
 
   const scrollTo = (id) => {
     const el = document.getElementById(id)
@@ -346,9 +357,9 @@ export function CinematicNav() {
           WebkitBackdropFilter: 'blur(32px)',
           borderRadius: '100px',
           border: '1px solid rgba(0, 212, 255, 0.14)',
-          boxShadow:
-            '0 4px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03) inset',
-          transition: 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease',
+          boxShadow: '0 4px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03) inset',
+          transition:
+            'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease',
           whiteSpace: 'nowrap',
           maxWidth: 'calc(100vw - 40px)',
         }}
@@ -356,16 +367,18 @@ export function CinematicNav() {
         <LogoButton />
         <Divider />
 
-        {isHome
-          ? HOME_SECTIONS.map((id) => (
-              <NavBtn
-                key={id}
-                label={id}
-                active={active === id}
-                onClick={() => scrollTo(id)}
-              />
-            ))
-          : <Breadcrumb location={location} />}
+        {isHome ? (
+          HOME_SECTIONS.map((id) => (
+            <NavBtn
+              key={id}
+              label={id}
+              active={displayActive === id}
+              onClick={() => scrollTo(id)}
+            />
+          ))
+        ) : (
+          <Breadcrumb location={location} />
+        )}
 
         <Divider />
         <NavLink to="/projects" label="projects" active={isProjects} hobby />

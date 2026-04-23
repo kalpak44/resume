@@ -25,15 +25,28 @@ function WindowControls({ onClose }) {
         onClick={onClose}
         aria-label="Close"
         style={{
-          width: '13px', height: '13px', borderRadius: '50%',
-          background: '#ff5f57', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '13px',
+          height: '13px',
+          borderRadius: '50%',
+          background: '#ff5f57',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: hovered ? '0 0 8px rgba(255,95,87,0.6)' : 'none',
           transition: 'box-shadow 0.2s',
         }}
       >
         {hovered && (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
+          <svg
+            width="6"
+            height="6"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="#8d0e0a"
+            strokeWidth="1.8"
+          >
             <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
           </svg>
         )}
@@ -44,14 +57,31 @@ function WindowControls({ onClose }) {
           type="button"
           aria-label={['Minimize', 'Maximize'][i]}
           style={{
-            width: '13px', height: '13px', borderRadius: '50%',
-            background: color, border: 'none', cursor: 'default',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: '13px',
+            height: '13px',
+            borderRadius: '50%',
+            background: color,
+            border: 'none',
+            cursor: 'default',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {hovered && (
-            <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke={i === 0 ? '#8d6302' : '#0d5215'} strokeWidth="1.8">
-              {i === 0 ? <path d="M2 6h8" strokeLinecap="round" /> : <path d="M2 6h8M6 2v8" strokeLinecap="round" />}
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke={i === 0 ? '#8d6302' : '#0d5215'}
+              strokeWidth="1.8"
+            >
+              {i === 0 ? (
+                <path d="M2 6h8" strokeLinecap="round" />
+              ) : (
+                <path d="M2 6h8M6 2v8" strokeLinecap="round" />
+              )}
             </svg>
           )}
         </button>
@@ -74,9 +104,17 @@ export function Projects() {
     gsap.fromTo(
       '.cin-proj-item',
       { opacity: 0, y: 24, scale: 0.97 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: 0.18 }
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.07,
+        delay: 0.18,
+      }
     )
-  }, [projects])
+  }, [])
 
   if (!projects.length) return null
 
@@ -158,8 +196,16 @@ export function Projects() {
             >
               Personal Projects
             </h1>
-            <p style={{ fontSize: '0.9rem', color: C.subtle, maxWidth: '480px', lineHeight: 1.6 }}>
-              Experiments and hobby builds — not part of my main job, just things I enjoy building.
+            <p
+              style={{
+                fontSize: '0.9rem',
+                color: C.subtle,
+                maxWidth: '480px',
+                lineHeight: 1.6,
+              }}
+            >
+              Experiments and hobby builds — not part of my main job, just things I enjoy
+              building.
             </p>
             <div
               style={{
@@ -204,7 +250,8 @@ export function Projects() {
                       border: '1px solid rgba(244,114,182,0.1)',
                       display: 'flex',
                       flexDirection: 'column',
-                      transition: 'border-color 0.25s, box-shadow 0.25s, background 0.25s',
+                      transition:
+                        'border-color 0.25s, box-shadow 0.25s, background 0.25s',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = 'rgba(244,114,182,0.32)'
@@ -260,7 +307,14 @@ export function Projects() {
                         : project.summary}
                     </p>
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '12px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '5px',
+                        marginBottom: '12px',
+                      }}
+                    >
                       {(project.technologies || []).slice(0, 4).map((tech, ti) => (
                         <span
                           key={ti}
@@ -278,7 +332,13 @@ export function Projects() {
                         </span>
                       ))}
                       {(project.technologies || []).length > 4 && (
-                        <span style={{ fontSize: '0.7rem', color: C.muted, alignSelf: 'center' }}>
+                        <span
+                          style={{
+                            fontSize: '0.7rem',
+                            color: C.muted,
+                            alignSelf: 'center',
+                          }}
+                        >
                           +{project.technologies.length - 4}
                         </span>
                       )}
@@ -295,7 +355,10 @@ export function Projects() {
                       }}
                     >
                       <span>View details</span>
-                      <i className="fa-solid fa-arrow-right" style={{ fontSize: '0.68rem' }} />
+                      <i
+                        className="fa-solid fa-arrow-right"
+                        style={{ fontSize: '0.68rem' }}
+                      />
                     </div>
                   </div>
                 </Link>
@@ -310,9 +373,14 @@ export function Projects() {
         <Link
           to="/"
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            color: C.muted, textDecoration: 'none',
-            fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: C.muted,
+            textDecoration: 'none',
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            transition: 'color 0.2s',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = C.pink)}
           onMouseLeave={(e) => (e.currentTarget.style.color = C.muted)}

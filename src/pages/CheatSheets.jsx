@@ -22,21 +22,55 @@ function WindowControls({ onClose }) {
       onMouseLeave={() => setHovered(false)}
     >
       {[
-        { color: '#ff5f57', glowColor: 'rgba(255,95,87,0.6)', icon: onClose ? (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
-            <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
-          </svg>
-        ) : null, onClick: onClose },
-        { color: '#febc2e', glowColor: null, icon: hovered ? (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d6302" strokeWidth="1.8">
-            <path d="M2 6h8" strokeLinecap="round" />
-          </svg>
-        ) : null },
-        { color: '#28c840', glowColor: null, icon: hovered ? (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#0d5215" strokeWidth="1.8">
-            <path d="M2 6h8M6 2v8" strokeLinecap="round" />
-          </svg>
-        ) : null },
+        {
+          color: '#ff5f57',
+          glowColor: 'rgba(255,95,87,0.6)',
+          icon: onClose ? (
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#8d0e0a"
+              strokeWidth="1.8"
+            >
+              <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
+            </svg>
+          ) : null,
+          onClick: onClose,
+        },
+        {
+          color: '#febc2e',
+          glowColor: null,
+          icon: hovered ? (
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#8d6302"
+              strokeWidth="1.8"
+            >
+              <path d="M2 6h8" strokeLinecap="round" />
+            </svg>
+          ) : null,
+        },
+        {
+          color: '#28c840',
+          glowColor: null,
+          icon: hovered ? (
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#0d5215"
+              strokeWidth="1.8"
+            >
+              <path d="M2 6h8M6 2v8" strokeLinecap="round" />
+            </svg>
+          ) : null,
+        },
       ].map((btn, i) => (
         <button
           key={i}
@@ -44,10 +78,15 @@ function WindowControls({ onClose }) {
           onClick={btn.onClick}
           aria-label={['Close', 'Minimize', 'Maximize'][i]}
           style={{
-            width: '13px', height: '13px', borderRadius: '50%',
-            background: btn.color, border: 'none',
+            width: '13px',
+            height: '13px',
+            borderRadius: '50%',
+            background: btn.color,
+            border: 'none',
             cursor: btn.onClick ? 'pointer' : 'default',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             boxShadow: hovered && btn.glowColor ? `0 0 8px ${btn.glowColor}` : 'none',
             transition: 'box-shadow 0.2s',
           }}
@@ -82,7 +121,7 @@ export function CheatSheets() {
         delay: 0.2,
       }
     )
-  }, [cheatsheets])
+  }, [])
 
   if (!cheatsheets.length) return null
 
@@ -183,7 +222,7 @@ export function CheatSheets() {
               gap: '16px',
             }}
           >
-            {cheatsheets.map((sheet, idx) => (
+            {cheatsheets.map((sheet) => (
               <div
                 key={sheet.id}
                 className="cin-sheet-item"
@@ -208,7 +247,8 @@ export function CheatSheets() {
                       border: '1px solid rgba(0,212,255,0.08)',
                       display: 'flex',
                       flexDirection: 'column',
-                      transition: 'border-color 0.25s, box-shadow 0.25s, background 0.25s',
+                      transition:
+                        'border-color 0.25s, box-shadow 0.25s, background 0.25s',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = 'rgba(0,212,255,0.3)'
@@ -270,7 +310,10 @@ export function CheatSheets() {
                       }}
                     >
                       <span>View details</span>
-                      <i className="fa-solid fa-arrow-right" style={{ fontSize: '0.68rem' }} />
+                      <i
+                        className="fa-solid fa-arrow-right"
+                        style={{ fontSize: '0.68rem' }}
+                      />
                     </div>
                   </div>
                 </Link>

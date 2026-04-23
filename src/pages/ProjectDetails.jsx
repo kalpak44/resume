@@ -27,15 +27,28 @@ function WindowControls({ onClose }) {
         onClick={onClose}
         aria-label="Close"
         style={{
-          width: '13px', height: '13px', borderRadius: '50%',
-          background: '#ff5f57', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '13px',
+          height: '13px',
+          borderRadius: '50%',
+          background: '#ff5f57',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           transition: 'box-shadow 0.2s',
           boxShadow: hovered ? '0 0 8px rgba(255,95,87,0.6)' : 'none',
         }}
       >
         {hovered && (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
+          <svg
+            width="6"
+            height="6"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="#8d0e0a"
+            strokeWidth="1.8"
+          >
             <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
           </svg>
         )}
@@ -44,13 +57,26 @@ function WindowControls({ onClose }) {
         type="button"
         aria-label="Minimize"
         style={{
-          width: '13px', height: '13px', borderRadius: '50%',
-          background: '#febc2e', border: 'none', cursor: 'default',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '13px',
+          height: '13px',
+          borderRadius: '50%',
+          background: '#febc2e',
+          border: 'none',
+          cursor: 'default',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         {hovered && (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d6302" strokeWidth="1.8">
+          <svg
+            width="6"
+            height="6"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="#8d6302"
+            strokeWidth="1.8"
+          >
             <path d="M2 6h8" strokeLinecap="round" />
           </svg>
         )}
@@ -59,13 +85,26 @@ function WindowControls({ onClose }) {
         type="button"
         aria-label="Maximize"
         style={{
-          width: '13px', height: '13px', borderRadius: '50%',
-          background: '#28c840', border: 'none', cursor: 'default',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '13px',
+          height: '13px',
+          borderRadius: '50%',
+          background: '#28c840',
+          border: 'none',
+          cursor: 'default',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         {hovered && (
-          <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#0d5215" strokeWidth="1.8">
+          <svg
+            width="6"
+            height="6"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="#0d5215"
+            strokeWidth="1.8"
+          >
             <path d="M2 6h8M6 2v8" strokeLinecap="round" />
           </svg>
         )}

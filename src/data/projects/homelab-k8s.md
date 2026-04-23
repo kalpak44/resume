@@ -2,21 +2,21 @@ This project is a GitOps-managed homelab Kubernetes cluster running inside a pri
 
 ### Key Features & Details
 
-* **Platform**: **MicroK8s** Kubernetes cluster running inside a private LAN
-* **GitOps**: **FluxCD** continuously syncs cluster state from GitHub
-* **Ingress & Routing**: **Traefik Ingress** exposes 2 main entrypoints:
-  * `websecure` → **Public HTTPS Entry** (Cloudflare-facing)
-  * `privatewebsecure` → **Private LAN/VPN Secure Entry** (internal-only)
-* **TLS Automation**: **Cloudflare DNS + ACME (Let's Encrypt)** for automatic certificate issuance/renewal
-* **Load Balancing**: **MetalLB LoadBalancer** provides stable LAN IPs and fronts all Traefik entrypoints
-* **Storage**: **NFS server** provides persistent volumes (**PVCs**) for stateful workloads
-* **Security**: **Trivy Operator** performs vulnerability + misconfiguration scanning across workloads
-* **Monitoring**: **Grafana** dashboards for cluster/hardware metrics and Trivy reports
-* **DNS Control**: **AdGuard DNS** distributes ad-blocking + internal DNS across all home devices via router DHCP
-* **Internal Services**: **NGINX landing page**, **pgAdmin**, router proxies, and other personal tools
-* **Custom Apps**: Self-hosted deployments for games (**Bunker**, **Spy**, **Battleship**) + personal **Resume**
-* **External Private Servers**: Dedicated **PostgreSQL**, private DNS records, **NFS storage**, and other LAN services
-* **Roadmap**: **SSO**, **RAID**, cluster hardening and access policy improvements
+- **Platform**: **MicroK8s** Kubernetes cluster running inside a private LAN
+- **GitOps**: **FluxCD** continuously syncs cluster state from GitHub
+- **Ingress & Routing**: **Traefik Ingress** exposes 2 main entrypoints:
+  - `websecure` → **Public HTTPS Entry** (Cloudflare-facing)
+  - `privatewebsecure` → **Private LAN/VPN Secure Entry** (internal-only)
+- **TLS Automation**: **Cloudflare DNS + ACME (Let's Encrypt)** for automatic certificate issuance/renewal
+- **Load Balancing**: **MetalLB LoadBalancer** provides stable LAN IPs and fronts all Traefik entrypoints
+- **Storage**: **NFS server** provides persistent volumes (**PVCs**) for stateful workloads
+- **Security**: **Trivy Operator** performs vulnerability + misconfiguration scanning across workloads
+- **Monitoring**: **Grafana** dashboards for cluster/hardware metrics and Trivy reports
+- **DNS Control**: **AdGuard DNS** distributes ad-blocking + internal DNS across all home devices via router DHCP
+- **Internal Services**: **NGINX landing page**, **pgAdmin**, router proxies, and other personal tools
+- **Custom Apps**: Self-hosted deployments for games (**Bunker**, **Spy**, **Battleship**) + personal **Resume**
+- **External Private Servers**: Dedicated **PostgreSQL**, private DNS records, **NFS storage**, and other LAN services
+- **Roadmap**: **SSO**, **RAID**, cluster hardening and access policy improvements
 
 ```mermaid
 graph TD

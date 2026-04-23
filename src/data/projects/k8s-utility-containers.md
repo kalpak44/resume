@@ -1,10 +1,7 @@
-
 A small set of **utility container images** meant to be dropped into Kubernetes **CronJobs** and **Jobs** for common ops tasks:
 
 - **postgres-awscli** - PostgreSQL backups/restores to S3 (plus retention)
 - **kubectl-awscli** - `kubectl` + AWS CLI toolbox image for cluster automation
-
-
 
 Both images are published to **GitHub Container Registry (GHCR)**.  
 The easiest way to see **all available tags/versions** is to open the **package page**:
@@ -13,31 +10,33 @@ The easiest way to see **all available tags/versions** is to open the **package 
 - kubectl-awscli package: **[GHCR package page](https://github.com/kalpak44/kubectl-awscli/pkgs/container/kubectl-awscli)**
 
 On those pages you’ll typically find:
+
 - `latest` (moving tag)
 - version tags (e.g. `9d4d16a`)
 
 ### For full usage docs and configuration options, check:
+
 - postgres-awscli README: **[README](https://github.com/kalpak44/postgres-awscli/blob/main/README.md)**
 - kubectl-awscli README: **[README](https://github.com/kalpak44/kubectl-awscli/blob/main/README.md)**
 
-
 ## What each image is for
+
 **1. postgres-awscli**
 
 **Purpose:** run database backups on a schedule (CronJob), and restores as an on-demand Job.
 
 Typical capabilities (see README for the authoritative list):
 
-* `pg_dump` + `psql` (PostgreSQL client tools)
-* `aws-cli`
-* Backup mode (default): dump → compress → upload to S3 → retention
-* Restore mode: download from S3 → restore into PostgreSQL (optionally recreate DB)
+- `pg_dump` + `psql` (PostgreSQL client tools)
+- `aws-cli`
+- Backup mode (default): dump → compress → upload to S3 → retention
+- Restore mode: download from S3 → restore into PostgreSQL (optionally recreate DB)
 
 **Docs:** see the latest **[postgres-awscli README](https://github.com/kalpak44/postgres-awscli/blob/main/README.md)** for
 
-* required env vars (DB connection, S3 bucket/prefix, AWS region/creds/IAM role)
-* restore parameters (which key to restore, optional recreate behavior)
-* Kubernetes CronJob and Job manifests
+- required env vars (DB connection, S3 bucket/prefix, AWS region/creds/IAM role)
+- restore parameters (which key to restore, optional recreate behavior)
+- Kubernetes CronJob and Job manifests
 
 #### Quick example (local backup run)
 
@@ -76,15 +75,13 @@ docker run --rm \
   ghcr.io/kalpak44/postgres-awscli:latest
 ```
 
-
-
 **2. kubectl-awscli**
 
 **Purpose:** a tiny ops image to run Kubernetes + AWS automation inside a Job/CronJob, such as:
 
-* refreshing ECR pull secrets (`regcred`)
-* cluster maintenance scripts
-* CI/CD helper tasks inside Kubernetes
+- refreshing ECR pull secrets (`regcred`)
+- cluster maintenance scripts
+- CI/CD helper tasks inside Kubernetes
 
 **Docs:** see the latest **[kubectl-awscli README](https://github.com/kalpak44/kubectl-awscli/blob/main/README.md)** for:
 
@@ -115,7 +112,7 @@ containers:
 
 ## Links
 
-* **[https://github.com/kalpak44/postgres-awscli/blob/main/README.md](https://github.com/kalpak44/postgres-awscli/blob/main/README.md)**
-* **[https://github.com/kalpak44/postgres-awscli/pkgs/container/postgres-awscli](https://github.com/kalpak44/postgres-awscli/pkgs/container/postgres-awscli)**
-* **[https://github.com/kalpak44/kubectl-awscli/blob/main/README.md](https://github.com/kalpak44/kubectl-awscli/blob/main/README.md)**
-* **[https://github.com/kalpak44/kubectl-awscli/pkgs/container/kubectl-awscli](https://github.com/kalpak44/kubectl-awscli/pkgs/container/kubectl-awscli)**
+- **[https://github.com/kalpak44/postgres-awscli/blob/main/README.md](https://github.com/kalpak44/postgres-awscli/blob/main/README.md)**
+- **[https://github.com/kalpak44/postgres-awscli/pkgs/container/postgres-awscli](https://github.com/kalpak44/postgres-awscli/pkgs/container/postgres-awscli)**
+- **[https://github.com/kalpak44/kubectl-awscli/blob/main/README.md](https://github.com/kalpak44/kubectl-awscli/blob/main/README.md)**
+- **[https://github.com/kalpak44/kubectl-awscli/pkgs/container/kubectl-awscli](https://github.com/kalpak44/kubectl-awscli/pkgs/container/kubectl-awscli)**

@@ -18,33 +18,32 @@ sequenceDiagram
 
 ## Common Technologies
 
-* REST (HTTP + JSON)
-* gRPC (HTTP/2 + Protobuf)
-* SOAP (XML)
+- REST (HTTP + JSON)
+- gRPC (HTTP/2 + Protobuf)
+- SOAP (XML)
 
 ## When to Use
 
-* Immediate response required
-* User-facing actions
-* Simple request/response
+- Immediate response required
+- User-facing actions
+- Simple request/response
 
 ## Main Risks
 
-* Tight coupling
-* Cascading failures
-* Timeouts impact user experience
+- Tight coupling
+- Cascading failures
+- Timeouts impact user experience
 
 ## Basic Rules
 
-* Always use timeouts
-* Avoid long service call chains
-* Add retries carefully (only for safe operations)
+- Always use timeouts
+- Avoid long service call chains
+- Add retries carefully (only for safe operations)
 
 # 2) Asynchronous Communication
 
 Service A sends a message and continues.
 Processing happens later.
-
 
 # 2.1 Messaging (RabbitMQ / ActiveMQ / ...)
 
@@ -71,16 +70,16 @@ sequenceDiagram
 
 ## Why Use Messaging
 
-* Decouples services
-* Handles traffic spikes
-* Built-in retry capability
+- Decouples services
+- Handles traffic spikes
+- Built-in retry capability
 
 ## Core Rules
 
-* Messages must have unique ID
-* Consumers must be idempotent
-* Use retry limits
-* Use Dead Letter Queue (DLQ)
+- Messages must have unique ID
+- Consumers must be idempotent
+- Use retry limits
+- Use Dead Letter Queue (DLQ)
 
 ## Retry + DLQ Concept
 
@@ -108,30 +107,30 @@ flowchart LR
 
 ## Key Ideas
 
-* Events stored for retention period
-* Consumers track offset
-* Ordering guaranteed per partition
+- Events stored for retention period
+- Consumers track offset
+- Ordering guaranteed per partition
 
 ## When to Use
 
-* Event-driven systems
-* Multiple services need same data
-* High throughput
+- Event-driven systems
+- Multiple services need same data
+- High throughput
 
 # 3) Sync vs. Async (Quick Decision Guide)
 
 ## Use Sync
 
-* Need immediate result
-* Simple request/response
-* User is waiting
+- Need immediate result
+- Simple request/response
+- User is waiting
 
 ## Use Async
 
-* Can process later
-* Need resilience
-* Expect traffic spikes
-* Want loose coupling
+- Can process later
+- Need resilience
+- Expect traffic spikes
+- Want loose coupling
 
 # Key Takeaway
 

@@ -4,11 +4,11 @@ Technically, the real goal was to experiment with VS Code extension APIs in plai
 
 ### Key Features & Details
 
-* Built a VS Code extension in **JavaScript** that randomly opens workspace files and moves the cursor around like it's "busy"
-* Implemented workspace file discovery + random rotation logic across the project directory
-* Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API
-* Set up GitHub Actions to build and package the extension into `.vsix` artifacts
-* Automated GitHub Releases with **multi-platform builds (Windows/macOS)** so the extension can be downloaded directly from CI
+- Built a VS Code extension in **JavaScript** that randomly opens workspace files and moves the cursor around like it's "busy"
+- Implemented workspace file discovery + random rotation logic across the project directory
+- Integrated simple editor actions (open file, set selection, cursor movement) using VS Code Extension API
+- Set up GitHub Actions to build and package the extension into `.vsix` artifacts
+- Automated GitHub Releases with **multi-platform builds (Windows/macOS)** so the extension can be downloaded directly from CI
 
 ```mermaid
 graph TD

@@ -11,12 +11,12 @@ Additional labels for pre-release and build metadata are available as extensions
 
 #### Rules for Incrementing Versions
 
-* **MAJOR**: MUST be incremented if any backward incompatible changes are introduced to the public API. It MAY include
+- **MAJOR**: MUST be incremented if any backward incompatible changes are introduced to the public API. It MAY include
   minor and patch level changes. Patch and minor version MUST be reset to 0 when a major version is incremented.
-* **MINOR**: MUST be incremented if new, backward compatible functionality is introduced to the public API. It MUST be
+- **MINOR**: MUST be incremented if new, backward compatible functionality is introduced to the public API. It MUST be
   incremented if any public API functionality is marked as deprecated. It MAY include patch level changes. Patch version
   MUST be reset to 0 when a minor version is incremented.
-* **PATCH**: MUST be incremented if only backward compatible bug fixes are introduced. A bug fix is defined as an
+- **PATCH**: MUST be incremented if only backward compatible bug fixes are introduced. A bug fix is defined as an
   internal change that fixes incorrect behavior.
 
 #### Pre-release and Build Metadata

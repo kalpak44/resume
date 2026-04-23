@@ -19,10 +19,10 @@ graph TD
 - **Atomicity**: "All or nothing." If any part of the transaction fails, the entire transaction is rolled back.
 - **Consistency**: Ensures the database moves from one valid state to another, maintaining all predefined rules (constraints, triggers).
 - **Isolation**: Transactions are independent; the intermediate state of a transaction is invisible to others. Different **Isolation Levels** control how visible changes are to other concurrent transactions:
-    - **Read Uncommitted**: Lowest level; a transaction may read uncommitted changes from others (**Dirty Read**).
-    - **Read Committed**: Only reads committed data. Prevents Dirty Reads but not **Non-repeatable Reads** (data can change between reads in the same transaction).
-    - **Repeatable Read**: Ensures that if a row is read twice, it has the same values. Prevents Dirty and Non-repeatable reads, but may allow **Phantom Reads** (new rows appearing).
-    - **Serializable**: Highest level; transactions are executed as if they were sequential, preventing all the above phenomena.
+  - **Read Uncommitted**: Lowest level; a transaction may read uncommitted changes from others (**Dirty Read**).
+  - **Read Committed**: Only reads committed data. Prevents Dirty Reads but not **Non-repeatable Reads** (data can change between reads in the same transaction).
+  - **Repeatable Read**: Ensures that if a row is read twice, it has the same values. Prevents Dirty and Non-repeatable reads, but may allow **Phantom Reads** (new rows appearing).
+  - **Serializable**: Highest level; transactions are executed as if they were sequential, preventing all the above phenomena.
 - **Durability**: Once a transaction is committed, it remains committed even in the event of a system failure.
 
 ### Managing Transactions

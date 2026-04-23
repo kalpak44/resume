@@ -2,12 +2,12 @@ A minimal Telegram bot designed to streamline payment collection for small selle
 
 ### Key Features & Details
 
-* Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links
-* Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely
-* Built framework-free Java service with minimal dependencies for fast startup and low memory usage
-* Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments
-* Configured runtime via environment variables with optional properties-based fallback for flexible deployments
-* Added structured logging using SLF4J + Logback for easier troubleshooting and observability
+- Implemented chat-based product + pricing flow and automated generation of Stripe Checkout payment links
+- Integrated Stripe Checkout via Stripe Java SDK to create single-payment sessions securely
+- Built framework-free Java service with minimal dependencies for fast startup and low memory usage
+- Containerized the application and delivered ARM32-compatible Docker images for Raspberry Pi deployments
+- Configured runtime via environment variables with optional properties-based fallback for flexible deployments
+- Added structured logging using SLF4J + Logback for easier troubleshooting and observability
 
 ```mermaid
 graph TD

@@ -7,16 +7,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+web-page-app/node_modules
+web-page-app/dist
+web-page-app/dist-ssr
+web-page-app/.vite
 *.local
+.mvn/repository/
+cv-pdf-generator/target/
+web-page-app/public/assets/resume.pdf
+cv-pdf-generator/.DS_Store
+web-page-app/.DS_Store*
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
+.DS_Store*
 *.suo
 *.ntvs*
 *.njsproj

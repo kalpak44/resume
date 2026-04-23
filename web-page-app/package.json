@@ -1,0 +1,60 @@
+{
+  "name": "web-page",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Personal web page built with Vite, React, Tailwind CSS, and React Router.",
+  "author": {
+    "name": "Pavel Usanli"
+  },
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "vite",
+    "react",
+    "tailwindcss",
+    "portfolio",
+    "resume",
+    "website"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:resume": "mvn -Dmaven.repo.local=../.mvn/repository -DskipTests -f ../cv-pdf-generator/pom.xml package exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='build public/assets/resume.pdf'",
+    "docker:build": "docker build -f docker/Dockerfile -t web-page-app ..",
+    "dev:resume": "mvn -Dmaven.repo.local=../.mvn/repository -f ../cv-pdf-generator/pom.xml exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='serve'",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "gsap": "^3.15.0",
+    "mermaid": "^11.12.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.12.0",
+    "remark-gfm": "^4.0.1",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.2.4"
+  }
+}

@@ -19,9 +19,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:resume": "mvn -Dmaven.repo.local=../.mvn/repository -DskipTests -f ../cv-pdf-generator/pom.xml package exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='build public/assets/resume.pdf'",
+    "build:resume": "RESUME_DATA_DIR=../cv-pdf-generator/data mvn -Dmaven.repo.local=../.mvn/repository -DskipTests -f ../cv-pdf-generator/pom.xml package exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='build public/assets/resume.pdf'",
     "docker:build": "docker build -f docker/Dockerfile -t web-page-app ..",
-    "dev:resume": "mvn -Dmaven.repo.local=../.mvn/repository -f ../cv-pdf-generator/pom.xml exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='serve'",
+    "dev:resume": "RESUME_DATA_DIR=../cv-pdf-generator/data mvn -Dmaven.repo.local=../.mvn/repository -f ../cv-pdf-generator/pom.xml exec:java -Dexec.mainClass=online.pavelusanli.resume.ResumeApp -Dexec.args='serve'",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

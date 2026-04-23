@@ -21,6 +21,9 @@ on:
       - ".github/workflows/publish-frontend.yml"
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
@@ -40,7 +43,13 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: maven
+
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: .mvn/repository
+          key: maven-${{ hashFiles('cv-pdf-generator/pom.xml') }}
+          restore-keys: maven-
 
       - name: Install dependencies
         working-directory: web-page-app
@@ -109,17 +118,13 @@ jobs:
 
       - name: Generate build report
         run: |
-          echo "### Docker Image Build Report 🚀" >> $GITHUB_STEP_SUMMARY
-          echo "Successfully built and pushed the image to GHCR." >> $GITHUB_STEP_SUMMARY
+          echo "### Docker Image Build Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Platforms:** \`linux/amd64\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Digest:** \`${{ steps.push.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Tag |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- |" >> $GITHUB_STEP_SUMMARY
-
-          while IFS= read -r tag; do
-            [ -n "$tag" ] && echo "| \`$tag\` |" >> $GITHUB_STEP_SUMMARY
-          done <<< "${{ steps.meta.outputs.tags }}"
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Digest:** \`${{ steps.push.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" | while IFS= read -r tag; do
+            [ -n "$tag" ] && echo "| \`${tag}\` |" >> $GITHUB_STEP_SUMMARY
+          done

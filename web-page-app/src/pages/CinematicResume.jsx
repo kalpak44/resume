@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { StarField } from '../components/StarField.jsx'
@@ -269,9 +269,7 @@ function HeroSection({ profile }) {
             backgroundClip: 'text',
             whiteSpace: 'nowrap',
           }}
-        >
-          <SplitChars text="USANLI" />
-        </div>
+        ></div>
       </div>
 
       {/* Tagline */}
@@ -595,6 +593,59 @@ function AboutSection({ profile }) {
 
 // ── Experience Section ─────────────────────────────────────
 
+function animateCardContent(card) {
+  if (!card || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  const company = card.querySelector('.exp-company')
+  const role = card.querySelector('.exp-role')
+  const meta = card.querySelector('.exp-meta')
+  const bullets = card.querySelectorAll('.exp-bullet')
+  const pills = card.querySelectorAll('.exp-pill')
+  if (company)
+    gsap.fromTo(
+      company,
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.05 }
+    )
+  if (role)
+    gsap.fromTo(
+      role,
+      { opacity: 0, x: -28 },
+      { opacity: 1, x: 0, duration: 0.55, ease: 'power3.out', delay: 0.18 }
+    )
+  if (meta)
+    gsap.fromTo(
+      meta,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.4, ease: 'power2.out', delay: 0.28 }
+    )
+  if (bullets.length)
+    gsap.fromTo(
+      bullets,
+      { opacity: 0, x: 28 },
+      { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out', stagger: 0.07, delay: 0.32 }
+    )
+  if (pills.length)
+    gsap.fromTo(
+      pills,
+      { opacity: 0, scale: 0.75 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.35,
+        ease: 'back.out(1.6)',
+        stagger: 0.04,
+        delay: 0.55,
+      }
+    )
+}
+
+function resetCardContent(card) {
+  if (!card) return
+  card
+    .querySelectorAll('.exp-company,.exp-role,.exp-meta,.exp-bullet,.exp-pill')
+    .forEach((el) => gsap.set(el, { opacity: 0, x: 0, y: 0, scale: 1 }))
+}
+
 const EXP_COLORS = [C.cyan, C.purple, '#10b981', C.pink]
 
 function ExperienceSection({ experience, onRegisterNav }) {
@@ -602,6 +653,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
   const [activeIdx, setActiveIdx] = useState(0)
   const isTransitioningRef = useRef(false)
   const cardRefs = useRef([])
+  const onRegisterNavRef = useRef(onRegisterNav)
 
   const parseJob = (meta) => {
     const company = meta.split(',')[0].trim()
@@ -615,125 +667,78 @@ function ExperienceSection({ experience, onRegisterNav }) {
     return { company, location, type, period }
   }
 
-  const animateCardContent = (card) => {
-    if (!card || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const company = card.querySelector('.exp-company')
-    const role = card.querySelector('.exp-role')
-    const meta = card.querySelector('.exp-meta')
-    const bullets = card.querySelectorAll('.exp-bullet')
-    const pills = card.querySelectorAll('.exp-pill')
-    if (company)
-      gsap.fromTo(
-        company,
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: 'power3.out',
-          delay: 0.05,
-        }
-      )
-    if (role)
-      gsap.fromTo(
-        role,
-        { opacity: 0, x: -28 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.55,
-          ease: 'power3.out',
-          delay: 0.18,
-        }
-      )
-    if (meta)
-      gsap.fromTo(
-        meta,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: 'power2.out', delay: 0.28 }
-      )
-    if (bullets.length)
-      gsap.fromTo(
-        bullets,
-        { opacity: 0, x: 28 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.45,
-          ease: 'power2.out',
-          stagger: 0.07,
-          delay: 0.32,
-        }
-      )
-    if (pills.length)
-      gsap.fromTo(
-        pills,
-        { opacity: 0, scale: 0.75 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.35,
-          ease: 'back.out(1.6)',
-          stagger: 0.04,
-          delay: 0.55,
-        }
-      )
-  }
+  const animateTo = useCallback(
+    (nextIdx, dir) => {
+      if (isTransitioningRef.current) return false
+      if (nextIdx < 0 || nextIdx >= experience.length) return false
+      const curIdx = activeIdxRef.current
+      if (nextIdx === curIdx) return false
 
-  const resetCardContent = (card) => {
-    if (!card) return
-    card
-      .querySelectorAll('.exp-company,.exp-role,.exp-meta,.exp-bullet,.exp-pill')
-      .forEach((el) => gsap.set(el, { opacity: 0, x: 0, y: 0, scale: 1 }))
-  }
+      isTransitioningRef.current = true
+      const curCard = cardRefs.current[curIdx]
+      const nextCard = cardRefs.current[nextIdx]
+      const isMobile = window.innerWidth < 640
 
-  const animateTo = (nextIdx, dir) => {
-    if (isTransitioningRef.current) return false
-    if (nextIdx < 0 || nextIdx >= experience.length) return false
-    const curIdx = activeIdxRef.current
-    if (nextIdx === curIdx) return false
-
-    isTransitioningRef.current = true
-    const curCard = cardRefs.current[curIdx]
-    const nextCard = cardRefs.current[nextIdx]
-    // Forward (dir > 0): current exits left, next enters from right
-    // Backward (dir < 0): current exits right, next enters from left
-    const outX = dir > 0 ? '-105%' : '105%'
-    const inFromX = dir > 0 ? '105%' : '-105%'
-
-    resetCardContent(nextCard)
-    gsap.set(nextCard, { x: inFromX })
-    gsap.to(curCard, { x: outX, duration: 0.62, ease: 'power3.inOut' })
-    gsap.to(nextCard, {
-      x: '0%',
-      duration: 0.62,
-      ease: 'power3.inOut',
-      onComplete: () => {
-        isTransitioningRef.current = false
-        activeIdxRef.current = nextIdx
-        setActiveIdx(nextIdx)
-        animateCardContent(nextCard)
-      },
-    })
-    return true
-  }
+      resetCardContent(nextCard)
+      if (isMobile) {
+        // Vertical slide on mobile — feels like section navigation
+        const outY = dir > 0 ? '-105%' : '105%'
+        const inFromY = dir > 0 ? '105%' : '-105%'
+        gsap.set(nextCard, { y: inFromY, x: '0%' })
+        gsap.to(curCard, { y: outY, duration: 0.62, ease: 'power3.inOut' })
+        gsap.to(nextCard, {
+          y: '0%',
+          duration: 0.62,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            isTransitioningRef.current = false
+            activeIdxRef.current = nextIdx
+            setActiveIdx(nextIdx)
+            animateCardContent(nextCard)
+          },
+        })
+      } else {
+        // Horizontal slide on desktop
+        const outX = dir > 0 ? '-105%' : '105%'
+        const inFromX = dir > 0 ? '105%' : '-105%'
+        gsap.set(nextCard, { x: inFromX })
+        gsap.to(curCard, { x: outX, duration: 0.62, ease: 'power3.inOut' })
+        gsap.to(nextCard, {
+          x: '0%',
+          duration: 0.62,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            isTransitioningRef.current = false
+            activeIdxRef.current = nextIdx
+            setActiveIdx(nextIdx)
+            animateCardContent(nextCard)
+          },
+        })
+      }
+      return true
+    },
+    [experience.length]
+  )
 
   useEffect(() => {
-    // Initial card positions - first card visible, rest to the right (off-screen)
+    // Initial card positions - first card visible, rest off-screen
+    const isMobile = window.innerWidth < 640
     cardRefs.current.forEach((card, i) => {
       if (!card) return
-      gsap.set(card, { x: i === 0 ? '0%' : '105%' })
+      if (isMobile) {
+        gsap.set(card, { y: i === 0 ? '0%' : '105%', x: '0%' })
+      } else {
+        gsap.set(card, { x: i === 0 ? '0%' : '105%', y: '0%' })
+      }
       if (i !== 0) resetCardContent(card)
     })
 
     // Register goTo with parent so wheel/touch can drive card changes
-    if (onRegisterNav) {
-      onRegisterNav((dir) => {
-        const next = activeIdxRef.current + dir
-        if (next < 0 || next >= experience.length) return false
+    if (onRegisterNavRef.current) {
+      onRegisterNavRef.current((dir) => {
         // While a transition is running, consume the event but don't act
         if (isTransitioningRef.current) return true
-        return animateTo(next, dir)
+        return animateTo(activeIdxRef.current + dir, dir)
       })
     }
 
@@ -752,7 +757,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
     )
     obs.observe(section)
     return () => obs.disconnect()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [animateTo])
 
   return (
     <section
@@ -809,7 +814,10 @@ function ExperienceSection({ experience, onRegisterNav }) {
         </div>
 
         {/* Navigation dots */}
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div
+          className="exp-nav-dots"
+          style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+        >
           {experience.map((_, i) => {
             const color = EXP_COLORS[i % EXP_COLORS.length]
             const active = i === activeIdx
@@ -1055,6 +1063,7 @@ function SkillsSection() {
         <SectionLabel num="03" title="SKILLS" />
 
         <div
+          className="cin-skill-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))',
@@ -1462,6 +1471,188 @@ function LoadingScreen() {
   )
 }
 
+// ── Mobile menu (full-screen overlay, hidden on hero) ──────
+
+const MENU_SECTIONS = [
+  { id: 'about', label: 'About', num: '01', color: C.cyan },
+  { id: 'experience', label: 'Experience', num: '02', color: C.purple },
+  { id: 'skills', label: 'Skills', num: '03', color: '#10b981' },
+  { id: 'contact', label: 'Contact', num: '04', color: C.pink },
+]
+
+function MobileMenu({ visible }) {
+  const [open, setOpen] = useState(false)
+  const isOpen = open && visible
+
+  const close = () => setOpen(false)
+
+  const scrollTo = (id) => {
+    const container = document.querySelector('.cin-root')
+    const el = document.getElementById(id)
+    if (!el || !container) return
+    const elRect = el.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+    container.scrollBy({ top: elRect.top - containerRect.top, behavior: 'smooth' })
+    close()
+  }
+
+  if (!visible) return null
+
+  return (
+    <>
+      {/* Full-screen overlay */}
+      <div
+        className="cin-mobile-overlay"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 440,
+          background: 'rgba(0,4,14,0.88)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: '0 40px 60px',
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? 'auto' : 'none',
+          transition: 'opacity 0.3s ease',
+        }}
+      >
+        {/* Section links */}
+        <nav style={{ marginBottom: '48px' }}>
+          {MENU_SECTIONS.map(({ id, label, num, color }) => (
+            <button
+              key={id}
+              onClick={() => scrollTo(id)}
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: '14px',
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '14px 0',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                textAlign: 'left',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '0.68rem',
+                  fontFamily: 'monospace',
+                  color: color,
+                  letterSpacing: '0.15em',
+                  fontWeight: 700,
+                  flexShrink: 0,
+                }}
+              >
+                {num}
+              </span>
+              <span
+                style={{
+                  fontSize: 'clamp(1.6rem, 9vw, 2.2rem)',
+                  fontWeight: 800,
+                  color: C.text,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                }}
+              >
+                {label}
+              </span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Page links */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <MenuLink
+            to="/projects"
+            icon="fa-solid fa-folder"
+            label="Projects"
+            color={C.cyan}
+            onClick={close}
+          />
+          <MenuLink
+            to="/cheat-sheets"
+            icon="fa-solid fa-book"
+            label="Cheat Sheets"
+            color={C.purple}
+            onClick={close}
+          />
+        </div>
+      </div>
+
+      {/* Toggle button — always on top */}
+      <button
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          position: 'fixed',
+          top: '14px',
+          right: '14px',
+          zIndex: 450,
+          width: '40px',
+          height: '40px',
+          borderRadius: '12px',
+          background: isOpen ? 'rgba(0,212,255,0.12)' : 'rgba(0,6,18,0.82)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: `1px solid ${isOpen ? 'rgba(0,212,255,0.4)' : 'rgba(0,212,255,0.18)'}`,
+          color: C.cyan,
+          fontSize: isOpen ? '1rem' : '1.15rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+          transition: 'border-color 0.2s, background 0.2s, font-size 0.15s',
+        }}
+      >
+        {isOpen ? '✕' : '☰'}
+      </button>
+    </>
+  )
+}
+
+function MenuLink({ to, icon, label, color, onClick }) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px 16px',
+        borderRadius: '12px',
+        background: color + '0d',
+        border: `1px solid ${color}22`,
+        color: C.text,
+        textDecoration: 'none',
+        fontSize: '0.95rem',
+        fontWeight: 600,
+        transition: 'background 0.18s, border-color 0.18s',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = color + '22'
+        e.currentTarget.style.borderColor = color + '55'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = color + '0d'
+        e.currentTarget.style.borderColor = color + '22'
+      }}
+    >
+      <i
+        className={icon}
+        style={{ color, fontSize: '0.82rem', width: '16px', textAlign: 'center' }}
+      />
+      {label}
+    </Link>
+  )
+}
+
 // ── Main export ────────────────────────────────────────────
 
 const SNAP_SECTIONS = ['hero', 'about', 'experience', 'skills', 'contact']
@@ -1471,6 +1662,7 @@ export function CinematicResume() {
   const currentIdxRef = useRef(0)
   const isScrollingRef = useRef(false)
   const expGoToRef = useRef(null) // set by ExperienceSection via onRegisterNav
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -1537,6 +1729,18 @@ export function CinematicResume() {
         delay: 2.2,
       })
     }, mainRef)
+
+    // ── Mobile menu visibility (hide on hero) ──────────────
+
+    const heroEl = document.getElementById('hero')
+    let heroObserver = null
+    if (heroEl) {
+      heroObserver = new IntersectionObserver(
+        ([entry]) => setShowMobileMenu(!entry.isIntersecting),
+        { root: mainRef.current, threshold: 0.3 }
+      )
+      heroObserver.observe(heroEl)
+    }
 
     // ── Per-section snap reveals (IntersectionObserver) ────
 
@@ -1649,6 +1853,17 @@ export function CinematicResume() {
         const navigated = expGoToRef.current(dir)
         if (navigated) return
       }
+      // Let sections with internal scroll consume the wheel event until they hit a boundary
+      const sectionEl = document.getElementById(SNAP_SECTIONS[currentIdxRef.current])
+      if (sectionEl && sectionEl.scrollHeight > sectionEl.clientHeight + 5) {
+        const atBottom =
+          sectionEl.scrollTop + sectionEl.clientHeight >= sectionEl.scrollHeight - 5
+        const atTop = sectionEl.scrollTop <= 5
+        if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) {
+          sectionEl.scrollBy({ top: e.deltaY })
+          return
+        }
+      }
       goTo(currentIdxRef.current + dir)
     }
 
@@ -1662,13 +1877,18 @@ export function CinematicResume() {
       touchDir = null
     }
     const onTouchMove = (e) => {
-      if (touchDir) return
-      const dx = Math.abs(e.touches[0].clientX - touchStartX)
-      const dy = Math.abs(e.touches[0].clientY - touchStartY)
-      if (dx < 8 && dy < 8) return
-      touchDir = dx > dy ? 'h' : 'v'
-      // Prevent browser scroll when swiping horizontally in experience section
-      if (touchDir === 'h' && SNAP_SECTIONS[currentIdxRef.current] === 'experience') {
+      // Lock direction on first significant movement
+      if (!touchDir) {
+        const dx = Math.abs(e.touches[0].clientX - touchStartX)
+        const dy = Math.abs(e.touches[0].clientY - touchStartY)
+        if (dx < 8 && dy < 8) return
+        touchDir = dx > dy ? 'h' : 'v'
+      }
+      // Prevent native container scroll on every touchmove event, not just the first,
+      // otherwise the browser scrolls the snap container past the experience section
+      const isExperience = SNAP_SECTIONS[currentIdxRef.current] === 'experience'
+      const isMobile = window.innerWidth < 640
+      if (isExperience && (isMobile ? touchDir === 'v' : touchDir === 'h')) {
         e.preventDefault()
       }
     }
@@ -1677,18 +1897,37 @@ export function CinematicResume() {
       const dy = touchStartY - e.changedTouches[0].clientY
       const dx = touchStartX - e.changedTouches[0].clientX
       const isExperience = SNAP_SECTIONS[currentIdxRef.current] === 'experience'
+      const isMobile = window.innerWidth < 640
 
-      if (isExperience && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= 40) {
-        // Horizontal swipe → navigate between experience cards
-        const dir = dx > 0 ? 1 : -1
-        if (expGoToRef.current) {
+      if (isExperience && expGoToRef.current) {
+        if (isMobile && touchDir === 'v' && Math.abs(dy) >= 30) {
+          // Mobile: vertical swipe navigates experience cards; fall through to section nav at boundary
+          const dir = dy > 0 ? 1 : -1
           const navigated = expGoToRef.current(dir)
           if (navigated) return
+          goTo(currentIdxRef.current + dir)
+          return
+        } else if (!isMobile && touchDir === 'h' && Math.abs(dx) >= 40) {
+          // Desktop: horizontal swipe navigates experience cards
+          const dir = dx > 0 ? 1 : -1
+          const navigated = expGoToRef.current(dir)
+          if (navigated) return
+          goTo(currentIdxRef.current + dir)
+          return
         }
-        goTo(currentIdxRef.current + dir)
-      } else if (Math.abs(dy) >= 30) {
-        // Vertical swipe → navigate between sections
-        goTo(currentIdxRef.current + (dy > 0 ? 1 : -1))
+      }
+
+      if (Math.abs(dy) >= 30) {
+        // Vertical swipe → navigate between sections, but let scrollable sections scroll first
+        const swipeDir = dy > 0 ? 1 : -1
+        const sectionEl = document.getElementById(SNAP_SECTIONS[currentIdxRef.current])
+        if (sectionEl && sectionEl.scrollHeight > sectionEl.clientHeight + 5) {
+          const atBottom =
+            sectionEl.scrollTop + sectionEl.clientHeight >= sectionEl.scrollHeight - 5
+          const atTop = sectionEl.scrollTop <= 5
+          if ((swipeDir > 0 && !atBottom) || (swipeDir < 0 && !atTop)) return
+        }
+        goTo(currentIdxRef.current + swipeDir)
       }
     }
 
@@ -1698,6 +1937,7 @@ export function CinematicResume() {
     container.addEventListener('touchend', onTouchEnd, { passive: true })
 
     return () => {
+      heroObserver?.disconnect()
       observers.forEach((o) => o.disconnect())
       ctx.revert()
       container.removeEventListener('wheel', onWheel)
@@ -1736,9 +1976,34 @@ export function CinematicResume() {
           .cin-snap-section { height: 100dvh !important; }
         }
 
+        /* Sections that can overflow on mobile: allow internal scroll */
+        @media (max-width: 639px) {
+          #about,
+          #skills {
+            overflow-y: auto !important;
+            align-items: flex-start !important;
+            padding-top: 72px !important;
+            padding-bottom: 40px !important;
+          }
+          #skills .cin-reveal {
+            margin-bottom: 24px !important;
+          }
+          .exp-nav-dots {
+            display: none !important;
+          }
+          .cin-skill-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+
         /* Initial state for section headings (clip-path reveal) */
         .cin-section-heading { opacity: 0; }
         .cin-skill-cat { opacity: 0; }
+
+        /* Mobile menu only visible on small screens */
+        .cin-mobile-menu { display: block; }
+        @media (min-width: 640px) { .cin-mobile-menu { display: none !important; } }
 
         @media (prefers-reduced-motion: reduce) {
           .cin-char,
@@ -1756,6 +2021,10 @@ export function CinematicResume() {
           }
         }
       `}</style>
+
+      <div className="cin-mobile-menu">
+        <MobileMenu visible={showMobileMenu} />
+      </div>
 
       <div
         ref={mainRef}

@@ -3,6 +3,7 @@ import homelabMd from './projects/homelab-k8s.md?raw'
 import telegramMd from './projects/telegram-stripe-bot.md?raw'
 import codeViewerMd from './projects/code-viewer-bot.md?raw'
 import k8sUtilMd from './projects/k8s-utility-containers.md?raw'
+import miteAssistantMd from './projects/mite-assistant-mcp.md?raw'
 
 export const projects = [
   {
@@ -104,5 +105,21 @@ export const projects = [
       'GHCR',
     ],
     details: k8sUtilMd,
+  },
+  {
+    id: 'mite-assistant-mcp',
+    title: 'Mite Assistant MCP - AI Time Tracking via MCP',
+    summary:
+      'An MCP server that connects AI assistants (Claude, Codex) to Mite time tracking. Log, query, and update time entries through natural language — without leaving your editor.',
+    technologies: [
+      'Node.js',
+      'JavaScript',
+      'MCP SDK',
+      'Zod',
+      'REST API',
+      'Bearer Auth',
+    ],
+    github: 'https://github.com/kalpak44/mite-assistant-mcp',
+    details: miteAssistantMd,
   },
 ]

@@ -111,14 +111,7 @@ export const projects = [
     title: 'Mite Assistant MCP - AI Time Tracking via MCP',
     summary:
       'An MCP server that connects AI assistants (Claude, Codex) to Mite time tracking. Log, query, and update time entries through natural language — without leaving your editor.',
-    technologies: [
-      'Node.js',
-      'JavaScript',
-      'MCP SDK',
-      'Zod',
-      'REST API',
-      'Bearer Auth',
-    ],
+    technologies: ['Node.js', 'JavaScript', 'MCP SDK', 'Zod', 'REST API', 'Bearer Auth'],
     github: 'https://github.com/kalpak44/mite-assistant-mcp',
     details: miteAssistantMd,
   },

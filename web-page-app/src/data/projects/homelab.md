@@ -23,6 +23,8 @@ pipelines with direct Proxmox API access — no ports exposed to the internet.
 - **Config Management**: **Ansible** automates OS setup, package installs, and service configuration across all nodes
 - **Kubernetes**: Multi-node **k3s** cluster running on Proxmox VMs
 - **GitOps**: **FluxCD** continuously reconciles cluster state from GitHub
+- **Autoscaling**: **Sablier** scales idle workloads to zero and wakes them on the first incoming request — keeping
+  resource usage low for infrequently accessed services without any manual intervention
 - **CI/CD**: Self-hosted **GitHub Actions runner** on the LAN - runs Terraform + Ansible pipelines with direct Proxmox
   API access
 

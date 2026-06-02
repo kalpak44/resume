@@ -184,7 +184,7 @@ export function ProjectDetails() {
             background: 'rgba(0,212,255,0.02)',
           }}
         >
-          <WindowControls onClose={() => navigate('/')} />
+          <WindowControls onClose={() => navigate('/projects')} />
           <span
             style={{
               flex: 1,
@@ -300,7 +300,7 @@ export function ProjectDetails() {
       {/* Back button */}
       <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/projects')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -322,7 +322,7 @@ export function ProjectDetails() {
             onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateX(-4px)')}
             onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateX(0)')}
           />
-          Back to Resume
+          Project List
         </button>
       </div>
     </div>

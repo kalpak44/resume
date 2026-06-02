@@ -95,7 +95,7 @@ export function CheatSheetDetails() {
       <div style={{ textAlign: 'center', padding: '80px 24px', color: '#94a3b8' }}>
         <p style={{ fontSize: '1.1rem', marginBottom: '16px' }}>Cheat sheet not found</p>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/cheat-sheets')}
           style={{
             background: 'none',
             border: 'none',
@@ -105,7 +105,7 @@ export function CheatSheetDetails() {
             textDecoration: 'underline',
           }}
         >
-          Go back
+          Cheat Sheet List
         </button>
       </div>
     )
@@ -136,7 +136,7 @@ export function CheatSheetDetails() {
             background: 'rgba(0,212,255,0.02)',
           }}
         >
-          <WindowControls onClose={() => navigate(-1)} />
+          <WindowControls onClose={() => navigate('/cheat-sheets')} />
           <span
             style={{
               flex: 1,
@@ -189,7 +189,7 @@ export function CheatSheetDetails() {
       {/* Back button */}
       <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/cheat-sheets')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -206,7 +206,7 @@ export function CheatSheetDetails() {
           onMouseLeave={(e) => (e.currentTarget.style.color = C.muted)}
         >
           <i className="fa-solid fa-arrow-left" />
-          Back
+          Cheat Sheet List
         </button>
       </div>
     </div>

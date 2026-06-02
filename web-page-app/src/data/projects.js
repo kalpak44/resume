@@ -1,5 +1,5 @@
 import bunkerMd from './projects/bunker.md?raw'
-import homelabMd from './projects/homelab-k8s.md?raw'
+import homelabMd from './projects/homelab.md?raw'
 import telegramMd from './projects/telegram-stripe-bot.md?raw'
 import codeViewerMd from './projects/code-viewer-bot.md?raw'
 import k8sUtilMd from './projects/k8s-utility-containers.md?raw'
@@ -28,29 +28,33 @@ export const projects = [
     details: bunkerMd,
   },
   {
-    id: 'homelab-k8s',
-    title: 'Homelab Kubernetes - GitOps-Managed Platform',
+    id: 'homelab',
+    title: 'Homelab - Self-Hosted Infrastructure Platform',
     summary:
-      'A private homelab Kubernetes platform running on MicroK8s and managed via FluxCD GitOps, with Traefik ingress, Cloudflare-managed TLS, NFS-backed persistent volumes, and built-in monitoring + security scanning.',
+      'A fully code-driven homelab on Proxmox bare metal. Terraform provisions all VMs/LXCs and manages Cloudflare DNS and WAF. Ansible configures everything. A multi-node k3s cluster runs all workloads via FluxCD GitOps, with HAProxy, Traefik, CrowdSec, Vault, and self-hosted GitHub Actions runners.',
     technologies: [
+      'Proxmox VE',
+      'Terraform',
+      'Ansible',
+      'k3s',
       'Kubernetes',
-      'MicroK8s',
       'FluxCD',
       'GitOps',
+      'HAProxy',
       'Traefik',
       'MetalLB',
+      'CrowdSec',
       'Cloudflare',
       "Let's Encrypt",
+      'HashiCorp Vault',
+      'External Secrets',
       'NFS',
-      'Trivy Operator',
-      'Grafana',
-      'Prometheus',
       'AdGuard Home',
+      'Portainer',
+      'GitHub Actions',
       'PostgreSQL',
-      'NGINX',
-      'Helm',
     ],
-    github: 'https://github.com/kalpak44/homelab-k8s',
+    github: 'https://github.com/kalpak44/homelab-infra',
     details: homelabMd,
   },
   {

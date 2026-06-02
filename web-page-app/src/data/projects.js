@@ -137,6 +137,7 @@ export const projects = [
       'FluxCD',
       'GitOps',
     ],
+    url: 'https://planner.pavel-usanli.online/',
     details: capacityPlannerMd,
   },
 ]

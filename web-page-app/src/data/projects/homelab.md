@@ -1,9 +1,9 @@
 A fully code-driven homelab built on a **Proxmox** bare-metal hypervisor. **Terraform** provisions all VMs and LXC
 containers on Proxmox, manages every Cloudflare DNS record (public and internal), WAF rules, and stores remote state in
-**Cloudflare R2**. **Ansible** handles all post-provisioning OS-level configuration. On top of Proxmox, a multi-node *
-*k3s** cluster runs all containerized workloads, reconciled continuously by **FluxCD** GitOps. External traffic flows
+**Cloudflare R2**. **Ansible** handles all post-provisioning OS-level configuration. On top of Proxmox, a multi-node \*
+\*k3s** cluster runs all containerized workloads, reconciled continuously by **FluxCD** GitOps. External traffic flows
 through **Cloudflare** → **HAProxy** → **Traefik** inside the cluster. Secrets are centrally managed in **HashiCorp
-Vault** and synced into Kubernetes via **External Secrets Operator**. A dedicated **self-hosted GitHub Actions runner**
+Vault** and synced into Kubernetes via **External Secrets Operator**. A dedicated **self-hosted GitHub Actions runner\*\*
 on the LAN has direct Proxmox API access for running `deploy` and `destroy` workflows without exposing any internal
 ports to the internet.
 
@@ -12,8 +12,8 @@ ports to the internet.
 ### Infrastructure Layers
 
 - **Hypervisor**: **Proxmox VE** – all services run as VMs or LXC containers on bare metal
-- **IaC**: **Terraform** provisions Proxmox VMs/LXCs, manages all Cloudflare DNS records, WAF rules, and uses *
-  *Cloudflare R2** as a remote state backend
+- **IaC**: **Terraform** provisions Proxmox VMs/LXCs, manages all Cloudflare DNS records, WAF rules, and uses \*
+  \*Cloudflare R2\*\* as a remote state backend
 - **Config Management**: **Ansible** automates OS setup, package installs, and service configuration across all nodes
 - **Kubernetes**: Multi-node **k3s** cluster running on Proxmox VMs
 - **GitOps**: **FluxCD** continuously reconciles cluster state from GitHub

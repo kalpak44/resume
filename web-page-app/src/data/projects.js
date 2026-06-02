@@ -44,6 +44,7 @@ export const projects = [
       'Traefik',
       'MetalLB',
       'CrowdSec',
+      'cert-manager',
       'Cloudflare',
       "Let's Encrypt",
       'HashiCorp Vault',

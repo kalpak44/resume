@@ -4,6 +4,7 @@ import telegramMd from './projects/telegram-stripe-bot.md?raw'
 import codeViewerMd from './projects/code-viewer-bot.md?raw'
 import k8sUtilMd from './projects/k8s-utility-containers.md?raw'
 import miteAssistantMd from './projects/mite-assistant-mcp.md?raw'
+import capacityPlannerMd from './projects/capacity-planner.md?raw'
 
 export const projects = [
   {
@@ -49,6 +50,7 @@ export const projects = [
       "Let's Encrypt",
       'HashiCorp Vault',
       'External Secrets',
+      'Sablier',
       'NFS',
       'AdGuard Home',
       'Portainer',
@@ -119,5 +121,22 @@ export const projects = [
     technologies: ['Node.js', 'JavaScript', 'MCP SDK', 'Zod', 'REST API', 'Bearer Auth'],
     github: 'https://github.com/kalpak44/mite-assistant-mcp',
     details: miteAssistantMd,
+  },
+  {
+    id: 'capacity-planner',
+    title: 'Capacity Planner - Calendar-Based Capacity Calculator',
+    summary:
+      'A single-file HTML tool for planning monthly work capacity. Distributes hours across workdays in spread or compress mode, handles day-off exceptions, filters by date range, and exports state as JSON. Deployed on homelab via FluxCD.',
+    technologies: [
+      'HTML',
+      'Vanilla JS',
+      'Tailwind CSS',
+      'nginx',
+      'Docker',
+      'Kubernetes',
+      'FluxCD',
+      'GitOps',
+    ],
+    details: capacityPlannerMd,
   },
 ]

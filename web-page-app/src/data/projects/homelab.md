@@ -31,7 +31,7 @@ ports to the internet.
 
 ### Security & Secrets
 
-- **Intrusion Detection**: **CrowdSec** IDS/IPS with Traefik bouncer integration and AppSec middleware
+- **Intrusion Detection**: **CrowdSec** IDS/IPS engine with a **Traefik plugin (bouncer)** for real-time request blocking and AppSec middleware
 - **Secrets Manager**: **HashiCorp Vault** (KV-v2) as the single source of truth for all secrets
 - **Secret Sync**: **External Secrets Operator** pulls from Vault into Kubernetes Secrets
 - **Cloudflare WAF**: Protects all public-facing services at the edge
@@ -43,6 +43,6 @@ ports to the internet.
 - **Container Management**: **Portainer** manages Docker stacks for non-k8s infra tooling
 
 **Purpose:** Build a production-grade homelab from scratch – fully automated from bare metal to running apps, with no
-manual steps after initial Proxmox install.
+manual steps after initial Proxmox installation.
 
 > Everything is reproducible: Terraform provisions the infra, Ansible configures it, Flux deploys the workloads.

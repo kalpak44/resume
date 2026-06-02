@@ -2,7 +2,7 @@ A zero-dependency single-file tool I built for my own day-to-day capacity planni
 
 ### Key Features & Details
 
-- **Two distribution modes**: *Spread evenly* distributes hours proportionally across all available workdays; *Compress* front- or back-loads hours into fewer full workdays up to a configurable daily max
+- **Two distribution modes**: _Spread evenly_ distributes hours proportionally across all available workdays; _Compress_ front- or back-loads hours into fewer full workdays up to a configurable daily max
 - **Year overview**: 12-month grid with per-month capacity inputs and live scheduled/avg stats — click any card to jump to that month's calendar
 - **One-off exceptions**: Mark individual days as full day-off or set partial hour-offs (for things like half-day meetings); exceptions can apply to a single day, all same weekdays in a month, or all same weekdays in a year
 - **Date range filter**: Set a start/end boundary and instantly see total scheduled work hours and workday count for that interval

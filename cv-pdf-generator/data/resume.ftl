@@ -204,7 +204,7 @@
             <p class="role">Software Engineer Specializing in Java</p>
             <div class="contacts">
                 <div class="contact-row">
-                    <span class="contact-item">pavel.usanli@gmail.com</span>
+                    <span class="contact-item">contact@pavel-usanli.online</span>
                     <span class="contact-item">+359 887 731 472</span>
                     <span class="contact-item">
                         <a class="contact-link" href="https://www.pavel-usanli.online">www.pavel-usanli.online</a>

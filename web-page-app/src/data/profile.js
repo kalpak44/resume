@@ -9,8 +9,8 @@ export const profile = {
     { icon: 'fa-solid fa-location-dot', text: 'Sofia City, Bulgaria' },
     {
       icon: 'fa-solid fa-envelope',
-      text: 'pavel.usanli@gmail.com',
-      link: 'mailto:pavel.usanli@gmail.com',
+      text: 'contact@pavel-usanli.online',
+      link: 'mailto:contact@pavel-usanli.online',
     },
     { icon: 'fa-solid fa-phone', text: '+(359) 887 731 472', link: 'tel:+359887731472' },
   ],

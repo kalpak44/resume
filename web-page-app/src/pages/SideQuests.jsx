@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import gsap from 'gsap'
 import { useIsMobile } from '../hooks/useIsMobile.js'
 
@@ -221,144 +221,173 @@ function MobilePhotoViewer({
   onNext,
   onClose,
 }) {
+  const touchStartX = useRef(null)
+  const [slideDir, setSlideDir] = useState(null)
+
+  const goNext = useCallback(() => {
+    if (!hasNext) return
+    setSlideDir('next')
+    onNext()
+  }, [hasNext, onNext])
+
+  const goPrev = useCallback(() => {
+    if (!hasPrev) return
+    setSlideDir('prev')
+    onPrev()
+  }, [hasPrev, onPrev])
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft' && hasPrev) onPrev()
-      if (e.key === 'ArrowRight' && hasNext) onNext()
+      if (e.key === 'ArrowLeft') goPrev()
+      if (e.key === 'ArrowRight') goNext()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [onClose, onPrev, onNext, hasPrev, hasNext])
+  }, [onClose, goNext, goPrev])
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return
+    const delta = touchStartX.current - e.changedTouches[0].clientX
+    touchStartX.current = null
+    if (delta > 50) goNext()
+    else if (delta < -50) goPrev()
+  }
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1000,
-        background: '#000',
-        display: 'flex',
-        flexDirection: 'column',
-        animation: 'viewerFadeIn 0.18s ease',
-      }}
-    >
-      {/* Top bar */}
+    <>
+      <style>{`
+        @keyframes mobileSlideFromRight {
+          from { transform: translateX(100%); }
+          to   { transform: translateX(0); }
+        }
+        @keyframes mobileSlideFromLeft {
+          from { transform: translateX(-100%); }
+          to   { transform: translateX(0); }
+        }
+      `}</style>
       <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 1000,
+          background: '#000',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '14px 16px',
-          paddingTop: 'calc(14px + env(safe-area-inset-top))',
-          flexShrink: 0,
+          flexDirection: 'column',
+          animation: 'viewerFadeIn 0.18s ease',
         }}
       >
-        <span
+        {/* Top bar */}
+        <div
           style={{
-            fontSize: '0.82rem',
-            color: 'rgba(255,255,255,0.45)',
-            fontFamily: 'monospace',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '14px 16px',
+            paddingTop: 'calc(14px + env(safe-area-inset-top))',
+            flexShrink: 0,
           }}
         >
-          {index + 1} / {total}
-        </span>
-        <button
-          onClick={onClose}
-          aria-label="Close"
+          <span
+            style={{
+              fontSize: '0.82rem',
+              color: 'rgba(255,255,255,0.45)',
+              fontFamily: 'monospace',
+            }}
+          >
+            {index + 1} / {total}
+          </span>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.12)',
+              border: 'none',
+              color: '#fff',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Image — keyed so it remounts on each photo change, triggering the slide animation */}
+        <div
           style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.12)',
-            border: 'none',
-            color: '#fff',
-            fontSize: '1rem',
-            cursor: 'pointer',
+            flex: 1,
+            minHeight: 0,
+            overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            WebkitTapHighlightColor: 'transparent',
           }}
         >
-          ✕
-        </button>
-      </div>
-
-      {/* Image */}
-      <div
-        style={{
-          flex: 1,
-          minHeight: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {hasPrev && (
           <div
-            onClick={onPrev}
+            key={index}
             style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: '35%',
-              zIndex: 2,
-              WebkitTapHighlightColor: 'transparent',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              animation:
+                slideDir === 'next'
+                  ? 'mobileSlideFromRight 0.28s cubic-bezier(0.25,0.46,0.45,0.94)'
+                  : slideDir === 'prev'
+                    ? 'mobileSlideFromLeft 0.28s cubic-bezier(0.25,0.46,0.45,0.94)'
+                    : 'none',
             }}
-          />
-        )}
-        {hasNext && (
-          <div
-            onClick={onNext}
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: '35%',
-              zIndex: 2,
-              WebkitTapHighlightColor: 'transparent',
-            }}
-          />
-        )}
-        <img
-          src={photo.src}
-          alt={photo.label}
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
-            objectFit: 'contain',
-            display: 'block',
-          }}
-        />
-      </div>
+          >
+            <img
+              src={photo.src}
+              alt={photo.label}
+              style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+            />
+          </div>
+        </div>
 
-      {/* Caption */}
-      <div
-        style={{
-          padding: '14px 20px',
-          paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
-          flexShrink: 0,
-        }}
-      >
-        <p
+        {/* Caption */}
+        <div
           style={{
-            fontSize: '0.9rem',
-            color: 'rgba(255,255,255,0.7)',
-            lineHeight: 1.55,
-            margin: 0,
-            fontStyle: 'italic',
-            textAlign: 'center',
+            padding: '14px 20px',
+            paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+            flexShrink: 0,
           }}
         >
-          {photo.description}
-        </p>
+          <p
+            style={{
+              fontSize: '0.9rem',
+              color: 'rgba(255,255,255,0.7)',
+              lineHeight: 1.55,
+              margin: 0,
+              fontStyle: 'italic',
+              textAlign: 'center',
+            }}
+          >
+            {photo.description}
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

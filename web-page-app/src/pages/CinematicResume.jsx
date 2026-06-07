@@ -1799,7 +1799,7 @@ export function CinematicResume() {
           #skills {
             overflow-y: auto !important;
             align-items: flex-start !important;
-            padding-top: 72px !important;
+            padding-top: 88px !important;
             padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
           }
           #contact {

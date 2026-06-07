@@ -318,6 +318,9 @@ export function CinematicNav() {
         @media (max-width: 640px) {
           nav[aria-label="Page navigation"] { display: none !important; }
         }
+        @media (min-width: 641px) {
+          nav[aria-label="Mobile navigation"] { display: none !important; }
+        }
       `}</style>
 
       {/* Scroll progress bar */}
@@ -336,6 +339,66 @@ export function CinematicNav() {
           pointerEvents: 'none',
         }}
       />
+
+      {/* Mobile bottom bar */}
+      <nav
+        aria-label="Mobile navigation"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 400,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          padding: '10px 8px calc(10px + env(safe-area-inset-bottom))',
+          background: 'rgba(0, 6, 18, 0.92)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderTop: '1px solid rgba(0, 212, 255, 0.12)',
+          boxShadow: '0 -4px 32px rgba(0,0,0,0.6)',
+        }}
+      >
+        {[
+          { to: '/', label: 'home', icon: '⌂' },
+          { to: '/projects', label: 'projects', icon: '◈', hobby: true },
+          { to: '/cheat-sheets', label: 'sheets', icon: '◉', hobby: true },
+          { to: '/side-quests', label: 'side quests', icon: '✦', hobby: true },
+        ].map(({ to, label, icon, hobby }) => {
+          const isActive =
+            to === '/' ? location.pathname === '/' : location.pathname.startsWith(to)
+          const accent = hobby ? '#f472b6' : C.cyan
+          return (
+            <Link
+              key={to}
+              to={to}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '3px',
+                padding: '6px 12px',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: isActive ? accent : C.muted,
+                background: isActive
+                  ? hobby
+                    ? 'rgba(244,114,182,0.1)'
+                    : 'rgba(0,212,255,0.1)'
+                  : 'transparent',
+                transition: 'color 0.18s, background 0.18s',
+                minWidth: '56px',
+              }}
+            >
+              <span style={{ fontSize: '1rem', lineHeight: 1 }}>{icon}</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: isActive ? 600 : 500, letterSpacing: '0.03em' }}>
+                {label}
+              </span>
+            </Link>
+          )
+        })}
+      </nav>
 
       {/* Nav pill */}
       <nav

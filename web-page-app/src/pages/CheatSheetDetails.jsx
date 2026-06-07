@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Markdown } from '../components/Markdown.jsx'
 import gsap from 'gsap'
 import { cheatsheets } from '../data/cheatsheets.js'
+import { useIsMobile } from '../hooks/useIsMobile.js'
 
 const C = {
   cyan: '#00d4ff',
@@ -74,6 +75,7 @@ function WindowControls({ onClose }) {
 export function CheatSheetDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
   const cheatsheet = cheatsheets.find((c) => c.id === id)
 
   useEffect(() => {
@@ -81,6 +83,7 @@ export function CheatSheetDetails() {
   }, [id])
 
   useEffect(() => {
+    if (isMobile) return
     if (!cheatsheet) return
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     gsap.fromTo(
@@ -88,7 +91,7 @@ export function CheatSheetDetails() {
       { opacity: 0, y: 36, scale: 0.98 },
       { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1 }
     )
-  }, [cheatsheet])
+  }, [cheatsheet, isMobile])
 
   if (!cheatsheet) {
     return (
@@ -107,6 +110,47 @@ export function CheatSheetDetails() {
         >
           Cheat Sheet List
         </button>
+      </div>
+    )
+  }
+
+  // ── iOS layout ─────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div>
+        {/* Back button */}
+        <button
+          onClick={() => navigate('/cheat-sheets')}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'none',
+            border: 'none',
+            color: C.cyan,
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontWeight: 500,
+            padding: '0 0 16px',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6.5 1L1.5 7l5 6" />
+          </svg>
+          Cheat Sheets
+        </button>
+
+        {/* Title */}
+        <h1 style={{ fontSize: '1.65rem', fontWeight: 700, color: C.text, margin: '0 0 12px', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+          {cheatsheet.title}
+        </h1>
+
+        {/* Divider */}
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '24px' }} />
+
+        {/* Markdown */}
+        <Markdown content={cheatsheet.details ?? ''} />
       </div>
     )
   }

@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import gsap from 'gsap'
 import { projects } from '../data/projects.js'
+import { useIsMobile } from '../hooks/useIsMobile.js'
 
 const C = {
   cyan: '#00d4ff',
@@ -92,8 +93,10 @@ function WindowControls({ onClose }) {
 
 export function Projects() {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
+    if (isMobile) return
     if (!projects.length) return
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     gsap.fromTo(
@@ -114,9 +117,86 @@ export function Projects() {
         delay: 0.18,
       }
     )
-  }, [])
+  }, [isMobile])
 
   if (!projects.length) return null
+
+  // ── iOS layout ─────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <>
+        <style>{`
+          .ios-proj-row { -webkit-tap-highlight-color: transparent; transition: background 0.12s; }
+          .ios-proj-row:active { background: rgba(255,255,255,0.09) !important; }
+        `}</style>
+        <div>
+          {/* Large title */}
+          <div style={{ marginBottom: '28px' }}>
+            <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.pink, letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'monospace', margin: '0 0 8px' }}>
+              Side Work · Hobby
+            </p>
+            <h1 style={{ fontSize: '2rem', fontWeight: 700, color: C.text, margin: 0, letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+              Personal Projects
+            </h1>
+          </div>
+
+          {/* Inset grouped list */}
+          <div style={{ borderRadius: '13px', overflow: 'hidden', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            {projects.map((project, idx) => (
+              <Link
+                key={project.id}
+                to={`/projects/${project.id}`}
+                className="ios-proj-row"
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '13px',
+                  padding: '12px 16px',
+                  textDecoration: 'none',
+                  background: 'transparent',
+                }}
+              >
+                {/* App icon */}
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '9px',
+                  background: 'linear-gradient(135deg, rgba(244,114,182,0.28), rgba(139,92,246,0.28))',
+                  border: '1px solid rgba(244,114,182,0.22)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <i className="fa-solid fa-folder" style={{ color: C.pink, fontSize: '0.85rem' }} />
+                </div>
+                {/* Text */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: C.text, lineHeight: 1.3 }}>
+                    {project.title}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: C.subtle, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '2px' }}>
+                    {(project.technologies || []).length > 0
+                      ? (project.technologies || []).slice(0, 3).join(' · ')
+                      : project.summary}
+                  </div>
+                </div>
+                {/* Disclosure chevron */}
+                <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                  <path d="M1 1l5 5-5 5" />
+                </svg>
+                {/* Inset separator */}
+                {idx < projects.length - 1 && (
+                  <div style={{ position: 'absolute', bottom: 0, left: '67px', right: 0, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
+                )}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </>
+    )
+  }
 
   const handleTilt = (e) => {
     const card = e.currentTarget

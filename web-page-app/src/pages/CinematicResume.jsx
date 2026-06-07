@@ -1765,12 +1765,20 @@ export function CinematicResume() {
         /* Sections that can overflow on mobile: allow internal scroll */
         @media (max-width: 639px) {
           .cin-about-btns { display: none !important; }
+          .cin-scroll-ind { display: none !important; }
           #about,
           #skills {
             overflow-y: auto !important;
             align-items: flex-start !important;
             padding-top: 72px !important;
-            padding-bottom: 40px !important;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+          }
+          #contact {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            justify-content: flex-start !important;
+            padding-top: 60px !important;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
           }
           #skills .cin-reveal {
             margin-bottom: 24px !important;

@@ -1765,7 +1765,7 @@ export function CinematicResume() {
         /* Sections that can overflow on mobile: allow internal scroll */
         @media (max-width: 639px) {
           .cin-about-btns { display: none !important; }
-          .cin-scroll-ind { display: none !important; }
+          .cin-scroll-ind { bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
           #about,
           #skills {
             overflow-y: auto !important;

@@ -6,6 +6,7 @@ import { Projects } from './pages/Projects.jsx'
 import { ProjectDetails } from './pages/ProjectDetails.jsx'
 import { CheatSheets } from './pages/CheatSheets.jsx'
 import { CheatSheetDetails } from './pages/CheatSheetDetails.jsx'
+import { SideQuests } from './pages/SideQuests.jsx'
 import { NotFound } from './pages/NotFound.jsx'
 
 function App() {
@@ -44,6 +45,14 @@ function App() {
             element={
               <Layout>
                 <CheatSheetDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/side-quests"
+            element={
+              <Layout>
+                <SideQuests />
               </Layout>
             }
           />

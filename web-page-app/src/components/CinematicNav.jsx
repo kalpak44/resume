@@ -306,6 +306,7 @@ export function CinematicNav() {
   }
   const isCheatSheets = location.pathname.startsWith('/cheat-sheets')
   const isProjects = location.pathname.startsWith('/projects')
+  const isSideQuests = location.pathname.startsWith('/side-quests')
 
   return (
     <>
@@ -383,6 +384,7 @@ export function CinematicNav() {
         <Divider />
         <NavLink to="/projects" label="projects" active={isProjects} hobby />
         <NavLink to="/cheat-sheets" label="cheat sheets" active={isCheatSheets} hobby />
+        <NavLink to="/side-quests" label="side quests" active={isSideQuests} hobby />
       </nav>
     </>
   )

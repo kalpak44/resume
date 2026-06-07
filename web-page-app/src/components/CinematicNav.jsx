@@ -392,7 +392,13 @@ export function CinematicNav() {
               }}
             >
               <span style={{ fontSize: '1rem', lineHeight: 1 }}>{icon}</span>
-              <span style={{ fontSize: '0.6rem', fontWeight: isActive ? 600 : 500, letterSpacing: '0.03em' }}>
+              <span
+                style={{
+                  fontSize: '0.6rem',
+                  fontWeight: isActive ? 600 : 500,
+                  letterSpacing: '0.03em',
+                }}
+              >
                 {label}
               </span>
             </Link>

@@ -188,20 +188,45 @@ export function ProjectDetails() {
               WebkitTapHighlightColor: 'transparent',
             }}
           >
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="8"
+              height="14"
+              viewBox="0 0 8 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M6.5 1L1.5 7l5 6" />
             </svg>
             Projects
           </button>
 
           {/* Title */}
-          <h1 style={{ fontSize: '1.65rem', fontWeight: 700, color: C.text, margin: '0 0 16px', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+          <h1
+            style={{
+              fontSize: '1.65rem',
+              fontWeight: 700,
+              color: C.text,
+              margin: '0 0 16px',
+              letterSpacing: '-0.025em',
+              lineHeight: 1.2,
+            }}
+          >
             {project.title}
           </h1>
 
           {/* Action links */}
           {(project.github || project.url) && (
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '24px' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                flexWrap: 'wrap',
+                marginBottom: '24px',
+              }}
+            >
               {project.github && (
                 <a
                   href={project.github}
@@ -254,20 +279,53 @@ export function ProjectDetails() {
           )}
 
           {/* Divider */}
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '24px' }} />
+          <div
+            style={{
+              height: '1px',
+              background: 'rgba(255,255,255,0.08)',
+              marginBottom: '24px',
+            }}
+          />
 
           {/* Markdown */}
           <Markdown content={project.details ?? ''} />
 
           {/* Tech tags */}
           {project.technologies?.length > 0 && (
-            <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-              <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.cyan, letterSpacing: '0.2em', textTransform: 'uppercase', fontFamily: 'monospace', margin: '0 0 12px' }}>
+            <div
+              style={{
+                marginTop: '28px',
+                paddingTop: '20px',
+                borderTop: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: C.cyan,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  fontFamily: 'monospace',
+                  margin: '0 0 12px',
+                }}
+              >
                 Technologies
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
                 {project.technologies.map((tech, i) => (
-                  <span key={i} style={{ padding: '4px 11px', borderRadius: '8px', background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.16)', color: C.sky, fontSize: '0.78rem', fontWeight: 500 }}>
+                  <span
+                    key={i}
+                    style={{
+                      padding: '4px 11px',
+                      borderRadius: '8px',
+                      background: 'rgba(0,212,255,0.08)',
+                      border: '1px solid rgba(0,212,255,0.16)',
+                      color: C.sky,
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
+                    }}
+                  >
                     {tech}
                   </span>
                 ))}

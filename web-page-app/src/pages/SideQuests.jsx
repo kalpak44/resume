@@ -1,6 +1,8 @@
+import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import gsap from 'gsap'
+import { useIsMobile } from '../hooks/useIsMobile.js'
 
 const C = {
   cyan: '#00d4ff',
@@ -209,6 +211,105 @@ function NavArrow({ direction, onClick, disabled }) {
   )
 }
 
+function MobilePhotoViewer({ photo, index, total, hasPrev, hasNext, onPrev, onNext, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft' && hasPrev) onPrev()
+      if (e.key === 'ArrowRight' && hasNext) onNext()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose, onPrev, onNext, hasPrev, hasNext])
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
+        background: '#000',
+        display: 'flex',
+        flexDirection: 'column',
+        animation: 'viewerFadeIn 0.18s ease',
+      }}
+    >
+      {/* Top bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '14px 16px',
+        paddingTop: 'calc(14px + env(safe-area-inset-top))',
+        flexShrink: 0,
+      }}>
+        <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'monospace' }}>
+          {index + 1} / {total}
+        </span>
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.12)',
+            border: 'none',
+            color: '#fff',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Image */}
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+        {hasPrev && (
+          <div
+            onClick={onPrev}
+            style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '35%', zIndex: 2, WebkitTapHighlightColor: 'transparent' }}
+          />
+        )}
+        {hasNext && (
+          <div
+            onClick={onNext}
+            style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '35%', zIndex: 2, WebkitTapHighlightColor: 'transparent' }}
+          />
+        )}
+        <img
+          src={photo.src}
+          alt={photo.label}
+          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
+        />
+      </div>
+
+      {/* Caption */}
+      <div style={{
+        padding: '14px 20px',
+        paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+        flexShrink: 0,
+      }}>
+        <p style={{
+          fontSize: '0.9rem',
+          color: 'rgba(255,255,255,0.7)',
+          lineHeight: 1.55,
+          margin: 0,
+          fontStyle: 'italic',
+          textAlign: 'center',
+        }}>
+          {photo.description}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function PhotoViewer({ photo, index, total, hasPrev, hasNext, onPrev, onNext, onClose }) {
   useEffect(() => {
     const onKey = (e) => {
@@ -355,6 +456,7 @@ function PhotoViewer({ photo, index, total, hasPrev, hasNext, onPrev, onNext, on
 
 export function SideQuests() {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
   const [selectedIdx, setSelectedIdx] = useState(null)
 
   const handleClose = useCallback(() => setSelectedIdx(null), [])
@@ -365,6 +467,7 @@ export function SideQuests() {
   )
 
   useEffect(() => {
+    if (isMobile) return
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     gsap.fromTo(
       '.cin-page-card',
@@ -384,7 +487,72 @@ export function SideQuests() {
         delay: 0.2,
       }
     )
-  }, [])
+  }, [isMobile])
+
+  // ── iOS layout ─────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <>
+        <style>{`
+          @keyframes viewerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+          .ios-photo-cell { -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+          .ios-photo-cell:active { opacity: 0.75 !important; }
+        `}</style>
+        <div>
+          {/* Large title */}
+          <div style={{ marginBottom: '20px' }}>
+            <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.purple, letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'monospace', margin: '0 0 8px' }}>
+              Life · Beyond Code
+            </p>
+            <h1 style={{ fontSize: '2rem', fontWeight: 700, color: C.text, margin: '0 0 6px', letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+              Side Quests
+            </h1>
+            <p style={{ fontSize: '0.85rem', color: C.subtle, margin: 0, lineHeight: 1.5 }}>
+              Things I do when the terminal is closed.
+            </p>
+          </div>
+
+          {/* 3-column photo grid (iOS Photos style) */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '2px',
+            borderRadius: '12px',
+            overflow: 'hidden',
+          }}>
+            {photos.map((photo, idx) => (
+              <div
+                key={photo.id}
+                className="ios-photo-cell"
+                onClick={() => setSelectedIdx(idx)}
+                style={{ aspectRatio: '1', overflow: 'hidden', cursor: 'pointer' }}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.label}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {selectedIdx !== null && createPortal(
+          <MobilePhotoViewer
+            photo={photos[selectedIdx]}
+            index={selectedIdx}
+            total={photos.length}
+            hasPrev={selectedIdx > 0}
+            hasNext={selectedIdx < photos.length - 1}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onClose={handleClose}
+          />,
+          document.body
+        )}
+      </>
+    )
+  }
 
   return (
     <>
@@ -584,7 +752,7 @@ export function SideQuests() {
         </div>
       </div>
 
-      {selectedIdx !== null && (
+      {selectedIdx !== null && createPortal(
         <PhotoViewer
           photo={photos[selectedIdx]}
           index={selectedIdx}
@@ -594,7 +762,8 @@ export function SideQuests() {
           onPrev={handlePrev}
           onNext={handleNext}
           onClose={handleClose}
-        />
+        />,
+        document.body
       )}
     </>
   )

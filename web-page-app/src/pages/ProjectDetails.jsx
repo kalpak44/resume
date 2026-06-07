@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Markdown } from '../components/Markdown.jsx'
 import gsap from 'gsap'
 import { projects } from '../data/projects.js'
+import { useIsMobile } from '../hooks/useIsMobile.js'
 
 const C = {
   cyan: '#00d4ff',
@@ -116,6 +117,7 @@ function WindowControls({ onClose }) {
 export function ProjectDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
   const project = projects.find((p) => p.id === id)
 
   useEffect(() => {
@@ -123,6 +125,7 @@ export function ProjectDetails() {
   }, [id])
 
   useEffect(() => {
+    if (isMobile) return
     if (!project) return
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     gsap.fromTo(
@@ -130,7 +133,7 @@ export function ProjectDetails() {
       { opacity: 0, y: 36, scale: 0.98 },
       { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1 }
     )
-  }, [project])
+  }, [project, isMobile])
 
   if (!project) {
     return (
@@ -156,6 +159,123 @@ export function ProjectDetails() {
           Back to resume
         </button>
       </div>
+    )
+  }
+
+  // ── iOS layout ─────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <>
+        <style>{`
+          .ios-action-btn { -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+          .ios-action-btn:active { opacity: 0.65 !important; }
+        `}</style>
+        <div>
+          {/* Back button */}
+          <button
+            onClick={() => navigate('/projects')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              background: 'none',
+              border: 'none',
+              color: C.cyan,
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: 500,
+              padding: '0 0 16px',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6.5 1L1.5 7l5 6" />
+            </svg>
+            Projects
+          </button>
+
+          {/* Title */}
+          <h1 style={{ fontSize: '1.65rem', fontWeight: 700, color: C.text, margin: '0 0 16px', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+            {project.title}
+          </h1>
+
+          {/* Action links */}
+          {(project.github || project.url) && (
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ios-action-btn"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '7px',
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    background: 'rgba(0,212,255,0.1)',
+                    border: '1px solid rgba(0,212,255,0.2)',
+                    color: C.cyan,
+                    fontSize: '0.88rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  <i className="fab fa-github" />
+                  GitHub
+                </a>
+              )}
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ios-action-btn"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '7px',
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    background: 'rgba(139,92,246,0.1)',
+                    border: '1px solid rgba(139,92,246,0.2)',
+                    color: C.purple,
+                    fontSize: '0.88rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  <i className="fa-solid fa-arrow-up-right-from-square" />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '24px' }} />
+
+          {/* Markdown */}
+          <Markdown content={project.details ?? ''} />
+
+          {/* Tech tags */}
+          {project.technologies?.length > 0 && (
+            <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+              <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.cyan, letterSpacing: '0.2em', textTransform: 'uppercase', fontFamily: 'monospace', margin: '0 0 12px' }}>
+                Technologies
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
+                {project.technologies.map((tech, i) => (
+                  <span key={i} style={{ padding: '4px 11px', borderRadius: '8px', background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.16)', color: C.sky, fontSize: '0.78rem', fontWeight: 500 }}>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </>
     )
   }
 

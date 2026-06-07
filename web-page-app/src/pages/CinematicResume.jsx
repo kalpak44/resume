@@ -543,6 +543,7 @@ function AboutSection({ profile }) {
             ))}
 
             <div
+              className="cin-about-btns"
               style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '4px' }}
             >
               {profile.buttons.map((btn, i) => (
@@ -1172,6 +1173,7 @@ function ContactSection({ profile }) {
   const emailMeta = profile.meta.find((m) => m.link?.startsWith('mailto:'))
   const linkedIn = profile.buttons.find((b) => b.text === 'LinkedIn')?.href
   const github = profile.buttons.find((b) => b.text === 'GitHub')?.href
+  const resume = profile.buttons.find((b) => b.text === 'Resume')?.href
   const edu = profile.education[0]
 
   return (
@@ -1313,34 +1315,14 @@ function ContactSection({ profile }) {
                 color={C.purple}
               />
             )}
-            <Link
-              to="/cheat-sheets"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 22px',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.12)',
-                background: 'rgba(255,255,255,0.04)',
-                color: C.text,
-                fontWeight: 500,
-                fontSize: '0.88rem',
-                textDecoration: 'none',
-                transition: 'transform 0.2s, border-color 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
-              }}
-            >
-              <i className="fa-solid fa-book" />
-              Cheat Sheets
-            </Link>
+            {resume && (
+              <SocialBtn
+                href={resume}
+                icon="fa-solid fa-download"
+                label="Resume"
+                color={C.cyan}
+              />
+            )}
           </div>
 
           {/* Education */}
@@ -1471,188 +1453,6 @@ function LoadingScreen() {
   )
 }
 
-// ── Mobile menu (full-screen overlay, hidden on hero) ──────
-
-const MENU_SECTIONS = [
-  { id: 'about', label: 'About', num: '01', color: C.cyan },
-  { id: 'experience', label: 'Experience', num: '02', color: C.purple },
-  { id: 'skills', label: 'Skills', num: '03', color: '#10b981' },
-  { id: 'contact', label: 'Contact', num: '04', color: C.pink },
-]
-
-function MobileMenu({ visible }) {
-  const [open, setOpen] = useState(false)
-  const isOpen = open && visible
-
-  const close = () => setOpen(false)
-
-  const scrollTo = (id) => {
-    const container = document.querySelector('.cin-root')
-    const el = document.getElementById(id)
-    if (!el || !container) return
-    const elRect = el.getBoundingClientRect()
-    const containerRect = container.getBoundingClientRect()
-    container.scrollBy({ top: elRect.top - containerRect.top, behavior: 'smooth' })
-    close()
-  }
-
-  if (!visible) return null
-
-  return (
-    <>
-      {/* Full-screen overlay */}
-      <div
-        className="cin-mobile-overlay"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 440,
-          background: 'rgba(0,4,14,0.88)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '0 40px 60px',
-          opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? 'auto' : 'none',
-          transition: 'opacity 0.3s ease',
-        }}
-      >
-        {/* Section links */}
-        <nav style={{ marginBottom: '48px' }}>
-          {MENU_SECTIONS.map(({ id, label, num, color }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '14px',
-                width: '100%',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '14px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                textAlign: 'left',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: '0.68rem',
-                  fontFamily: 'monospace',
-                  color: color,
-                  letterSpacing: '0.15em',
-                  fontWeight: 700,
-                  flexShrink: 0,
-                }}
-              >
-                {num}
-              </span>
-              <span
-                style={{
-                  fontSize: 'clamp(1.6rem, 9vw, 2.2rem)',
-                  fontWeight: 800,
-                  color: C.text,
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1,
-                }}
-              >
-                {label}
-              </span>
-            </button>
-          ))}
-        </nav>
-
-        {/* Page links */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <MenuLink
-            to="/projects"
-            icon="fa-solid fa-folder"
-            label="Projects"
-            color={C.cyan}
-            onClick={close}
-          />
-          <MenuLink
-            to="/cheat-sheets"
-            icon="fa-solid fa-book"
-            label="Cheat Sheets"
-            color={C.purple}
-            onClick={close}
-          />
-        </div>
-      </div>
-
-      {/* Toggle button - always on top */}
-      <button
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        onClick={() => setOpen((o) => !o)}
-        style={{
-          position: 'fixed',
-          top: '14px',
-          right: '14px',
-          zIndex: 450,
-          width: '40px',
-          height: '40px',
-          borderRadius: '12px',
-          background: isOpen ? 'rgba(0,212,255,0.12)' : 'rgba(0,6,18,0.82)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: `1px solid ${isOpen ? 'rgba(0,212,255,0.4)' : 'rgba(0,212,255,0.18)'}`,
-          color: C.cyan,
-          fontSize: isOpen ? '1rem' : '1.15rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
-          transition: 'border-color 0.2s, background 0.2s, font-size 0.15s',
-        }}
-      >
-        {isOpen ? '✕' : '☰'}
-      </button>
-    </>
-  )
-}
-
-function MenuLink({ to, icon, label, color, onClick }) {
-  return (
-    <Link
-      to={to}
-      onClick={onClick}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '12px 16px',
-        borderRadius: '12px',
-        background: color + '0d',
-        border: `1px solid ${color}22`,
-        color: C.text,
-        textDecoration: 'none',
-        fontSize: '0.95rem',
-        fontWeight: 600,
-        transition: 'background 0.18s, border-color 0.18s',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = color + '22'
-        e.currentTarget.style.borderColor = color + '55'
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = color + '0d'
-        e.currentTarget.style.borderColor = color + '22'
-      }}
-    >
-      <i
-        className={icon}
-        style={{ color, fontSize: '0.82rem', width: '16px', textAlign: 'center' }}
-      />
-      {label}
-    </Link>
-  )
-}
-
 // ── Main export ────────────────────────────────────────────
 
 const SNAP_SECTIONS = ['hero', 'about', 'experience', 'skills', 'contact']
@@ -1662,7 +1462,6 @@ export function CinematicResume() {
   const currentIdxRef = useRef(0)
   const isScrollingRef = useRef(false)
   const expGoToRef = useRef(null) // set by ExperienceSection via onRegisterNav
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -1729,18 +1528,6 @@ export function CinematicResume() {
         delay: 2.2,
       })
     }, mainRef)
-
-    // ── Mobile menu visibility (hide on hero) ──────────────
-
-    const heroEl = document.getElementById('hero')
-    let heroObserver = null
-    if (heroEl) {
-      heroObserver = new IntersectionObserver(
-        ([entry]) => setShowMobileMenu(!entry.isIntersecting),
-        { root: mainRef.current, threshold: 0.3 }
-      )
-      heroObserver.observe(heroEl)
-    }
 
     // ── Per-section snap reveals (IntersectionObserver) ────
 
@@ -1937,7 +1724,6 @@ export function CinematicResume() {
     container.addEventListener('touchend', onTouchEnd, { passive: true })
 
     return () => {
-      heroObserver?.disconnect()
       observers.forEach((o) => o.disconnect())
       ctx.revert()
       container.removeEventListener('wheel', onWheel)
@@ -1978,6 +1764,7 @@ export function CinematicResume() {
 
         /* Sections that can overflow on mobile: allow internal scroll */
         @media (max-width: 639px) {
+          .cin-about-btns { display: none !important; }
           #about,
           #skills {
             overflow-y: auto !important;
@@ -2001,9 +1788,6 @@ export function CinematicResume() {
         .cin-section-heading { opacity: 0; }
         .cin-skill-cat { opacity: 0; }
 
-        /* Mobile menu only visible on small screens */
-        .cin-mobile-menu { display: block; }
-        @media (min-width: 640px) { .cin-mobile-menu { display: none !important; } }
 
         @media (prefers-reduced-motion: reduce) {
           .cin-char,
@@ -2021,10 +1805,6 @@ export function CinematicResume() {
           }
         }
       `}</style>
-
-      <div className="cin-mobile-menu">
-        <MobileMenu visible={showMobileMenu} />
-      </div>
 
       <div
         ref={mainRef}

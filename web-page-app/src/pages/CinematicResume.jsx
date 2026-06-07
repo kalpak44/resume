@@ -681,7 +681,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
 
       resetCardContent(nextCard)
       if (isMobile) {
-        // Vertical slide on mobile — feels like section navigation
+        // Vertical slide on mobile - feels like section navigation
         const outY = dir > 0 ? '-105%' : '105%'
         const inFromY = dir > 0 ? '105%' : '-105%'
         gsap.set(nextCard, { y: inFromY, x: '0%' })
@@ -1584,7 +1584,7 @@ function MobileMenu({ visible }) {
         </div>
       </div>
 
-      {/* Toggle button — always on top */}
+      {/* Toggle button - always on top */}
       <button
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         onClick={() => setOpen((o) => !o)}

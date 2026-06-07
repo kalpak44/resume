@@ -1,4 +1,4 @@
-A production-grade homelab where everything — from bare-metal VM provisioning to app deployment — is fully automated
+A production-grade homelab where everything - from bare-metal VM provisioning to app deployment - is fully automated
 through code.
 
 **Proxmox VE** is the hypervisor layer.
@@ -11,7 +11,7 @@ reconciled by **FluxCD** GitOps.
 
 Traffic flows through **Cloudflare → HAProxy → Traefik**. Secrets live in **HashiCorp Vault** and sync into Kubernetes
 via **External Secrets Operator**. A **self-hosted GitHub Actions runner** on the LAN drives all `deploy` and `destroy`
-pipelines with direct Proxmox API access — no ports exposed to the internet.
+pipelines with direct Proxmox API access - no ports exposed to the internet.
 
 ![Homelab Architecture](/assets/overview_dark.png)
 
@@ -23,7 +23,7 @@ pipelines with direct Proxmox API access — no ports exposed to the internet.
 - **Config Management**: **Ansible** automates OS setup, package installs, and service configuration across all nodes
 - **Kubernetes**: Multi-node **k3s** cluster running on Proxmox VMs
 - **GitOps**: **FluxCD** continuously reconciles cluster state from GitHub
-- **Autoscaling**: **Sablier** scales idle workloads to zero and wakes them on the first incoming request — keeping
+- **Autoscaling**: **Sablier** scales idle workloads to zero and wakes them on the first incoming request - keeping
   resource usage low for infrequently accessed services without any manual intervention
 - **CI/CD**: Self-hosted **GitHub Actions runner** on the LAN - runs Terraform + Ansible pipelines with direct Proxmox
   API access

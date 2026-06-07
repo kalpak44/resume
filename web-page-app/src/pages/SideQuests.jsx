@@ -16,49 +16,56 @@ const photos = [
     id: 'look-for-interesting-natural-places',
     src: '/assets/photos/look-for-interesting-natural-places.webp',
     label: 'look-for-interesting-natural-places',
-    description: 'If there\'s a rock worth climbing, I\'m already at the top. Technically trespassing, spiritually thriving.',
+    description:
+      "If there's a rock worth climbing, I'm already at the top. Technically trespassing, spiritually thriving.",
   },
   {
     id: 'sometimes-cooking',
     src: '/assets/photos/sometimes-cooking.webp',
     label: 'sometimes-cooking',
-    description: 'I cook deliciously — or at least I won\'t die of hunger. Southeast Asia certified, zero Michelin stars.',
+    description:
+      "I cook deliciously — or at least I won't die of hunger. Southeast Asia certified, zero Michelin stars.",
   },
   {
     id: 'animal-friendly',
     src: '/assets/photos/animal-friendly.webp',
     label: 'animal-friendly',
-    description: 'Made a new friend. She weighs 3 tons, has better manners than most, and didn\'t even ask for my LinkedIn.',
+    description:
+      "Made a new friend. She weighs 3 tons, has better manners than most, and didn't even ask for my LinkedIn.",
   },
   {
     id: 'walk-a-lot',
     src: '/assets/photos/walk-a-lot.webp',
     label: 'walk-a-lot',
-    description: 'The map said easy trail. The sand dune filed a complaint. I filed one back with my legs the next morning.',
+    description:
+      'The map said easy trail. The sand dune filed a complaint. I filed one back with my legs the next morning.',
   },
   {
     id: 'somewhere-above-the-clouds',
     src: '/assets/photos/somewhere-above-the-clouds.webp',
     label: 'somewhere-above-the-clouds',
-    description: 'Climbed until the clouds became someone else\'s problem. Spoiler: the Wi-Fi doesn\'t reach up here, and that\'s the point.',
+    description:
+      "Climbed until the clouds became someone else's problem. Spoiler: the Wi-Fi doesn't reach up here, and that's the point.",
   },
   {
     id: 'apologies-to-vegans',
     src: '/assets/photos/apologies-to-vegans.webp',
     label: 'apologies-to-vegans',
-    description: 'Sincere apologies to vegans — and to the neighbors who had to smell this from three gardens away. Worth it.',
+    description:
+      'Sincere apologies to vegans — and to the neighbors who had to smell this from three gardens away. Worth it.',
   },
   {
     id: 'who-needs-dessert',
     src: "/assets/photos/who-needs-dessert-when-there's-fruit.webp",
     label: "who-needs-dessert-when-there's-fruit",
-    description: "Found the source. Skipped the supermarket. Peaked as a human being.",
+    description: 'Found the source. Skipped the supermarket. Peaked as a human being.',
   },
   {
     id: 'my-cat-in-space-REALLY',
     src: '/assets/photos/my-cat-in-space-REALLY.webp',
     label: 'my-cat-in-space-REALLY',
-    description: 'My cat. In space. REALLY. Orbit achieved, zero interest shown. Some personalities transcend gravity.',
+    description:
+      'My cat. In space. REALLY. Orbit achieved, zero interest shown. Some personalities transcend gravity.',
   },
 ]
 
@@ -75,7 +82,14 @@ function WindowControls({ onClose }) {
           color: '#ff5f57',
           glowColor: 'rgba(255,95,87,0.6)',
           icon: (
-            <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d0e0a" strokeWidth="1.8">
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#8d0e0a"
+              strokeWidth="1.8"
+            >
               <path d="M2 2l8 8M10 2l-8 8" strokeLinecap="round" />
             </svg>
           ),
@@ -85,7 +99,14 @@ function WindowControls({ onClose }) {
           color: '#febc2e',
           glowColor: null,
           icon: (
-            <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#8d6302" strokeWidth="1.8">
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#8d6302"
+              strokeWidth="1.8"
+            >
               <path d="M2 6h8" strokeLinecap="round" />
             </svg>
           ),
@@ -94,7 +115,14 @@ function WindowControls({ onClose }) {
           color: '#28c840',
           glowColor: null,
           icon: (
-            <svg width="6" height="6" viewBox="0 0 12 12" fill="none" stroke="#0d5215" strokeWidth="1.8">
+            <svg
+              width="6"
+              height="6"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="#0d5215"
+              strokeWidth="1.8"
+            >
               <path d="M2 6h8M6 2v8" strokeLinecap="round" />
             </svg>
           ),
@@ -142,9 +170,10 @@ function NavArrow({ direction, onClick, disabled }) {
         borderColor: disabled
           ? 'rgba(255,255,255,0.06)'
           : hovered
-          ? 'rgba(139,92,246,0.5)'
-          : 'rgba(255,255,255,0.12)',
-        background: hovered && !disabled ? 'rgba(139,92,246,0.15)' : 'rgba(255,255,255,0.04)',
+            ? 'rgba(139,92,246,0.5)'
+            : 'rgba(255,255,255,0.12)',
+        background:
+          hovered && !disabled ? 'rgba(139,92,246,0.15)' : 'rgba(255,255,255,0.04)',
         cursor: disabled ? 'default' : 'pointer',
         display: 'flex',
         alignItems: 'center',
@@ -159,14 +188,22 @@ function NavArrow({ direction, onClick, disabled }) {
         height="9"
         viewBox="0 0 10 10"
         fill="none"
-        stroke={disabled ? 'rgba(255,255,255,0.18)' : hovered ? '#c4b5fd' : 'rgba(255,255,255,0.5)'}
+        stroke={
+          disabled
+            ? 'rgba(255,255,255,0.18)'
+            : hovered
+              ? '#c4b5fd'
+              : 'rgba(255,255,255,0.5)'
+        }
         strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {direction === 'prev'
-          ? <path d="M6.5 1.5L3 5l3.5 3.5" />
-          : <path d="M3.5 1.5L7 5l-3.5 3.5" />}
+        {direction === 'prev' ? (
+          <path d="M6.5 1.5L3 5l3.5 3.5" />
+        ) : (
+          <path d="M3.5 1.5L7 5l-3.5 3.5" />
+        )}
       </svg>
     </button>
   )
@@ -209,7 +246,8 @@ function PhotoViewer({ photo, index, total, hasPrev, hasNext, onPrev, onNext, on
           borderRadius: '16px',
           background: 'rgba(8, 12, 28, 0.92)',
           border: '1px solid rgba(139,92,246,0.2)',
-          boxShadow: '0 32px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03) inset',
+          boxShadow:
+            '0 32px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03) inset',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -231,7 +269,14 @@ function PhotoViewer({ photo, index, total, hasPrev, hasNext, onPrev, onNext, on
           {/* Left: traffic lights + nav arrows */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 1 }}>
             <WindowControls onClose={onClose} />
-            <div style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.08)', margin: '0 2px' }} />
+            <div
+              style={{
+                width: '1px',
+                height: '12px',
+                background: 'rgba(255,255,255,0.08)',
+                margin: '0 2px',
+              }}
+            />
             <NavArrow direction="prev" onClick={onPrev} disabled={!hasPrev} />
             <NavArrow direction="next" onClick={onNext} disabled={!hasNext} />
           </div>

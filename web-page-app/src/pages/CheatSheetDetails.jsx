@@ -135,19 +135,43 @@ export function CheatSheetDetails() {
             WebkitTapHighlightColor: 'transparent',
           }}
         >
-          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="8"
+            height="14"
+            viewBox="0 0 8 14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M6.5 1L1.5 7l5 6" />
           </svg>
           Cheat Sheets
         </button>
 
         {/* Title */}
-        <h1 style={{ fontSize: '1.65rem', fontWeight: 700, color: C.text, margin: '0 0 12px', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
+        <h1
+          style={{
+            fontSize: '1.65rem',
+            fontWeight: 700,
+            color: C.text,
+            margin: '0 0 12px',
+            letterSpacing: '-0.025em',
+            lineHeight: 1.2,
+          }}
+        >
           {cheatsheet.title}
         </h1>
 
         {/* Divider */}
-        <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '24px' }} />
+        <div
+          style={{
+            height: '1px',
+            background: 'rgba(255,255,255,0.08)',
+            marginBottom: '24px',
+          }}
+        />
 
         {/* Markdown */}
         <Markdown content={cheatsheet.details ?? ''} />

@@ -649,12 +649,13 @@ function resetCardContent(card) {
 
 const EXP_COLORS = [C.cyan, C.purple, '#10b981', C.pink]
 
-function ExperienceSection({ experience, onRegisterNav }) {
+function ExperienceSection({ experience, onRegisterNav, onRegisterIsAtBoundary }) {
   const activeIdxRef = useRef(0)
   const [activeIdx, setActiveIdx] = useState(0)
   const isTransitioningRef = useRef(false)
   const cardRefs = useRef([])
   const onRegisterNavRef = useRef(onRegisterNav)
+  const onRegisterIsAtBoundaryRef = useRef(onRegisterIsAtBoundary)
 
   const parseJob = (meta) => {
     const company = meta.split(',')[0].trim()
@@ -737,9 +738,27 @@ function ExperienceSection({ experience, onRegisterNav }) {
     // Register goTo with parent so wheel/touch can drive card changes
     if (onRegisterNavRef.current) {
       onRegisterNavRef.current((dir) => {
-        // While a transition is running, consume the event but don't act
         if (isTransitioningRef.current) return true
+        // On mobile, don't navigate until the active card is scrolled to its boundary
+        if (window.innerWidth < 640) {
+          const card = cardRefs.current[activeIdxRef.current]
+          if (card && card.scrollHeight > card.clientHeight + 5) {
+            const atBottom = card.scrollTop + card.clientHeight >= card.scrollHeight - 5
+            const atTop = card.scrollTop <= 5
+            if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return true
+          }
+        }
         return animateTo(activeIdxRef.current + dir, dir)
+      })
+    }
+
+    // Register boundary checker so parent can decide whether to allow native card scroll
+    if (onRegisterIsAtBoundaryRef.current) {
+      onRegisterIsAtBoundaryRef.current((dir) => {
+        const card = cardRefs.current[activeIdxRef.current]
+        if (!card || card.scrollHeight <= card.clientHeight + 5) return true
+        if (dir > 0) return card.scrollTop + card.clientHeight >= card.scrollHeight - 5
+        return card.scrollTop <= 5
       })
     }
 
@@ -870,6 +889,7 @@ function ExperienceSection({ experience, onRegisterNav }) {
                 position: 'absolute',
                 inset: 0,
                 overflowY: 'auto',
+                overscrollBehavior: 'contain',
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(0,212,255,0.15) transparent',
                 boxSizing: 'border-box',
@@ -1461,7 +1481,8 @@ export function CinematicResume() {
   const mainRef = useRef(null)
   const currentIdxRef = useRef(0)
   const isScrollingRef = useRef(false)
-  const expGoToRef = useRef(null) // set by ExperienceSection via onRegisterNav
+  const expGoToRef = useRef(null)
+  const expIsAtBoundaryRef = useRef(null)
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -1672,10 +1693,18 @@ export function CinematicResume() {
         touchDir = dx > dy ? 'h' : 'v'
       }
       // Prevent native container scroll on every touchmove event, not just the first,
-      // otherwise the browser scrolls the snap container past the experience section
+      // otherwise the browser scrolls the snap container past the experience section.
+      // On mobile, skip preventDefault when the card still has content to scroll so
+      // the user can read it naturally; overscroll-behavior:contain on the card stops
+      // the scroll from chaining to cin-root when the card hits its boundary.
       const isExperience = SNAP_SECTIONS[currentIdxRef.current] === 'experience'
       const isMobile = window.innerWidth < 640
       if (isExperience && (isMobile ? touchDir === 'v' : touchDir === 'h')) {
+        if (isMobile && expIsAtBoundaryRef.current) {
+          const currentDy = touchStartY - e.touches[0].clientY
+          const dir = currentDy > 0 ? 1 : -1
+          if (!expIsAtBoundaryRef.current(dir)) return
+        }
         e.preventDefault()
       }
     }
@@ -1834,6 +1863,9 @@ export function CinematicResume() {
           experience={profile.experience}
           onRegisterNav={(fn) => {
             expGoToRef.current = fn
+          }}
+          onRegisterIsAtBoundary={(fn) => {
+            expIsAtBoundaryRef.current = fn
           }}
         />
         <SkillsSection />

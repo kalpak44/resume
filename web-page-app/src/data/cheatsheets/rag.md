@@ -105,6 +105,7 @@ A separate service or scheduled job that regularly fetches documents from source
 - Sends cleaned text to the chunking step
 
 **Trigger strategies:**
+
 - GitHub/GitLab: web hook on merge to `main`
 - Confluence: schedule or API polling
 - OpenAPI specs: after repository update or release
@@ -114,6 +115,7 @@ A separate service or scheduled job that regularly fetches documents from source
 Raw copies of source documents are stored separately (S3 / Blob / MinIO), allowing re-indexing when chunking strategy or embedding model changes.
 
 Each stored artifact may include:
+
 - Source document (raw)
 - Cleaned text
 - JSON with metadata
@@ -125,14 +127,14 @@ Each stored artifact may include:
 
 Splits documents into small semantic pieces. For developer documentation, cut by **structure** — not by character count:
 
-| Chunk type | Example |
-|---|---|
-| Service description | Overview section |
-| Endpoint | `POST /orders` |
-| Status table | Order statuses |
-| Error list | API errors |
-| Diagram | Checkout sequence flow |
-| Business rule | Cancellation conditions |
+| Chunk type          | Example                 |
+| ------------------- | ----------------------- |
+| Service description | Overview section        |
+| Endpoint            | `POST /orders`          |
+| Status table        | Order statuses          |
+| Error list          | API errors              |
+| Diagram             | Checkout sequence flow  |
+| Business rule       | Cancellation conditions |
 
 > **Tip:** 1000-character windows lose context. Structure-aware chunking produces far better retrieval.
 
@@ -146,10 +148,10 @@ Example: the query _"How to create an order request?"_ can surface `POST /orders
 
 Stores the hybrid search index. Real-world systems combine two retrieval strategies:
 
-| Strategy | Strength |
-|---|---|
-| Vector search (ANN) | Captures meaning, handles paraphrases |
-| Keyword / BM25 | Captures exact names, IDs, error codes |
+| Strategy            | Strength                               |
+| ------------------- | -------------------------------------- |
+| Vector search (ANN) | Captures meaning, handles paraphrases  |
+| Keyword / BM25      | Captures exact names, IDs, error codes |
 
 Each indexed record holds:
 
@@ -165,6 +167,7 @@ Each indexed record holds:
 ```
 
 **Popular storage options:**
+
 - Elasticsearch / OpenSearch
 - Azure AI Search
 - PostgreSQL + pgvector
@@ -267,19 +270,20 @@ LLMs are never called directly from the frontend. The gateway sits between and h
 
 # Frontend Options
 
-| Interface | Best for |
-|---|---|
-| Chat in corporate portal | General QA, onboarding |
-| Slack / Teams bot | Quick lookups in existing workflow |
-| IDE Plugin | Developers querying specs inline |
-| Confluence Widget | Contextual help next to docs |
-| Standalone internal assistant | Dedicated AI assistant product |
+| Interface                     | Best for                           |
+| ----------------------------- | ---------------------------------- |
+| Chat in corporate portal      | General QA, onboarding             |
+| Slack / Teams bot             | Quick lookups in existing workflow |
+| IDE Plugin                    | Developers querying specs inline   |
+| Confluence Widget             | Contextual help next to docs       |
+| Standalone internal assistant | Dedicated AI assistant product     |
 
 # Example: Developer Documentation Assistant
 
 **Goal:** An assistant for developers, analysts, and QA that answers questions about requirements, APIs, ADRs, schemas, and tasks.
 
 **Scenario:** A tester asks:
+
 > _"How to cancel a compensation claim by an employee?"_
 
 RAG must find not just similar words but the specific relevant specification:
@@ -292,16 +296,16 @@ Without RAG, the LLM would either hallucinate an answer or say it doesn't know. 
 
 # Common Pitfalls
 
-| Problem | Consequence |
-|---|---|
-| Bad source documents | Bad answers |
-| Bad parsing | Relevant chunks never found |
-| Bad chunking | Answer torn out of context |
-| Bad retrieval | Answer based on irrelevant data |
-| No reranking | Too much noise in the prompt context |
-| No metadata | System confuses products, versions, and roles |
-| No prompt injection protection | External document controls model behavior |
-| Weak system prompt | Model answers from its head when no data is available |
+| Problem                        | Consequence                                           |
+| ------------------------------ | ----------------------------------------------------- |
+| Bad source documents           | Bad answers                                           |
+| Bad parsing                    | Relevant chunks never found                           |
+| Bad chunking                   | Answer torn out of context                            |
+| Bad retrieval                  | Answer based on irrelevant data                       |
+| No reranking                   | Too much noise in the prompt context                  |
+| No metadata                    | System confuses products, versions, and roles         |
+| No prompt injection protection | External document controls model behavior             |
+| Weak system prompt             | Model answers from its head when no data is available |
 
 # Quick Checklist
 

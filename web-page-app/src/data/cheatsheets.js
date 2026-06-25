@@ -1,3 +1,4 @@
+import ragMd from './cheatsheets/rag.md?raw'
 import cicdMd from './cheatsheets/cicd-deployments.md?raw'
 import microservicesMd from './cheatsheets/microservices.md?raw'
 import s2sMd from './cheatsheets/service-to-service-communication.md?raw'
@@ -13,6 +14,13 @@ import reliabilityMd from './cheatsheets/reliability-sre.md?raw'
 import maintainabilityMd from './cheatsheets/maintainability.md?raw'
 
 export const cheatsheets = [
+  {
+    id: 'rag',
+    title: 'RAG (Retrieval-Augmented Generation)',
+    summary:
+      'How Retrieval-Augmented Generation works: the two-loop architecture (data ingestion + query & answer), full system design from sources and chunking to embeddings, hybrid search, reranking, LLM Gateway, and common pitfalls. Includes architecture diagrams and a developer documentation assistant example.',
+    details: ragMd,
+  },
   {
     id: 'cicd-deployments',
     title: 'CI/CD & Deployment Strategies',

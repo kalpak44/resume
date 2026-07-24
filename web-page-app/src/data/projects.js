@@ -1,4 +1,5 @@
 import bunkerMd from './projects/bunker.md?raw'
+import nocoAiToolsMd from './projects/noco-ai-tools.md?raw'
 import homelabMd from './projects/homelab.md?raw'
 import telegramMd from './projects/telegram-stripe-bot.md?raw'
 import codeViewerMd from './projects/code-viewer-bot.md?raw'
@@ -121,6 +122,26 @@ export const projects = [
     technologies: ['Node.js', 'JavaScript', 'MCP SDK', 'Zod', 'REST API', 'Bearer Auth'],
     github: 'https://github.com/kalpak44/mite-assistant-mcp',
     details: miteAssistantMd,
+  },
+  {
+    id: 'noco-ai-tools',
+    title: 'Noco AI Tools - NocoBase Plugin for Google + AI',
+    summary:
+      'A NocoBase plugin that connects NocoBase AI employees to Gmail and Google Calendar via OAuth. Lets AI agents list, read, and send emails and manage calendar events on behalf of the logged-in user — with automatic token rotation and per-user isolation.',
+    technologies: [
+      'TypeScript',
+      'NocoBase',
+      'Google Gmail API',
+      'Google Calendar API',
+      'OAuth 2.0',
+      'Zod',
+      'Docker',
+      'nginx',
+      'GitHub Actions',
+    ],
+    github: 'https://github.com/kalpak44/plugin-noco-tools',
+    url: 'https://noco-ai-tools.pavel-usanli.online/',
+    details: nocoAiToolsMd,
   },
   {
     id: 'capacity-planner',

@@ -26,7 +26,7 @@ COPY --from=pdf-builder /tmp/resume.pdf ./public/assets/resume.pdf
 
 RUN npx vite build
 
-FROM nginx:1.27-alpine
+FROM nginx:1.31-alpine
 
 WORKDIR /usr/share/nginx/html
 

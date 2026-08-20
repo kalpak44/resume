@@ -1,0 +1,124 @@
+# Managed by homelab-infra — terraform/github/kalpak44/workflows/ai-pr-agent.yml
+# Edits made here in the target repo are overwritten by `just deploy github kalpak44`.
+#
+# Reviews bot-authored pull requests with DeepSeek and, on approval, arms auto-merge.
+# Merging itself is still GitHub's decision: auto-merge waits for the branch rules.
+name: AI PR Agent
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Explicit permissions — a Dependabot-triggered run gets a read-only token without them.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ai-pr-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Bot PRs only. Human PRs get human review.
+    if: >-
+      contains(
+        fromJSON('["dependabot[bot]","renovate[bot]"]'),
+        github.event.pull_request.user.login
+      )
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+
+    steps:
+      - name: Collect the diff
+        run: |
+          gh pr diff "$PR" --repo "$REPO" > pr.diff
+          # DeepSeek's context is finite; a truncated diff still shows what changed.
+          head -c 60000 pr.diff > pr.trunc.diff
+          echo "diff bytes: $(wc -c < pr.diff) (sent: $(wc -c < pr.trunc.diff))"
+
+      - name: Ask DeepSeek for a verdict
+        env:
+          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${DEEPSEEK_APIKEY:-}" ]; then
+            echo "DEEPSEEK_APIKEY is empty — is it set in the Dependabot secret store too?" >&2
+            exit 1
+          fi
+
+          read -r -d '' SYSTEM <<'EOF' || true
+          You review automated dependency-update pull requests. You are the only reviewer;
+          approving means the change merges without a human looking at it.
+
+          Approve only when all of the following hold:
+            - the diff touches nothing but dependency manifests and lockfiles
+            - the version change is a patch or minor bump of an existing dependency
+            - no new dependency is introduced, and no build/CI/script content changes
+
+          Reject anything else, including major bumps, removed pins, changed registries,
+          modified workflows or build scripts, and any diff you cannot fully account for.
+          When in doubt, reject.
+
+          Reply with JSON only: {"verdict":"approve"|"reject","summary":"<=400 chars","risks":["..."]}
+          EOF
+
+          jq -n \
+            --arg model "$DEEPSEEK_MODEL" \
+            --arg system "$SYSTEM" \
+            --arg title "$TITLE" \
+            --rawfile diff pr.trunc.diff \
+            '{
+              model: $model,
+              temperature: 0,
+              response_format: { type: "json_object" },
+              messages: [
+                { role: "system", content: $system },
+                { role: "user", content: ("PR title: " + $title + "\n\nDiff:\n" + $diff) }
+              ]
+            }' > request.json
+
+          curl -sS --fail-with-body \
+            https://api.deepseek.com/chat/completions \
+            -H "Authorization: Bearer $DEEPSEEK_APIKEY" \
+            -H "Content-Type: application/json" \
+            -d @request.json > response.json
+
+          jq -r '.choices[0].message.content' response.json > verdict.json
+          echo "--- verdict ---"
+          cat verdict.json
+
+      - name: Post the review
+        run: |
+          set -euo pipefail
+          VERDICT=$(jq -r '.verdict // "reject"' verdict.json)
+          SUMMARY=$(jq -r '.summary // "no summary returned"' verdict.json)
+          RISKS=$(jq -r '(.risks // []) | map("- " + .) | join("\n")' verdict.json)
+
+          {
+            echo "### AI PR Agent — \`$VERDICT\`"
+            echo
+            echo "$SUMMARY"
+            if [ -n "$RISKS" ]; then
+              echo
+              echo "**Risks**"
+              echo "$RISKS"
+            fi
+          } > body.md
+
+          if [ "$VERDICT" = "approve" ]; then
+            gh pr review "$PR" --repo "$REPO" --approve --body-file body.md
+            # --auto merges once the branch rules are satisfied; with no rules
+            # configured GitHub merges immediately.
+            gh pr merge "$PR" --repo "$REPO" --auto --squash
+            echo "approved and armed auto-merge"
+          else
+            gh pr comment "$PR" --repo "$REPO" --body-file body.md
+            echo "not approved — left for a human"
+          fi

@@ -1,146 +1,65 @@
 # Managed by homelab-infra — terraform/github/<repo>/workflows/ai-pr-agent.yml
 # Edits made here in the target repo are overwritten by `just deploy github <repo>`.
 #
-# Reviews pull requests with DeepSeek and merges the ones it approves.
+# One job, once a day (or on demand): Codex CLI driving DeepSeek, with the gh CLI,
+# walks the open bot PRs oldest first and merges the safe ones one at a time.
 #
-# Triggers:
-#   pull_request — automatic, bot-authored PRs only
-#   workflow_dispatch — manual sweep of every open PR, oldest first. Review always
-#                       runs; merging stays limited to bot-authored PRs.
-#
-# Per PR: start its check if it never ran → review with DeepSeek → comment → wait for
-# checks → merge. The merge is blocking and the matrix is max-parallel: 1, so PRs land
-# one at a time and each rebases onto the previous merge instead of conflicting on the
-# same lockfile.
+# The policy lives in the prompt below, not in bash. There is no matrix, no auto-merge
+# and no branch ruleset — the agent checks that CI is green and is itself the gate.
 name: AI PR Agent
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: "0 6 * * *" # 06:00 UTC daily
   workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
-  actions: write # to dispatch the PR check workflow
+  actions: write # to start a PR check that never ran
+
+# Never let two sweeps merge into the same branch at once.
+concurrency:
+  group: ai-pr-agent
+  cancel-in-progress: false
 
 jobs:
-  # Produces the list of PR numbers to review, so both triggers share one code path.
-  discover:
+  agent:
     runs-on: ubuntu-latest
-    outputs:
-      prs: ${{ steps.list.outputs.prs }}
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      REPO: ${{ github.repository }}
+    timeout-minutes: 45
     steps:
-      - id: list
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Codex CLI
+        run: npm install -g @openai/codex
+
+      - name: Point Codex at DeepSeek
         run: |
-          set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # Automatic run: this PR only, and only if a bot opened it.
-            case "${{ github.event.pull_request.user.login }}" in
-              'dependabot[bot]'|'renovate[bot]')
-                PRS='[${{ github.event.pull_request.number }}]' ;;
-              *)
-                PRS='[]' ;;
-            esac
-          else
-            # Manual sweep: every open PR, oldest first. Capped at 100 — see the
-            # count echoed below if you ever have more than that open at once.
-            PRS=$(gh api \
-              "repos/$REPO/pulls?state=open&sort=created&direction=asc&per_page=100" \
-              --jq '[.[].number]')
-          fi
-          echo "prs=$PRS" >> "$GITHUB_OUTPUT"
-          echo "reviewing $(echo "$PRS" | jq 'length') PR(s): $PRS"
+          mkdir -p ~/.codex
+          cat > ~/.codex/config.toml <<EOF
+          model = "${DEEPSEEK_MODEL}"
+          model_provider = "deepseek"
 
-  review:
-    needs: discover
-    if: needs.discover.outputs.prs != '[]'
-    runs-on: ubuntu-latest
-    strategy:
-      # Sequential, in creation order, and one bad PR must not abort the rest.
-      max-parallel: 1
-      fail-fast: false
-      matrix:
-        pr: ${{ fromJSON(needs.discover.outputs.prs) }}
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PR: ${{ matrix.pr }}
-      REPO: ${{ github.repository }}
-
-    steps:
-      - name: Collect PR metadata and diff
-        run: |
-          set -euo pipefail
-          # Read the PR over the API rather than the event payload, so a manual
-          # dispatch (which has no pull_request context) takes the same path.
-          gh api "repos/$REPO/pulls/$PR" > pr.json
-
-          STATE=$(jq -r '.state' pr.json)
-          DRAFT=$(jq -r '.draft' pr.json)
-          if [ "$STATE" != "open" ] || [ "$DRAFT" = "true" ]; then
-            echo "PR #$PR is state=$STATE draft=$DRAFT — skipping."
-            echo "SKIP=true" >> "$GITHUB_ENV"
-            exit 0
-          fi
-
-          {
-            echo "PR_TITLE=$(jq -r '.title' pr.json)"
-            echo "PR_AUTHOR=$(jq -r '.user.login' pr.json)"
-          } >> "$GITHUB_ENV"
-
-          gh pr diff "$PR" --repo "$REPO" > pr.diff
-          # DeepSeek's context is finite; a truncated diff still shows what changed.
-          head -c 60000 pr.diff > pr.trunc.diff
-          echo "PR #$PR — diff bytes: $(wc -c < pr.diff) (sent: $(wc -c < pr.trunc.diff))"
-
-      - name: Start the PR check if it never ran
-        # A PR opened before its check workflow existed has no check runs at all, so a
-        # ruleset requiring one would block it forever. Dispatching fixes that: it is
-        # one of only two events GITHUB_TOKEN is allowed to trigger, so no PAT needed.
-        # Runs before the review so the build proceeds while DeepSeek is thinking.
-        if: env.SKIP != 'true' && vars.PR_CHECK_WORKFLOW != ''
-        # Best effort: a dispatch problem must not cost us the review itself.
-        continue-on-error: true
+          [model_providers.deepseek]
+          name = "DeepSeek"
+          base_url = "https://api.deepseek.com/v1"
+          env_key = "DEEPSEEK_APIKEY"
+          # DeepSeek speaks chat completions, not the OpenAI responses API.
+          wire_api = "chat"
+          EOF
         env:
-          PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
-        run: |
-          set -euo pipefail
-          HEAD_SHA=$(jq -r '.head.sha' pr.json)
-          HEAD_REF=$(jq -r '.head.ref' pr.json)
-
-          COUNT=$(gh api "repos/$REPO/commits/$HEAD_SHA/check-runs" --jq '.check_runs | length')
-          if [ "$COUNT" -gt 0 ]; then
-            echo "PR #$PR: $COUNT check(s) already on $HEAD_SHA — nothing to start."
-            exit 0
-          fi
-
-          # A dispatch is resolved against the target ref, so the workflow file has to
-          # exist *on the PR branch*. A branch older than the check workflow doesn't
-          # have it. Merging main in fixes that, and clears "behind" at the same time.
-          echo "PR #$PR: no checks on $HEAD_SHA — updating branch from main first."
-          gh api -X PUT "repos/$REPO/pulls/$PR/update-branch" --silent \
-            || echo "branch already up to date (or nothing to merge)"
-
-          # GitHub needs a moment to index the workflow on the updated ref.
-          for attempt in 1 2 3 4; do
-            if gh workflow run "$PR_CHECK_WORKFLOW" --repo "$REPO" --ref "$HEAD_REF"; then
-              echo "PR #$PR: dispatched $PR_CHECK_WORKFLOW on $HEAD_REF"
-              exit 0
-            fi
-            echo "attempt $attempt failed, retrying in 10s..."
-            sleep 10
-          done
-          echo "could not dispatch $PR_CHECK_WORKFLOW on $HEAD_REF" >&2
-          exit 1
-
-      - name: Ask DeepSeek for a verdict
-        if: env.SKIP != 'true'
-        env:
-          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
           DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+
+      - name: Run the agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
+          REPO: ${{ github.repository }}
+          PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
         run: |
           set -euo pipefail
 
@@ -149,118 +68,61 @@ jobs:
             exit 1
           fi
 
-          read -r -d '' SYSTEM <<'EOF' || true
-          You review automated dependency-update pull requests. You are the only reviewer;
-          approving means the change merges without a human looking at it.
+          cat > prompt.md <<EOF
+          You are the pull-request agent for the GitHub repository ${REPO}.
+          The \`gh\` CLI is installed and already authenticated. Do all your work through it.
 
-          Approve only when all of the following hold:
-            - the diff touches nothing but dependency manifests and lockfiles
-            - the version change is a patch or minor bump of an existing dependency
-            - no new dependency is introduced, and no build/CI/script content changes
+          Your goal: merge the dependency-update pull requests that are clearly safe, one at
+          a time, and leave everything else alone.
 
-          Reject anything else, including major bumps, removed pins, changed registries,
-          modified workflows or build scripts, and any diff you cannot fully account for.
-          When in doubt, reject.
+          Procedure:
+          1. List the open PRs, oldest first:
+             gh pr list --repo ${REPO} --state open --json number,title,author,createdAt
+          2. Drop every PR whose author is not dependabot[bot] or renovate[bot].
+          3. Handle the remaining PRs one at a time, oldest first. Finish one completely
+             before you touch the next — they usually edit the same lockfile, so merging
+             them in parallel causes conflicts.
 
-          Reply with JSON only: {"verdict":"approve"|"reject","summary":"<=400 chars","risks":["..."]}
+             For each PR <n>:
+             a. Read the change:  gh pr diff <n> --repo ${REPO}
+             b. Decide. Merge only if ALL of these hold:
+                  - nothing but dependency manifests and lockfiles changed
+                  - the bump is a patch or minor version of a dependency that already existed
+                  - no new dependency is introduced
+                  - no workflow, build script or CI configuration is touched
+                Otherwise leave it open and comment briefly saying why.
+             c. If the PR is behind its base branch, update it:
+                  gh api -X PUT repos/${REPO}/pulls/<n>/update-branch
+             d. Check whether the head commit has any check runs. If it has none and
+                PR_CHECK_WORKFLOW is set (it is "${PR_CHECK_WORKFLOW}"), start it:
+                  gh workflow run "${PR_CHECK_WORKFLOW}" --repo ${REPO} --ref <head branch>
+                Give it a few seconds to register before looking again.
+             e. Wait until every check on the head commit has concluded. Poll patiently;
+                a build can take several minutes.
+             f. Merge only if every check succeeded:
+                  gh pr merge <n> --repo ${REPO} --squash
+             g. Confirm the PR really is merged before moving to the next one.
+             h. Leave one short comment on the PR saying what you did and why.
+
+          Hard rules — do not break these:
+            - Never merge a PR authored by a human.
+            - Never merge when a check is failing, pending, or absent.
+            - Never force-push, never close a PR, never commit to the default branch.
+            - If anything is unclear, leave the PR open and explain in a comment.
+            - Handle at most 10 PRs in one run.
+
+          Finish with a one-line summary per PR: number, decision, and outcome.
           EOF
 
-          jq -n \
-            --arg model "$DEEPSEEK_MODEL" \
-            --arg system "$SYSTEM" \
-            --arg title "$PR_TITLE" \
-            --rawfile diff pr.trunc.diff \
-            '{
-              model: $model,
-              temperature: 0,
-              response_format: { type: "json_object" },
-              messages: [
-                { role: "system", content: $system },
-                { role: "user", content: ("PR title: " + $title + "\n\nDiff:\n" + $diff) }
-              ]
-            }' > request.json
+          codex exec \
+            --skip-git-repo-check \
+            --sandbox danger-full-access \
+            --output-last-message summary.md \
+            "$(cat prompt.md)"
 
-          curl -sS --fail-with-body \
-            https://api.deepseek.com/chat/completions \
-            -H "Authorization: Bearer $DEEPSEEK_APIKEY" \
-            -H "Content-Type: application/json" \
-            -d @request.json > response.json
-
-          jq -r '.choices[0].message.content' response.json > verdict.json
-          echo "--- verdict for PR #$PR ---"
-          cat verdict.json
-
-      - name: Post the review
-        if: env.SKIP != 'true'
+      - name: Summary
+        if: always()
         run: |
-          set -euo pipefail
-          VERDICT=$(jq -r '.verdict // "reject"' verdict.json)
-          SUMMARY=$(jq -r '.summary // "no summary returned"' verdict.json)
-          RISKS=$(jq -r '(.risks // []) | map("- " + .) | join("\n")' verdict.json)
-
-          # Auto-merge stays bot-only regardless of trigger, so a manual sweep can
-          # review human PRs without ever merging one.
-          case "$PR_AUTHOR" in
-            'dependabot[bot]'|'renovate[bot]') MERGEABLE=yes ;;
-            *)                                 MERGEABLE=no  ;;
-          esac
-
-          {
-            echo "### AI PR Agent — \`$VERDICT\`"
-            echo
-            echo "$SUMMARY"
-            if [ -n "$RISKS" ]; then
-              echo
-              echo "**Risks**"
-              echo "$RISKS"
-            fi
-            if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "no" ]; then
-              echo
-              echo "_Author \`$PR_AUTHOR\` is not a bot — reviewed only, auto-merge not armed._"
-            fi
-          } > body.md
-
-          # The verdict always goes on the PR as a comment. We deliberately do NOT call
-          # `gh pr review --approve`: GITHUB_TOKEN is barred from approving PRs
-          # ("GitHub Actions is not permitted to approve pull requests"), and even where
-          # that setting is lifted, a GITHUB_TOKEN approval doesn't satisfy a required-
-          # review rule. Auto-merge doesn't need an approval, so we skip it.
-          gh pr comment "$PR" --repo "$REPO" --body-file body.md
-
-          if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "yes" ]; then
-            echo "MERGE=yes" >> "$GITHUB_ENV"
-            echo "PR #$PR: commented, will wait for checks and merge"
-          else
-            echo "PR #$PR: commented only (verdict=$VERDICT, bot-authored=$MERGEABLE)"
+          if [ -f summary.md ]; then
+            { echo "## AI PR Agent"; echo; cat summary.md; } >> "$GITHUB_STEP_SUMMARY"
           fi
-
-      - name: Wait for checks, then merge
-        if: env.SKIP != 'true' && env.MERGE == 'yes'
-        # Deliberately a blocking merge rather than `gh pr merge --auto`. Auto-merge is
-        # asynchronous: arming several dependency PRs at once makes them all fire when
-        # their checks go green, and they then collide on the same lockfile. Merging
-        # here, in the job, keeps the matrix (max-parallel: 1) genuinely sequential —
-        # the next PR is not touched until this one is in main, so it sees the merged
-        # lockfile and rebases onto it cleanly.
-        timeout-minutes: 30
-        run: |
-          set -euo pipefail
-
-          echo "PR #$PR: waiting for checks..."
-          if ! gh pr checks "$PR" --repo "$REPO" --watch --fail-fast --interval 15; then
-            echo "PR #$PR: checks did not pass — leaving it open." >&2
-            exit 1
-          fi
-
-          gh pr merge "$PR" --repo "$REPO" --squash
-
-          # Confirm it really landed before the next PR in the matrix starts.
-          for _ in $(seq 1 20); do
-            if [ "$(gh api "repos/$REPO/pulls/$PR" --jq '.merged')" = "true" ]; then
-              echo "PR #$PR: merged."
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "PR #$PR: merge did not confirm within 100s." >&2
-          exit 1

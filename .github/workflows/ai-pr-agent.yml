@@ -18,6 +18,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write # to dispatch the PR check workflow
 
 jobs:
   # Produces the list of PR numbers to review, so both triggers share one code path.
@@ -90,6 +91,26 @@ jobs:
           # DeepSeek's context is finite; a truncated diff still shows what changed.
           head -c 60000 pr.diff > pr.trunc.diff
           echo "PR #$PR — diff bytes: $(wc -c < pr.diff) (sent: $(wc -c < pr.trunc.diff))"
+
+      - name: Start the PR check if it never ran
+        # A PR opened before its check workflow existed has no check runs at all, so a
+        # ruleset requiring one would block it forever. Dispatching fixes that: it is
+        # one of only two events GITHUB_TOKEN is allowed to trigger, so no PAT needed.
+        # Runs before the review so the build proceeds while DeepSeek is thinking.
+        if: env.SKIP != 'true' && vars.PR_CHECK_WORKFLOW != ''
+        env:
+          PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
+        run: |
+          set -euo pipefail
+          HEAD_SHA=$(jq -r '.head.sha' pr.json)
+          HEAD_REF=$(jq -r '.head.ref' pr.json)
+          COUNT=$(gh api "repos/$REPO/commits/$HEAD_SHA/check-runs" --jq '.check_runs | length')
+          if [ "$COUNT" -gt 0 ]; then
+            echo "PR #$PR: $COUNT check(s) already on $HEAD_SHA — not dispatching."
+          else
+            gh workflow run "$PR_CHECK_WORKFLOW" --repo "$REPO" --ref "$HEAD_REF"
+            echo "PR #$PR: dispatched $PR_CHECK_WORKFLOW on $HEAD_REF"
+          fi
 
       - name: Ask DeepSeek for a verdict
         if: env.SKIP != 'true'

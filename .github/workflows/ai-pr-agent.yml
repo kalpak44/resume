@@ -6,6 +6,9 @@
 #
 # The policy lives in the prompt below, not in bash. There is no matrix, no auto-merge
 # and no branch ruleset — the agent checks that CI is green and is itself the gate.
+#
+# DeepSeek serves the OpenAI Responses API directly, which is the only wire protocol
+# Codex still speaks, so Codex talks to it with no proxy in between.
 name: AI PR Agent
 
 on:
@@ -27,6 +30,14 @@ jobs:
   agent:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      # gh is preinstalled on GitHub-hosted runners; this is what authenticates it.
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
+      DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-v4-flash' }}
+      REPO: ${{ github.repository }}
+      PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -37,92 +48,42 @@ jobs:
       - name: Install Codex CLI
         run: npm install -g @openai/codex
 
-      - name: Start the LiteLLM bridge
-        # Codex only speaks the OpenAI Responses API (`wire_api = "chat"` was removed),
-        # and DeepSeek only offers chat completions. LiteLLM sits between them: it serves
-        # /v1/responses on localhost and forwards to DeepSeek as chat completions.
-        #
-        # Run from the image, not pip: `pip install litellm[proxy]` pulls a FastAPI that
-        # its own proxy code is not compatible with, and the server won't import.
-        env:
-          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
-          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+      - name: Point Codex at DeepSeek
         run: |
           set -euo pipefail
-          cat > litellm.yaml <<EOF
-          model_list:
-            - model_name: ${DEEPSEEK_MODEL}
-              litellm_params:
-                model: deepseek/${DEEPSEEK_MODEL}
-                api_key: os.environ/DEEPSEEK_APIKEY
-          EOF
-
-          # No master_key: the proxy is bound to localhost on a throwaway runner, and
-          # Codex still has to send *some* bearer token, which the proxy ignores.
-          docker run -d --name litellm \
-            -p 4000:4000 \
-            -v "$PWD/litellm.yaml:/app/config.yaml:ro" \
-            -e DEEPSEEK_APIKEY \
-            ghcr.io/berriai/litellm:main-stable \
-            --config /app/config.yaml --port 4000
-
-          for i in $(seq 1 90); do
-            if curl -sf http://127.0.0.1:4000/health/readiness >/dev/null; then
-              echo "LiteLLM ready after ${i}s"; exit 0
-            fi
-            sleep 2
-          done
-          echo "LiteLLM did not come up:" >&2; docker logs litellm >&2; exit 1
-
-      - name: Smoke-test the Responses API through the bridge
-        # The whole design rests on LiteLLM translating /v1/responses into DeepSeek chat
-        # completions. Prove it here so a failure is one line, not a Codex stack trace.
-        env:
-          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
-          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
-        run: |
-          set -euo pipefail
-          CODE=$(curl -sS -o smoke.json -w '%{http_code}' \
-            http://127.0.0.1:4000/v1/responses \
-            -H "Authorization: Bearer $DEEPSEEK_APIKEY" \
-            -H "Content-Type: application/json" \
-            -d "{\"model\":\"${DEEPSEEK_MODEL}\",\"input\":\"reply with the single word: ok\"}")
-          echo "HTTP $CODE"; head -c 800 smoke.json; echo
-          if [ "$CODE" != "200" ]; then
-            echo "the bridge does not serve /v1/responses for this provider" >&2
-            docker logs --tail 50 litellm >&2
-            exit 1
-          fi
-
-      - name: Point Codex at the bridge
-        env:
-          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
-        run: |
-          mkdir -p ~/.codex
-          cat > ~/.codex/config.toml <<EOF
-          model = "${DEEPSEEK_MODEL}"
-          model_provider = "litellm"
-
-          [model_providers.litellm]
-          name = "LiteLLM bridge to DeepSeek"
-          base_url = "http://127.0.0.1:4000/v1"
-          env_key = "DEEPSEEK_APIKEY"
-          wire_api = "responses"
-          EOF
-
-      - name: Run the agent
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
-          REPO: ${{ github.repository }}
-          PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
-        run: |
-          set -euo pipefail
-
           if [ -z "${DEEPSEEK_APIKEY:-}" ]; then
             echo "DEEPSEEK_APIKEY is empty — is it set in the Dependabot secret store too?" >&2
             exit 1
           fi
+
+          mkdir -p ~/.codex
+          cat > ~/.codex/config.toml <<EOF
+          model = "${DEEPSEEK_MODEL}"
+          model_provider = "deepseek"
+
+          [model_providers.deepseek]
+          name = "DeepSeek"
+          base_url = "https://api.deepseek.com/v1"
+          env_key = "DEEPSEEK_APIKEY"
+          wire_api = "responses"
+          EOF
+
+      - name: Smoke-test the model
+        # One cheap call, so a credential or model-name problem is one line here rather
+        # than a stack trace part-way through a sweep.
+        run: |
+          set -euo pipefail
+          CODE=$(curl -sS -o smoke.json -w '%{http_code}' \
+            https://api.deepseek.com/v1/responses \
+            -H "Authorization: Bearer $DEEPSEEK_APIKEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\":\"${DEEPSEEK_MODEL}\",\"input\":\"reply with the single word: ok\"}")
+          echo "HTTP $CODE"
+          if [ "$CODE" != "200" ]; then head -c 500 smoke.json; echo; exit 1; fi
+
+      - name: Run the agent
+        run: |
+          set -euo pipefail
 
           cat > prompt.md <<EOF
           You are the pull-request agent for the GitHub repository ${REPO}.
@@ -134,7 +95,8 @@ jobs:
           Procedure:
           1. List the open PRs, oldest first:
              gh pr list --repo ${REPO} --state open --json number,title,author,createdAt
-          2. Drop every PR whose author is not dependabot[bot] or renovate[bot].
+          2. Drop every PR whose author is not a bot. In this listing Dependabot appears as
+             login "app/dependabot" with is_bot true — match on is_bot, not on the name.
           3. Handle the remaining PRs one at a time, oldest first. Finish one completely
              before you touch the next — they usually edit the same lockfile, so merging
              them in parallel causes conflicts.
@@ -181,7 +143,4 @@ jobs:
         run: |
           if [ -f summary.md ]; then
             { echo "## AI PR Agent"; echo; cat summary.md; } >> "$GITHUB_STEP_SUMMARY"
-          fi
-          if docker ps -a --format '{{.Names}}' | grep -q '^litellm$'; then
-            echo "::group::LiteLLM log"; docker logs --tail 80 litellm 2>&1 || true; echo "::endgroup::"
           fi

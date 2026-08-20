@@ -1,13 +1,17 @@
 # Managed by homelab-infra — terraform/github/<repo>/workflows/ai-pr-agent.yml
 # Edits made here in the target repo are overwritten by `just deploy github <repo>`.
 #
-# Reviews pull requests with DeepSeek and, on approval, arms auto-merge.
-# Merging itself is still GitHub's decision: auto-merge waits for the branch rules.
+# Reviews pull requests with DeepSeek and merges the ones it approves.
 #
 # Triggers:
 #   pull_request — automatic, bot-authored PRs only
 #   workflow_dispatch — manual sweep of every open PR, oldest first. Review always
-#                       runs; auto-merge is still armed for bot-authored PRs only.
+#                       runs; merging stays limited to bot-authored PRs.
+#
+# Per PR: start its check if it never ran → review with DeepSeek → comment → wait for
+# checks → merge. The merge is blocking and the matrix is max-parallel: 1, so PRs land
+# one at a time and each rebases onto the previous merge instead of conflicting on the
+# same lockfile.
 name: AI PR Agent
 
 on:
@@ -98,19 +102,39 @@ jobs:
         # one of only two events GITHUB_TOKEN is allowed to trigger, so no PAT needed.
         # Runs before the review so the build proceeds while DeepSeek is thinking.
         if: env.SKIP != 'true' && vars.PR_CHECK_WORKFLOW != ''
+        # Best effort: a dispatch problem must not cost us the review itself.
+        continue-on-error: true
         env:
           PR_CHECK_WORKFLOW: ${{ vars.PR_CHECK_WORKFLOW }}
         run: |
           set -euo pipefail
           HEAD_SHA=$(jq -r '.head.sha' pr.json)
           HEAD_REF=$(jq -r '.head.ref' pr.json)
+
           COUNT=$(gh api "repos/$REPO/commits/$HEAD_SHA/check-runs" --jq '.check_runs | length')
           if [ "$COUNT" -gt 0 ]; then
-            echo "PR #$PR: $COUNT check(s) already on $HEAD_SHA — not dispatching."
-          else
-            gh workflow run "$PR_CHECK_WORKFLOW" --repo "$REPO" --ref "$HEAD_REF"
-            echo "PR #$PR: dispatched $PR_CHECK_WORKFLOW on $HEAD_REF"
+            echo "PR #$PR: $COUNT check(s) already on $HEAD_SHA — nothing to start."
+            exit 0
           fi
+
+          # A dispatch is resolved against the target ref, so the workflow file has to
+          # exist *on the PR branch*. A branch older than the check workflow doesn't
+          # have it. Merging main in fixes that, and clears "behind" at the same time.
+          echo "PR #$PR: no checks on $HEAD_SHA — updating branch from main first."
+          gh api -X PUT "repos/$REPO/pulls/$PR/update-branch" --silent \
+            || echo "branch already up to date (or nothing to merge)"
+
+          # GitHub needs a moment to index the workflow on the updated ref.
+          for attempt in 1 2 3 4; do
+            if gh workflow run "$PR_CHECK_WORKFLOW" --repo "$REPO" --ref "$HEAD_REF"; then
+              echo "PR #$PR: dispatched $PR_CHECK_WORKFLOW on $HEAD_REF"
+              exit 0
+            fi
+            echo "attempt $attempt failed, retrying in 10s..."
+            sleep 10
+          done
+          echo "could not dispatch $PR_CHECK_WORKFLOW on $HEAD_REF" >&2
+          exit 1
 
       - name: Ask DeepSeek for a verdict
         if: env.SKIP != 'true'
@@ -204,10 +228,39 @@ jobs:
           gh pr comment "$PR" --repo "$REPO" --body-file body.md
 
           if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "yes" ]; then
-            # --auto merges once the branch rules are satisfied; with no rules
-            # configured GitHub merges immediately.
-            gh pr merge "$PR" --repo "$REPO" --auto --squash
-            echo "PR #$PR: commented and armed auto-merge"
+            echo "MERGE=yes" >> "$GITHUB_ENV"
+            echo "PR #$PR: commented, will wait for checks and merge"
           else
             echo "PR #$PR: commented only (verdict=$VERDICT, bot-authored=$MERGEABLE)"
           fi
+
+      - name: Wait for checks, then merge
+        if: env.SKIP != 'true' && env.MERGE == 'yes'
+        # Deliberately a blocking merge rather than `gh pr merge --auto`. Auto-merge is
+        # asynchronous: arming several dependency PRs at once makes them all fire when
+        # their checks go green, and they then collide on the same lockfile. Merging
+        # here, in the job, keeps the matrix (max-parallel: 1) genuinely sequential —
+        # the next PR is not touched until this one is in main, so it sees the merged
+        # lockfile and rebases onto it cleanly.
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+
+          echo "PR #$PR: waiting for checks..."
+          if ! gh pr checks "$PR" --repo "$REPO" --watch --fail-fast --interval 15; then
+            echo "PR #$PR: checks did not pass — leaving it open." >&2
+            exit 1
+          fi
+
+          gh pr merge "$PR" --repo "$REPO" --squash
+
+          # Confirm it really landed before the next PR in the matrix starts.
+          for _ in $(seq 1 20); do
+            if [ "$(gh api "repos/$REPO/pulls/$PR" --jq '.merged')" = "true" ]; then
+              echo "PR #$PR: merged."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "PR #$PR: merge did not confirm within 100s." >&2
+          exit 1

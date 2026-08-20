@@ -34,25 +34,59 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install Codex CLI
-        run: npm install -g @openai/codex
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-      - name: Point Codex at DeepSeek
+      - name: Install Codex CLI and LiteLLM
+        run: |
+          npm install -g @openai/codex
+          pip install --quiet "litellm[proxy]"
+
+      - name: Start the LiteLLM bridge
+        # Codex only speaks the OpenAI Responses API (`wire_api = "chat"` was removed),
+        # and DeepSeek only offers chat completions. LiteLLM sits between them: it serves
+        # /v1/responses on localhost and forwards to DeepSeek as chat completions.
+        env:
+          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+        run: |
+          set -euo pipefail
+          cat > litellm.yaml <<EOF
+          model_list:
+            - model_name: ${DEEPSEEK_MODEL}
+              litellm_params:
+                model: deepseek/${DEEPSEEK_MODEL}
+                api_key: os.environ/DEEPSEEK_APIKEY
+          EOF
+
+          # No master_key: the proxy is bound to localhost on a throwaway runner, and
+          # Codex still has to send *some* bearer token, which the proxy ignores.
+          nohup litellm --config litellm.yaml --port 4000 > litellm.log 2>&1 &
+
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:4000/health/readiness >/dev/null; then
+              echo "LiteLLM ready after ${i}s"; exit 0
+            fi
+            sleep 1
+          done
+          echo "LiteLLM did not come up:" >&2; cat litellm.log >&2; exit 1
+
+      - name: Point Codex at the bridge
+        env:
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
         run: |
           mkdir -p ~/.codex
           cat > ~/.codex/config.toml <<EOF
           model = "${DEEPSEEK_MODEL}"
-          model_provider = "deepseek"
+          model_provider = "litellm"
 
-          [model_providers.deepseek]
-          name = "DeepSeek"
-          base_url = "https://api.deepseek.com/v1"
+          [model_providers.litellm]
+          name = "LiteLLM bridge to DeepSeek"
+          base_url = "http://127.0.0.1:4000/v1"
           env_key = "DEEPSEEK_APIKEY"
-          # DeepSeek speaks chat completions, not the OpenAI responses API.
-          wire_api = "chat"
+          wire_api = "responses"
           EOF
-        env:
-          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
 
       - name: Run the agent
         env:
@@ -125,4 +159,7 @@ jobs:
         run: |
           if [ -f summary.md ]; then
             { echo "## AI PR Agent"; echo; cat summary.md; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f litellm.log ]; then
+            echo "::group::LiteLLM log"; tail -50 litellm.log; echo "::endgroup::"
           fi

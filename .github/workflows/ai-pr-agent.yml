@@ -5,7 +5,7 @@
 # Merging itself is still GitHub's decision: auto-merge waits for the branch rules.
 #
 # Triggers:
-#   pull_request      — automatic, bot-authored PRs only
+#   pull_request — automatic, bot-authored PRs only
 #   workflow_dispatch — manual sweep of every open PR, oldest first. Review always
 #                       runs; auto-merge is still armed for bot-authored PRs only.
 name: AI PR Agent
@@ -175,13 +175,18 @@ jobs:
             fi
           } > body.md
 
+          # The verdict always goes on the PR as a comment. We deliberately do NOT call
+          # `gh pr review --approve`: GITHUB_TOKEN is barred from approving PRs
+          # ("GitHub Actions is not permitted to approve pull requests"), and even where
+          # that setting is lifted, a GITHUB_TOKEN approval doesn't satisfy a required-
+          # review rule. Auto-merge doesn't need an approval, so we skip it.
+          gh pr comment "$PR" --repo "$REPO" --body-file body.md
+
           if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "yes" ]; then
-            gh pr review "$PR" --repo "$REPO" --approve --body-file body.md
             # --auto merges once the branch rules are satisfied; with no rules
             # configured GitHub merges immediately.
             gh pr merge "$PR" --repo "$REPO" --auto --squash
-            echo "PR #$PR: approved and armed auto-merge"
+            echo "PR #$PR: commented and armed auto-merge"
           else
-            gh pr comment "$PR" --repo "$REPO" --body-file body.md
             echo "PR #$PR: commented only (verdict=$VERDICT, bot-authored=$MERGEABLE)"
           fi

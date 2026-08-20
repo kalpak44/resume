@@ -34,19 +34,16 @@ jobs:
         with:
           node-version: "22"
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Codex CLI and LiteLLM
-        run: |
-          npm install -g @openai/codex
-          pip install --quiet "litellm[proxy]"
+      - name: Install Codex CLI
+        run: npm install -g @openai/codex
 
       - name: Start the LiteLLM bridge
         # Codex only speaks the OpenAI Responses API (`wire_api = "chat"` was removed),
         # and DeepSeek only offers chat completions. LiteLLM sits between them: it serves
         # /v1/responses on localhost and forwards to DeepSeek as chat completions.
+        #
+        # Run from the image, not pip: `pip install litellm[proxy]` pulls a FastAPI that
+        # its own proxy code is not compatible with, and the server won't import.
         env:
           DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
           DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
@@ -62,15 +59,40 @@ jobs:
 
           # No master_key: the proxy is bound to localhost on a throwaway runner, and
           # Codex still has to send *some* bearer token, which the proxy ignores.
-          nohup litellm --config litellm.yaml --port 4000 > litellm.log 2>&1 &
+          docker run -d --name litellm \
+            -p 4000:4000 \
+            -v "$PWD/litellm.yaml:/app/config.yaml:ro" \
+            -e DEEPSEEK_APIKEY \
+            ghcr.io/berriai/litellm:main-stable \
+            --config /app/config.yaml --port 4000
 
-          for i in $(seq 1 60); do
+          for i in $(seq 1 90); do
             if curl -sf http://127.0.0.1:4000/health/readiness >/dev/null; then
               echo "LiteLLM ready after ${i}s"; exit 0
             fi
-            sleep 1
+            sleep 2
           done
-          echo "LiteLLM did not come up:" >&2; cat litellm.log >&2; exit 1
+          echo "LiteLLM did not come up:" >&2; docker logs litellm >&2; exit 1
+
+      - name: Smoke-test the Responses API through the bridge
+        # The whole design rests on LiteLLM translating /v1/responses into DeepSeek chat
+        # completions. Prove it here so a failure is one line, not a Codex stack trace.
+        env:
+          DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+        run: |
+          set -euo pipefail
+          CODE=$(curl -sS -o smoke.json -w '%{http_code}' \
+            http://127.0.0.1:4000/v1/responses \
+            -H "Authorization: Bearer $DEEPSEEK_APIKEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\":\"${DEEPSEEK_MODEL}\",\"input\":\"reply with the single word: ok\"}")
+          echo "HTTP $CODE"; head -c 800 smoke.json; echo
+          if [ "$CODE" != "200" ]; then
+            echo "the bridge does not serve /v1/responses for this provider" >&2
+            docker logs --tail 50 litellm >&2
+            exit 1
+          fi
 
       - name: Point Codex at the bridge
         env:
@@ -160,6 +182,6 @@ jobs:
           if [ -f summary.md ]; then
             { echo "## AI PR Agent"; echo; cat summary.md; } >> "$GITHUB_STEP_SUMMARY"
           fi
-          if [ -f litellm.log ]; then
-            echo "::group::LiteLLM log"; tail -50 litellm.log; echo "::endgroup::"
+          if docker ps -a --format '{{.Names}}' | grep -q '^litellm$'; then
+            echo "::group::LiteLLM log"; docker logs --tail 80 litellm 2>&1 || true; echo "::endgroup::"
           fi

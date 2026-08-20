@@ -1,50 +1,101 @@
-# Managed by homelab-infra — terraform/github/kalpak44/workflows/ai-pr-agent.yml
-# Edits made here in the target repo are overwritten by `just deploy github kalpak44`.
+# Managed by homelab-infra — terraform/github/<repo>/workflows/ai-pr-agent.yml
+# Edits made here in the target repo are overwritten by `just deploy github <repo>`.
 #
-# Reviews bot-authored pull requests with DeepSeek and, on approval, arms auto-merge.
+# Reviews pull requests with DeepSeek and, on approval, arms auto-merge.
 # Merging itself is still GitHub's decision: auto-merge waits for the branch rules.
+#
+# Triggers:
+#   pull_request      — automatic, bot-authored PRs only
+#   workflow_dispatch — manual sweep of every open PR, oldest first. Review always
+#                       runs; auto-merge is still armed for bot-authored PRs only.
 name: AI PR Agent
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
-# Explicit permissions — a Dependabot-triggered run gets a read-only token without them.
 permissions:
   contents: write
   pull-requests: write
 
-concurrency:
-  group: ai-pr-agent-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  review:
-    # Bot PRs only. Human PRs get human review.
-    if: >-
-      contains(
-        fromJSON('["dependabot[bot]","renovate[bot]"]'),
-        github.event.pull_request.user.login
-      )
+  # Produces the list of PR numbers to review, so both triggers share one code path.
+  discover:
     runs-on: ubuntu-latest
+    outputs:
+      prs: ${{ steps.list.outputs.prs }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PR: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+    steps:
+      - id: list
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # Automatic run: this PR only, and only if a bot opened it.
+            case "${{ github.event.pull_request.user.login }}" in
+              'dependabot[bot]'|'renovate[bot]')
+                PRS='[${{ github.event.pull_request.number }}]' ;;
+              *)
+                PRS='[]' ;;
+            esac
+          else
+            # Manual sweep: every open PR, oldest first. Capped at 100 — see the
+            # count echoed below if you ever have more than that open at once.
+            PRS=$(gh api \
+              "repos/$REPO/pulls?state=open&sort=created&direction=asc&per_page=100" \
+              --jq '[.[].number]')
+          fi
+          echo "prs=$PRS" >> "$GITHUB_OUTPUT"
+          echo "reviewing $(echo "$PRS" | jq 'length') PR(s): $PRS"
+
+  review:
+    needs: discover
+    if: needs.discover.outputs.prs != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      # Sequential, in creation order, and one bad PR must not abort the rest.
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJSON(needs.discover.outputs.prs) }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR: ${{ matrix.pr }}
       REPO: ${{ github.repository }}
 
     steps:
-      - name: Collect the diff
+      - name: Collect PR metadata and diff
         run: |
+          set -euo pipefail
+          # Read the PR over the API rather than the event payload, so a manual
+          # dispatch (which has no pull_request context) takes the same path.
+          gh api "repos/$REPO/pulls/$PR" > pr.json
+
+          STATE=$(jq -r '.state' pr.json)
+          DRAFT=$(jq -r '.draft' pr.json)
+          if [ "$STATE" != "open" ] || [ "$DRAFT" = "true" ]; then
+            echo "PR #$PR is state=$STATE draft=$DRAFT — skipping."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          {
+            echo "PR_TITLE=$(jq -r '.title' pr.json)"
+            echo "PR_AUTHOR=$(jq -r '.user.login' pr.json)"
+          } >> "$GITHUB_ENV"
+
           gh pr diff "$PR" --repo "$REPO" > pr.diff
           # DeepSeek's context is finite; a truncated diff still shows what changed.
           head -c 60000 pr.diff > pr.trunc.diff
-          echo "diff bytes: $(wc -c < pr.diff) (sent: $(wc -c < pr.trunc.diff))"
+          echo "PR #$PR — diff bytes: $(wc -c < pr.diff) (sent: $(wc -c < pr.trunc.diff))"
 
       - name: Ask DeepSeek for a verdict
+        if: env.SKIP != 'true'
         env:
           DEEPSEEK_APIKEY: ${{ secrets.DEEPSEEK_APIKEY }}
           DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
-          TITLE: ${{ github.event.pull_request.title }}
         run: |
           set -euo pipefail
 
@@ -72,7 +123,7 @@ jobs:
           jq -n \
             --arg model "$DEEPSEEK_MODEL" \
             --arg system "$SYSTEM" \
-            --arg title "$TITLE" \
+            --arg title "$PR_TITLE" \
             --rawfile diff pr.trunc.diff \
             '{
               model: $model,
@@ -91,15 +142,23 @@ jobs:
             -d @request.json > response.json
 
           jq -r '.choices[0].message.content' response.json > verdict.json
-          echo "--- verdict ---"
+          echo "--- verdict for PR #$PR ---"
           cat verdict.json
 
       - name: Post the review
+        if: env.SKIP != 'true'
         run: |
           set -euo pipefail
           VERDICT=$(jq -r '.verdict // "reject"' verdict.json)
           SUMMARY=$(jq -r '.summary // "no summary returned"' verdict.json)
           RISKS=$(jq -r '(.risks // []) | map("- " + .) | join("\n")' verdict.json)
+
+          # Auto-merge stays bot-only regardless of trigger, so a manual sweep can
+          # review human PRs without ever merging one.
+          case "$PR_AUTHOR" in
+            'dependabot[bot]'|'renovate[bot]') MERGEABLE=yes ;;
+            *)                                 MERGEABLE=no  ;;
+          esac
 
           {
             echo "### AI PR Agent — \`$VERDICT\`"
@@ -110,15 +169,19 @@ jobs:
               echo "**Risks**"
               echo "$RISKS"
             fi
+            if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "no" ]; then
+              echo
+              echo "_Author \`$PR_AUTHOR\` is not a bot — reviewed only, auto-merge not armed._"
+            fi
           } > body.md
 
-          if [ "$VERDICT" = "approve" ]; then
+          if [ "$VERDICT" = "approve" ] && [ "$MERGEABLE" = "yes" ]; then
             gh pr review "$PR" --repo "$REPO" --approve --body-file body.md
             # --auto merges once the branch rules are satisfied; with no rules
             # configured GitHub merges immediately.
             gh pr merge "$PR" --repo "$REPO" --auto --squash
-            echo "approved and armed auto-merge"
+            echo "PR #$PR: approved and armed auto-merge"
           else
             gh pr comment "$PR" --repo "$REPO" --body-file body.md
-            echo "not approved — left for a human"
+            echo "PR #$PR: commented only (verdict=$VERDICT, bot-authored=$MERGEABLE)"
           fi
